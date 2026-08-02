@@ -34,22 +34,64 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 
 Instala y configura [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant). Comprueba en **Ajustes → Dispositivos y servicios** que Home Assistant muestra el vehículo y sus entidades.
 
-### 2. Instala esta tarjeta
+### 2. Añade el repositorio a HACS
 
-1. Abre **HACS → Frontend**.
-2. Añade `https://github.com/Danieldiazi/myhondaplus-vehicle-card` como repositorio personalizado de tipo **Dashboard**.
-3. Instala **My Honda+ Vehicle Card**.
-4. Recarga completamente el navegador.
-5. Añade una tarjeta y selecciona **My Honda+ Vehicle Card**.
+1. Abre **HACS** y entra en **Frontend**.
+2. Pulsa el menú de los tres puntos de la esquina superior derecha.
+3. Selecciona **Repositorios personalizados**.
+4. En **Repositorio**, pega:
 
-La configuración mínima es:
+   ```text
+   https://github.com/Danieldiazi/myhondaplus-vehicle-card
+   ```
+
+5. En **Tipo**, selecciona **Panel de control**. En algunas versiones o traducciones de HACS puede aparecer como **Dashboard**.
+6. Pulsa **Añadir**.
+
+Añadir el repositorio personalizado solo hace que HACS lo reconozca. **La tarjeta todavía no está instalada en este punto.**
+
+### 3. Descarga e instala la tarjeta desde HACS
+
+1. Vuelve a **HACS → Frontend**.
+2. Busca **My Honda+ Vehicle Card** o abre el repositorio que acabas de añadir.
+3. Pulsa **Descargar**.
+4. Confirma la versión propuesta y vuelve a pulsar **Descargar** en la ventana de confirmación.
+5. Espera a que HACS indique que la instalación ha finalizado.
+
+HACS debe crear automáticamente el recurso JavaScript de la tarjeta. Puedes comprobarlo en **Ajustes → Paneles → Recursos**. La URL esperada es:
+
+```text
+/hacsfiles/myhondaplus-vehicle-card/myhondaplus-vehicle-card.js
+```
+
+El tipo del recurso debe ser **Módulo JavaScript**.
+
+### 4. Recarga Home Assistant
+
+Después de instalar o actualizar la tarjeta, realiza una recarga completa del navegador:
+
+- Windows/Linux: `Ctrl + F5` o `Ctrl + Mayús + R`.
+- macOS: `Cmd + Mayús + R`.
+- Aplicación móvil: cierra completamente la aplicación y vuelve a abrirla.
+
+No suele ser necesario reiniciar todo Home Assistant.
+
+### 5. Añade la tarjeta al panel
+
+1. Abre el panel donde quieras mostrar el coche.
+2. Pulsa **Editar panel → Añadir tarjeta**.
+3. Busca y selecciona **My Honda+ Vehicle Card**.
+4. En el editor visual, selecciona el vehículo y configura el nombre, el color y los controles visibles.
+5. Guarda la tarjeta y el panel.
+
+También puedes añadirla manualmente mediante YAML:
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
 device: ID_DEL_DISPOSITIVO
 ```
 
-La mayor parte de la configuración se puede realizar desde el editor visual.
+La mayor parte de la configuración se puede realizar desde el editor visual, por lo que normalmente no necesitas buscar ni copiar el identificador del dispositivo.
 
 ## Responsabilidad de cada proyecto
 
