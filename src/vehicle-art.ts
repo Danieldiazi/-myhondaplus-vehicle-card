@@ -3,9 +3,15 @@ import type { VehicleModelKey } from "./types";
 import civicLateralSvg from "../assets/civic-lateral.svg?raw";
 
 // The supplied Civic artwork is intentionally kept as an SVG asset. Extracting
-// its path lets us render it inline, so `currentColor` follows the selected
-// paint preset or custom vehicle color without loading a separate image URL.
+// its path lets us render it inline, so the selected paint preset or custom
+// vehicle color can be applied without loading a separate image URL. The
+// artwork starts with the wheel subpaths; we redraw those after the paint
+// layer so the wheels stay neutral instead of inheriting the body color.
 const CIVIC_LATERAL_PATH = civicLateralSvg.match(/<path[^>]*\sd="([^"]+)"/)?.[1];
+const CIVIC_WHEEL_PATH = CIVIC_LATERAL_PATH?.slice(
+  0,
+  CIVIC_LATERAL_PATH.indexOf("M179.4 227"),
+).trim();
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -23,7 +29,7 @@ export function renderVehicleArt(
   color: string,
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
-  if (model === "civic" && CIVIC_LATERAL_PATH) {
+  if (model === "civic" && CIVIC_LATERAL_PATH && CIVIC_WHEEL_PATH) {
     return html`<svg
       class="vehicle-art civic-lateral-art"
       viewBox="0 0 623 300"
@@ -32,7 +38,23 @@ export function renderVehicleArt(
       style="color: ${color}"
     >
       <title>Honda Civic - vista lateral</title>
-      <path d=${CIVIC_LATERAL_PATH} fill="currentColor" fill-rule="evenodd"></path>
+      <path
+        d=${CIVIC_LATERAL_PATH}
+        fill="currentColor"
+        fill-rule="evenodd"
+        stroke="#20252b"
+        stroke-width="1.8"
+        stroke-linejoin="round"
+        paint-order="stroke fill"
+      ></path>
+      <path
+        d=${CIVIC_WHEEL_PATH}
+        fill="#20252b"
+        fill-rule="evenodd"
+        stroke="#111417"
+        stroke-width="1.2"
+        stroke-linejoin="round"
+      ></path>
     </svg>`;
   }
 
