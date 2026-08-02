@@ -1,35 +1,53 @@
 # Changelog
 
-All notable changes to this project are documented here. The project follows Semantic Versioning and the structure of Keep a Changelog.
+Todos los cambios relevantes de este proyecto se documentan en este archivo.
+
+El proyecto sigue [Semantic Versioning](https://semver.org/):
+
+- `PATCH`: correcciones compatibles;
+- `MINOR`: funciones nuevas compatibles;
+- `MAJOR`: cambios incompatibles de configuración o comportamiento.
 
 ## [Unreleased]
 
 ### Added
 
-- Automatic Spanish, English and Galician localization.
-- Presentation-independent `VehicleState` model.
-- Privacy-safe diagnostics for support requests.
-- Configurable metrics and vehicle controls.
-- Visible action and discovery errors.
-- Action progress state and duplicate-action prevention.
-- Keyboard focus styles and reduced-motion support.
-- Issue forms, pull request template and Dependabot configuration.
+- Instalaciones reproducibles mediante `package-lock.json` y `npm ci`.
+- Auditoría de dependencias de producción en CI y releases.
+- Política de seguridad en `SECURITY.md`.
+- Documentación explícita de la dependencia de My Honda+ for Home Assistant y de los límites de responsabilidad entre integración y tarjeta.
 
 ### Changed
 
-- GitHub Actions run on Node.js 24 using current official actions.
-- Project documentation is separated into user, configuration, architecture and contribution guides.
+- GitHub Actions fijadas mediante SHA completos.
+- Flujo de publicación actualizado para Node.js 24.
+- README, guía de usuario y referencia de configuración ampliados con instalación previa de la integración y orientación de soporte.
 
-## [0.4.0] - 2026-08-02
-
-### Added
-
-- Model-aware vector renderer for supported Honda families.
-- Honda paint presets, animations, responsive layouts and stale-data indication.
-- Visual editor and HACS single-file build verification.
-
-## [0.3.0]
+## [0.5.0] - 2026-08-02
 
 ### Added
 
-- Initial TypeScript and Lit implementation with entity discovery, controls and tests.
+- Traducciones al español, inglés y gallego.
+- Modelo interno normalizado `VehicleState`.
+- Diagnóstico anonimizado copiable.
+- Métricas y controles configurables.
+- Errores visibles y bloqueo de acciones en curso.
+- Soporte para lectores de pantalla, foco de teclado y reducción de movimiento.
+- Formularios de incidencias y plantilla de pull request.
+- Dependabot para npm y GitHub Actions.
+- Documentación de usuario, configuración, arquitectura y contribución.
+
+### Changed
+
+- Workflows actualizados a Node.js 24.
+- Separación entre entidades de Home Assistant y estado visual.
+
+## [0.4.0]
+
+### Added
+
+- Arquitectura TypeScript + Lit + Vite.
+- Editor visual con descubrimiento de vehículos.
+- Presets de color y color personalizado.
+- Tests unitarios del resolvedor de entidades.
+- CI y automatización de releases.
