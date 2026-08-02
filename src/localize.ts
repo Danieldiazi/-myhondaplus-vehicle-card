@@ -130,8 +130,9 @@ export function localize(
   replacements: Record<string, string | number> = {},
 ): string {
   const language = normalizeLocale(locale);
-  return Object.entries(replacements).reduce(
-    (text, [name, value]) => text.replaceAll(`{${name}}`, String(value)),
-    TRANSLATIONS[language][key],
-  );
+  let text: string = TRANSLATIONS[language][key];
+  for (const [name, value] of Object.entries(replacements)) {
+    text = text.replaceAll(`{${name}}`, String(value));
+  }
+  return text;
 }
