@@ -1,7 +1,8 @@
 import { html, type TemplateResult } from "lit";
-import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import type { VehicleModelKey } from "./types";
-import civicLayeredSvg from "../assets/civic-2024-layered.svg?raw";
+import civicLateralSvg from "../assets/civic-lateral-2.svg?raw";
+
+const CIVIC_LATERAL_PATH = civicLateralSvg.match(/<path[^>]*\sd="([^"]+)"/)?.[1];
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -20,7 +21,35 @@ export function renderVehicleArt(
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
   if (model === "civic") {
-    return html`${unsafeSVG(civicLayeredSvg.replaceAll("currentColor", color))}`;
+    return html`<svg
+      class="vehicle-art civic-lateral-art"
+      viewBox="0 0 623 300"
+      role="img"
+      aria-label="Honda Civic"
+    >
+      <defs>
+        <filter id="civic-paint-shadow" x="-20%" y="-20%" width="140%" height="160%">
+          <feDropShadow
+            dx="0"
+            dy="8"
+            stdDeviation="6"
+            flood-color=${color}
+            flood-opacity=".7"
+          ></feDropShadow>
+        </filter>
+      </defs>
+      <title>Honda Civic - vista lateral</title>
+      ${
+        CIVIC_LATERAL_PATH
+          ? html`<path
+              d=${CIVIC_LATERAL_PATH}
+              fill="#20252b"
+              fill-rule="evenodd"
+              filter="url(#civic-paint-shadow)"
+            ></path>`
+          : null
+      }
+    </svg>`;
   }
 
   return html`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${model}">
