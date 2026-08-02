@@ -1,37 +1,41 @@
 # My Honda+ Vehicle Card
 
-Tarjeta Lovelace no oficial para los vehículos conectados mediante la integración [My Honda+](https://github.com/enricobattocchi/myhondaplus-homeassistant).
+Tarjeta Lovelace no oficial, moderna y configurable para los vehículos conectados mediante [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant).
 
-## Funciones
+> Proyecto comunitario, no afiliado a Honda Motor Co., Ltd.
 
-- Selección del dispositivo desde el editor visual de Home Assistant.
-- Detección automática de las entidades pertenecientes al vehículo.
-- Ilustración del coche recoloreable mediante selector de color.
-- Imagen personalizada opcional.
+## Características
+
+- Selector visual del vehículo, sin copiar identificadores internos.
+- Detección automática de entidades por dispositivo, dominio y claves estables.
+- Ilustración recoloreable con colores de fábrica y color personalizado.
+- Imagen propia opcional.
 - Autonomía, batería y kilometraje.
-- Estado de puertas, ventanas, maletero, capó y luces.
-- Controles de cierre, climatización, ubicación y actualización desde el coche.
-- Confirmación antes de desbloquear las puertas.
-- Aviso cuando los datos están desactualizados.
-- Diseño adaptable a móvil y escritorio.
+- Puertas, ventanas, maletero, capó y luces.
+- Cierre, climatización, actualización y ubicación.
+- Confirmación antes de desbloquear.
+- Diseño completo o compacto y adaptación móvil.
+- Código TypeScript con Lit, Vite, tests, lint y CI.
 
 ## Instalación con HACS
 
-1. Abre HACS.
-2. Entra en **Frontend**.
-3. Añade este repositorio como repositorio personalizado de tipo **Dashboard**.
-4. Instala **My Honda+ Vehicle Card**.
-5. Recarga el navegador.
+1. Abre **HACS → Frontend**.
+2. Añade `https://github.com/Danieldiazi/myhondaplus-vehicle-card` como repositorio personalizado de tipo **Dashboard**.
+3. Instala **My Honda+ Vehicle Card**.
+4. Recarga el navegador.
+5. Añade una tarjeta y selecciona **My Honda+ Vehicle Card**.
 
 ## Configuración mínima
+
+La configuración habitual se realiza desde el editor visual:
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
 device: ID_DEL_DISPOSITIVO
-vehicle_color: "#a51d2d"
+color_preset: rallye_red
 ```
 
-## Imagen propia
+## Imagen personalizada
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
@@ -42,17 +46,22 @@ vehicle_image: /local/coches/mi-civic.png
 
 ## Desarrollo
 
+Requiere Node.js 20 o posterior.
+
 ```bash
 npm install
-npm run build
+npm run check
+npm run dev
 ```
 
-El archivo distribuible se genera en `dist/myhondaplus-vehicle-card.js`.
+La distribución HACS se genera en `dist/myhondaplus-vehicle-card.js`.
+
+Consulta [CONTRIBUTING.md](CONTRIBUTING.md) y [docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 
 ## Estado
 
-Versión inicial en desarrollo. La ilustración incluida es genérica; el color exterior se selecciona manualmente porque la API de Honda no expone de forma fiable el color real.
+La tarjeta está en desarrollo activo. La ilustración actual es una base vectorial recoloreable; están previstas ilustraciones específicas por modelo.
 
 ## Licencia
 
-MIT.
+MIT. Consulta [LICENSE](LICENSE).

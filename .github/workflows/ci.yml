@@ -1,4 +1,4 @@
-name: Validate
+name: CI
 
 on:
   push:
@@ -16,9 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies
-        run: npm install
-      - name: Run project checks
-        run: npm run check
-      - name: Verify distribution exists
-        run: test -s dist/myhondaplus-vehicle-card.js
+      - run: npm install
+      - run: npm run check
+      - name: Verify HACS bundle
+        run: |
+          test -s dist/myhondaplus-vehicle-card.js
+          test "$(find dist -maxdepth 1 -type f | wc -l)" -eq 1
