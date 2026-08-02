@@ -2,15 +2,15 @@ import { html, type TemplateResult } from "lit";
 import type { VehicleModelKey } from "./types";
 import civicLateralSvg from "../assets/civic-lateral.svg?raw";
 
-// The supplied Civic artwork is intentionally kept as an SVG asset. Extracting
-// its path lets us render it inline, so the selected paint preset or custom
-// vehicle color can be applied without loading a separate image URL. It is a
-// compound path: the dark artwork is the base, while this large body subpath
-// is painted separately so the line details and wheels remain neutral.
+// The supplied Civic artwork is intentionally kept as an SVG asset. It is a
+// compound path, so it is used as line art only. The body, glass and wheels
+// are rendered as separate layers to keep the paint color out of the details.
 const CIVIC_LATERAL_PATH = civicLateralSvg.match(/<path[^>]*\sd="([^"]+)"/)?.[1];
 const CIVIC_BODY_PATH = CIVIC_LATERAL_PATH?.split(/(?=M)/).find((path) =>
   path.startsWith("M179.4 227"),
 );
+const CIVIC_GLASS_PATH =
+  "M180 165 L250 107 Q300 78 370 82 L465 91 Q505 98 540 122 L510 132 Q470 109 420 105 L270 105 Q230 120 195 165 Z";
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -37,8 +37,26 @@ export function renderVehicleArt(
       style="color: ${color}"
     >
       <title>Honda Civic - vista lateral</title>
-      <path d=${CIVIC_LATERAL_PATH} fill="#20252b" fill-rule="evenodd"></path>
       <path d=${CIVIC_BODY_PATH} fill="currentColor" fill-rule="evenodd"></path>
+      <path d=${CIVIC_GLASS_PATH} fill="#d8e2e6" stroke="#20252b" stroke-width="3"></path>
+      ${[
+        [133, 210],
+        [450, 210],
+      ].map(
+        ([cx, cy]) =>
+          html`<g>
+            <circle cx=${cx} cy=${cy} r="38" fill="#20252b"></circle>
+            <circle cx=${cx} cy=${cy} r="27" fill="#d8e2e6"></circle>
+          </g>`,
+      )}
+      <path
+        d=${CIVIC_LATERAL_PATH}
+        fill="none"
+        stroke="#20252b"
+        stroke-width="2"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      ></path>
     </svg>`;
   }
 
