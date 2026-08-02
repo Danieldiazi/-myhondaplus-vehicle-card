@@ -1,0 +1,49 @@
+name: Entity detection problem
+description: Report an entity that is missing or matched incorrectly
+title: "[Entity detection]: "
+labels: [bug, entity-detection]
+body:
+  - type: input
+    id: integration-version
+    attributes:
+      label: My Honda+ integration version
+  - type: input
+    id: card-version
+    attributes:
+      label: Card version
+    validations:
+      required: true
+  - type: dropdown
+    id: entity-kind
+    attributes:
+      label: Affected value or action
+      options:
+        - Lock
+        - Range
+        - Battery
+        - Odometer
+        - Last update
+        - Climate
+        - Charging
+        - Refresh
+        - Location
+        - Doors
+        - Windows
+        - Trunk
+        - Hood
+        - Lights
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Anonymized diagnostics
+      description: Use the card diagnostic output. Never include a VIN, coordinates, tokens or complete unique ids.
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Additional details
+      description: Explain what was detected and what should have been detected.
