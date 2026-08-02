@@ -6,8 +6,8 @@ const MODEL_PATTERNS: Array<[VehicleModelKey, RegExp]> = [
   ["crv", /\bcr[- ]?v\b/i],
   ["zrv", /\bzr[- ]?v\b/i],
   ["jazz", /jazz|fit/i],
+  ["eny1", /\be:?ny1\b/i],
   ["honda_e", /honda\s*e\b/i],
-  ["eny1", /e:\?ny1|eny1/i],
 ];
 
 export function resolveVehicleModel(device?: DeviceRegistryEntry): VehicleModelKey {
