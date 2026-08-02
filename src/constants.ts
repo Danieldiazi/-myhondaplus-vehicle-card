@@ -35,10 +35,7 @@ export const DEFAULT_CONFIG: Required<
   confirm_unlock: true,
 };
 
-export const PAINT_PRESETS: Record<
-  string,
-  { label: string; value: string; accent: string }
-> = {
+export const PAINT_PRESETS: Record<string, { label: string; value: string; accent: string }> = {
   rallye_red: { label: "Rallye Red", value: "#a51d2d", accent: "#ef8a92" },
   platinum_white: { label: "Platinum White Pearl", value: "#d9dcde", accent: "#ffffff" },
   crystal_black: { label: "Crystal Black Pearl", value: "#202326", accent: "#70777d" },

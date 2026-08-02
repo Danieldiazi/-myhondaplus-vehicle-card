@@ -12,7 +12,10 @@ export const ENTITY_RULES: Record<keyof EntityMap, Rule> = {
   odometer: { domains: ["sensor"], hints: ["odometer", "mileage"] },
   updated: { domains: ["sensor"], hints: ["last_updated", "updated"] },
   climate: { domains: ["switch"], hints: ["climate", "preconditioning"] },
-  charging: { domains: ["binary_sensor", "sensor", "switch"], hints: ["charging", "charge_status", "plugged"] },
+  charging: {
+    domains: ["binary_sensor", "sensor", "switch"],
+    hints: ["charging", "charge_status", "plugged"],
+  },
   refresh: { domains: ["button"], hints: ["refresh_from_car"] },
   location: { domains: ["device_tracker"], hints: ["location", "car_finder"] },
   doors: { domains: ["binary_sensor"], hints: ["doors", "door"] },
