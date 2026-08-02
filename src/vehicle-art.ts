@@ -1,5 +1,7 @@
 import { html, type TemplateResult } from "lit";
+import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import type { VehicleModelKey } from "./types";
+import civicLayeredSvg from "../assets/civic-2024-layered.svg?raw";
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -17,6 +19,10 @@ export function renderVehicleArt(
   color: string,
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
+  if (model === "civic") {
+    return html`${unsafeSVG(civicLayeredSvg.replaceAll("currentColor", color))}`;
+  }
+
   return html`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${model}">
     <defs>
       <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1">
