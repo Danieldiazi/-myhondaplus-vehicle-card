@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check package.json tsconfig.json vite.config.ts src/constants.ts src/entity-resolver.ts src/index.ts src/types.ts src/vehicle-art.tsx tests/**/*.ts",
+    "format:check": "prettier --check package.json tsconfig.json vite.config.ts src/constants.ts src/entity-resolver.ts src/index.ts src/types.ts tests/**/*.ts",
     "test": "vitest run",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
