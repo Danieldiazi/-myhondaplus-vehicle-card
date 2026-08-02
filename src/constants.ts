@@ -2,7 +2,7 @@ import type { MyHondaPlusCardConfig } from "./types";
 
 export const CARD_TAG = "myhondaplus-vehicle-card";
 export const EDITOR_TAG = "myhondaplus-vehicle-card-editor";
-export const VERSION = "0.4.1";
+export const VERSION = "0.5.0";
 
 export const DEFAULT_CONFIG: Required<
   Pick<
@@ -19,6 +19,10 @@ export const DEFAULT_CONFIG: Required<
     | "show_model"
     | "animate"
     | "confirm_unlock"
+    | "locale"
+    | "debug"
+    | "controls"
+    | "metrics"
   >
 > = {
   type: `custom:${CARD_TAG}`,
@@ -33,6 +37,10 @@ export const DEFAULT_CONFIG: Required<
   show_model: true,
   animate: true,
   confirm_unlock: true,
+  locale: "auto",
+  debug: false,
+  controls: ["lock", "climate", "refresh", "location"],
+  metrics: ["range", "battery", "odometer"],
 };
 
 export const PAINT_PRESETS: Record<string, { label: string; value: string; accent: string }> = {
