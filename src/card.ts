@@ -143,7 +143,8 @@ export class MyHondaPlusVehicleCard extends LitElement {
 
     const state = this.vehicleState();
     const domain = entityId.split(".")[0] ?? "";
-    let service = domain === "button" ? "press" : this.entity(key)?.state === "on" ? "turn_off" : "turn_on";
+    let service =
+      domain === "button" ? "press" : this.entity(key)?.state === "on" ? "turn_off" : "turn_on";
     if (domain === "lock") service = state.locked ? "unlock" : "lock";
 
     if (
@@ -198,7 +199,10 @@ export class MyHondaPlusVehicleCard extends LitElement {
     activeText: string,
     inactiveText: string,
   ): TemplateResult {
-    return html`<div class="status ${active ? "warning" : ""}" aria-label=${`${label}: ${active ? activeText : inactiveText}`}>
+    return html`<div
+      class="status ${active ? "warning" : ""}"
+      aria-label=${`${label}: ${active ? activeText : inactiveText}`}
+    >
       <span class="status-icon" aria-hidden="true">${icon}</span>
       <div><b>${label}</b><small>${active ? activeText : inactiveText}</small></div>
       <i aria-hidden="true"></i>
@@ -236,7 +240,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
 
   protected override render(): TemplateResult {
     const state = this.vehicleState();
-    const lockedText = state.locked === true ? this.t("locked") : state.locked === false ? this.t("unlocked") : this.t("unknown_state");
+    const lockedText =
+      state.locked === true
+        ? this.t("locked")
+        : state.locked === false
+          ? this.t("unlocked")
+          : this.t("unknown_state");
     const controls = this.config.controls ?? [...DEFAULT_CONTROLS];
     const metrics = this.config.metrics ?? [...DEFAULT_METRICS];
 
@@ -252,53 +261,69 @@ export class MyHondaPlusVehicleCard extends LitElement {
       </header>
 
       <div class="announcer" aria-live="polite">
-        ${this.busy ? this.t("action_in_progress") : this.message?.text ?? ""}
+        ${this.busy ? this.t("action_in_progress") : (this.message?.text ?? "")}
       </div>
       ${this.message ? html`<div class="message ${this.message.kind}">${this.message.text}</div>` : nothing}
 
       <section class="vehicle ${state.charging ? "is-charging" : ""}">
         ${this.vehicleVisual(state)}
-        <div class="freshness ${state.stale ? "stale" : ""}" title=${state.stale ? this.t("stale_data") : ""}>
+        <div
+          class="freshness ${state.stale ? "stale" : ""}"
+          title=${state.stale ? this.t("stale_data") : ""}
+        >
           ${this.ageText(state)}
         </div>
       </section>
 
-      ${this.config.device
-        ? html`<section class="metrics">${metrics.map((key) => this.metric(key, state))}</section>`
-        : html`<div class="setup">${this.t("select_vehicle")}</div>`}
-
-      ${this.config.layout !== "compact"
-        ? html`<section class="statuses">
-            ${this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed"))}
-            ${this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed"))}
-            ${this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed"))}
-            ${this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed"))}
-            ${this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off"))}
-            ${this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive"))}
-          </section>`
-        : nothing}
-
-      ${this.config.show_controls !== false
-        ? html`<nav class="controls" aria-label="Vehicle controls">
-            ${controls.map((key) => {
+      ${
+        this.config.device
+          ? html`<section class="metrics">
+              ${metrics.map((key) => this.metric(key, state))}
+            </section>`
+          : html`<div class="setup">${this.t("select_vehicle")}</div>`
+      }
+      ${
+        this.config.layout !== "compact"
+          ? html`<section class="statuses">
+              ${this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed"))}
+              ${this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off"))}
+              ${this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive"))}
+            </section>`
+          : nothing
+      }
+      ${
+        this.config.show_controls !== false
+          ? html`<nav class="controls" aria-label="Vehicle controls">
+              ${controls.map((key) => {
               const metadata = {
-                lock: { icon: state.locked ? "🔓" : "🔒", label: state.locked ? this.t("unlock") : this.t("lock") },
+                lock: {
+                  icon: state.locked ? "🔓" : "🔒",
+                  label: state.locked ? this.t("unlock") : this.t("lock"),
+                },
                 climate: { icon: "❄️", label: this.t("climate") },
                 refresh: { icon: "↻", label: this.t("refresh") },
                 location: { icon: "⌖", label: this.t("location") },
               }[key];
               return this.control(metadata.icon, metadata.label, key);
             })}
-          </nav>`
-        : nothing}
-
-      ${this.config.debug
-        ? html`<details class="diagnostics">
-            <summary>Diagnostics</summary>
-            <button type="button" @click=${() => void this.copyDiagnostics()}>Copy anonymized diagnostics</button>
-            <pre>${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this.locale()))}</pre>
-          </details>`
-        : nothing}
+            </nav>`
+          : nothing
+      }
+      ${
+        this.config.debug
+          ? html`<details class="diagnostics">
+              <summary>Diagnostics</summary>
+              <button type="button" @click=${() => void this.copyDiagnostics()}>
+                Copy anonymized diagnostics
+              </button>
+              <pre>
+${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this.locale()))}</pre>
+            </details>`
+          : nothing
+      }
     </ha-card>`;
   }
 
@@ -310,7 +335,15 @@ export class MyHondaPlusVehicleCard extends LitElement {
       padding: 20px;
       overflow: hidden;
       color: var(--primary-text-color);
-      background: linear-gradient(145deg, var(--ha-card-background, var(--card-background-color)), color-mix(in srgb, var(--ha-card-background, var(--card-background-color)) 90%, var(--primary-color) 10%));
+      background: linear-gradient(
+        145deg,
+        var(--ha-card-background, var(--card-background-color)),
+        color-mix(
+          in srgb,
+          var(--ha-card-background, var(--card-background-color)) 90%,
+          var(--primary-color) 10%
+        )
+      );
     }
     header {
       display: flex;

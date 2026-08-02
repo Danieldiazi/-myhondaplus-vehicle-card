@@ -39,14 +39,7 @@ export interface DeviceRegistryEntry {
 export type CardLayout = "full" | "compact";
 export type ImageMode = "rendered" | "custom";
 export type VehicleModelKey =
-  | "civic"
-  | "hrv"
-  | "crv"
-  | "zrv"
-  | "jazz"
-  | "honda_e"
-  | "eny1"
-  | "generic";
+  "civic" | "hrv" | "crv" | "zrv" | "jazz" | "honda_e" | "eny1" | "generic";
 export type CardLocale = "auto" | "en" | "es" | "gl";
 
 export interface MyHondaPlusCardConfig {

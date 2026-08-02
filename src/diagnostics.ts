@@ -1,10 +1,5 @@
 import { VERSION } from "./constants";
-import type {
-  CardDiagnostics,
-  EntityMap,
-  HomeAssistant,
-  VehicleModelKey,
-} from "./types";
+import type { CardDiagnostics, EntityMap, HomeAssistant, VehicleModelKey } from "./types";
 
 const ENTITY_KEYS = [
   "lock",

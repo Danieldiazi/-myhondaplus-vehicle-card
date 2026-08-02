@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest";
 import type { HassEntity } from "../src/types";
 import { buildVehicleState, entityDisplayValue } from "../src/vehicle-state";
 
-const entity = (state: string, unit?: string, lastUpdated = "2026-08-02T10:00:00Z"): HassEntity => ({
+const entity = (
+  state: string,
+  unit?: string,
+  lastUpdated = "2026-08-02T10:00:00Z",
+): HassEntity => ({
   entity_id: "sensor.test",
   state,
   attributes: unit ? { unit_of_measurement: unit } : {},

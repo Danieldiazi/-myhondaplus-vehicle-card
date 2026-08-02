@@ -97,15 +97,16 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       <legend>${title}</legend>
       <div class="checks">
         ${options.map(
-          ([value, label]) => html`<label class="check">
-            <input
-              type="checkbox"
-              .value=${value}
-              .checked=${selected.has(value)}
-              @change=${(event: Event) => this.toggleListValue(event, field)}
-            />
-            ${label}
-          </label>`,
+          ([value, label]) =>
+            html`<label class="check">
+              <input
+                type="checkbox"
+                .value=${value}
+                .checked=${selected.has(value)}
+                @change=${(event: Event) => this.toggleListValue(event, field)}
+              />
+              ${label}
+            </label>`,
         )}
       </div>
     </fieldset>`;
@@ -115,21 +116,27 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     return html`<div class="grid">
       <section>
         <h3>Vehículo</h3>
-        <label>Vehículo conectado
+        <label
+          >Vehículo conectado
           <select name="device" @change=${this.updateField}>
             <option value="">Selecciona un vehículo My Honda+</option>
             ${this.devices.map(
-              (device) => html`<option value=${device.id} ?selected=${this.config.device === device.id}>
-                ${this.deviceName(device)}
-              </option>`,
+              (device) =>
+                html`<option value=${device.id} ?selected=${this.config.device === device.id}>
+                  ${this.deviceName(device)}
+                </option>`,
             )}
           </select>
-          <span class="hint">${this.loading ? "Buscando vehículos…" : `${this.devices.length} vehículo(s) encontrado(s)`}</span>
+          <span class="hint"
+            >${this.loading ? "Buscando vehículos…" : `${this.devices.length} vehículo(s) encontrado(s)`}</span
+          >
         </label>
-        <label>Nombre
+        <label
+          >Nombre
           <input name="name" .value=${this.config.name ?? ""} @change=${this.updateField} />
         </label>
-        <label>Modelo visual
+        <label
+          >Modelo visual
           <select name="vehicle_model" @change=${this.updateField}>
             ${[
               ["auto", "Automático"],
@@ -142,7 +149,10 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
               ["eny1", "Honda e:Ny1"],
               ["generic", "Honda genérico"],
             ].map(
-              ([value, label]) => html`<option value=${value} ?selected=${this.config.vehicle_model === value}>${label}</option>`,
+              ([value, label]) =>
+                html`<option value=${value} ?selected=${this.config.vehicle_model === value}>
+                  ${label}
+                </option>`,
             )}
           </select>
         </label>
@@ -150,37 +160,61 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
 
       <section>
         <h3>Apariencia</h3>
-        <label>Color de fábrica
+        <label
+          >Color de fábrica
           <select name="color_preset" @change=${this.updateField}>
             ${Object.entries(PAINT_PRESETS).map(
-              ([key, preset]) => html`<option value=${key} ?selected=${this.config.color_preset === key}>
-                ${preset.label}
-              </option>`,
+              ([key, preset]) =>
+                html`<option value=${key} ?selected=${this.config.color_preset === key}>
+                  ${preset.label}
+                </option>`,
             )}
           </select>
         </label>
-        ${this.config.color_preset === "custom"
-          ? html`<label>Color personalizado
-              <input name="vehicle_color" type="color" .value=${this.config.vehicle_color ?? DEFAULT_CONFIG.vehicle_color} @change=${this.updateField} />
-            </label>`
-          : nothing}
-        <label>Diseño
+        ${
+          this.config.color_preset === "custom"
+            ? html`<label
+                >Color personalizado
+                <input
+                  name="vehicle_color"
+                  type="color"
+                  .value=${this.config.vehicle_color ?? DEFAULT_CONFIG.vehicle_color}
+                  @change=${this.updateField}
+                />
+              </label>`
+            : nothing
+        }
+        <label
+          >Diseño
           <select name="layout" @change=${this.updateField}>
             <option value="full" ?selected=${this.config.layout === "full"}>Completo</option>
             <option value="compact" ?selected=${this.config.layout === "compact"}>Compacto</option>
           </select>
         </label>
-        <label>Imagen
+        <label
+          >Imagen
           <select name="image_mode" @change=${this.updateField}>
-            <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>Ilustración recoloreable</option>
-            <option value="custom" ?selected=${this.config.image_mode === "custom"}>Imagen personalizada</option>
+            <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>
+              Ilustración recoloreable
+            </option>
+            <option value="custom" ?selected=${this.config.image_mode === "custom"}>
+              Imagen personalizada
+            </option>
           </select>
         </label>
-        ${this.config.image_mode === "custom"
-          ? html`<label>URL de imagen
-              <input name="vehicle_image" .value=${this.config.vehicle_image ?? ""} placeholder="/local/coches/mi-civic.png" @change=${this.updateField} />
-            </label>`
-          : nothing}
+        ${
+          this.config.image_mode === "custom"
+            ? html`<label
+                >URL de imagen
+                <input
+                  name="vehicle_image"
+                  .value=${this.config.vehicle_image ?? ""}
+                  placeholder="/local/coches/mi-civic.png"
+                  @change=${this.updateField}
+                />
+              </label>`
+            : nothing
+        }
       </section>
 
       <section>
@@ -200,7 +234,8 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
 
       <section>
         <h3>Comportamiento</h3>
-        <label>Idioma
+        <label
+          >Idioma
           <select name="locale" @change=${this.updateField}>
             <option value="auto" ?selected=${this.config.locale === "auto"}>Automático</option>
             <option value="es" ?selected=${this.config.locale === "es"}>Español</option>
@@ -208,14 +243,62 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             <option value="gl" ?selected=${this.config.locale === "gl"}>Galego</option>
           </select>
         </label>
-        <label>Datos antiguos después de (segundos)
-          <input name="stale_after" type="number" min="300" step="300" .value=${String(this.config.stale_after ?? DEFAULT_CONFIG.stale_after)} @change=${this.updateField} />
+        <label
+          >Datos antiguos después de (segundos)
+          <input
+            name="stale_after"
+            type="number"
+            min="300"
+            step="300"
+            .value=${String(this.config.stale_after ?? DEFAULT_CONFIG.stale_after)}
+            @change=${this.updateField}
+          />
         </label>
-        <label class="check"><input name="show_controls" type="checkbox" .checked=${this.config.show_controls !== false} @change=${this.updateField} /> Mostrar controles</label>
-        <label class="check"><input name="show_model" type="checkbox" .checked=${this.config.show_model !== false} @change=${this.updateField} /> Mostrar modelo</label>
-        <label class="check"><input name="animate" type="checkbox" .checked=${this.config.animate !== false} @change=${this.updateField} /> Permitir animaciones</label>
-        <label class="check"><input name="confirm_unlock" type="checkbox" .checked=${this.config.confirm_unlock !== false} @change=${this.updateField} /> Confirmar antes de abrir</label>
-        <label class="check"><input name="debug" type="checkbox" .checked=${this.config.debug === true} @change=${this.updateField} /> Mostrar diagnóstico anonimizado</label>
+        <label class="check"
+          ><input
+            name="show_controls"
+            type="checkbox"
+            .checked=${this.config.show_controls !== false}
+            @change=${this.updateField}
+          />
+          Mostrar controles</label
+        >
+        <label class="check"
+          ><input
+            name="show_model"
+            type="checkbox"
+            .checked=${this.config.show_model !== false}
+            @change=${this.updateField}
+          />
+          Mostrar modelo</label
+        >
+        <label class="check"
+          ><input
+            name="animate"
+            type="checkbox"
+            .checked=${this.config.animate !== false}
+            @change=${this.updateField}
+          />
+          Permitir animaciones</label
+        >
+        <label class="check"
+          ><input
+            name="confirm_unlock"
+            type="checkbox"
+            .checked=${this.config.confirm_unlock !== false}
+            @change=${this.updateField}
+          />
+          Confirmar antes de abrir</label
+        >
+        <label class="check"
+          ><input
+            name="debug"
+            type="checkbox"
+            .checked=${this.config.debug === true}
+            @change=${this.updateField}
+          />
+          Mostrar diagnóstico anonimizado</label
+        >
       </section>
     </div>`;
   }
