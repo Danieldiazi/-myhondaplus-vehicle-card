@@ -1,5 +1,4 @@
 import { html, type TemplateResult } from "lit";
-import { unsafeSVG } from "lit/directives/unsafe-svg.js";
 import type { VehicleModelKey } from "./types";
 import civicLateralSvg from "../assets/civic-lateral-2.svg?raw";
 
@@ -20,14 +19,15 @@ export function renderVehicleArt(
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
   if (model === "civic") {
-    const civicSvg = civicLateralSvg
-      .replace(
-        "<title>",
-        `<defs><filter id="civic-paint-shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="${color}" flood-opacity=".7" /></filter></defs><title>`,
-      )
-      .replace('fill="currentColor"', 'fill="#20252b" filter="url(#civic-paint-shadow)"');
+    const civicSvg = civicLateralSvg.replace('fill="currentColor"', 'fill="#20252b"');
+    const civicImage = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(civicSvg)}`;
 
-    return html`${unsafeSVG(civicSvg)}`;
+    return html`<img
+      class="vehicle-art civic-lateral-art"
+      src=${civicImage}
+      alt="Honda Civic - vista lateral"
+      style="filter: drop-shadow(0 8px 6px ${color}99)"
+    />`;
   }
 
   return html`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${model}">
