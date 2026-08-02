@@ -2,16 +2,15 @@ import { html, type TemplateResult } from "lit";
 import type { VehicleModelKey } from "./types";
 import civicLateralSvg from "../assets/civic-lateral.svg?raw";
 
-// The supplied Civic artwork is intentionally kept as an SVG asset. Extracting
-// its path lets us render it inline, so the selected paint preset or custom
-// vehicle color can be applied without loading a separate image URL. The
-// artwork starts with the wheel subpaths; we redraw those after the paint
-// layer so the wheels stay neutral instead of inheriting the body color.
+// The supplied Civic artwork is intentionally kept as an SVG asset. It is a
+// compound path, so it is used as line art only. The body, glass and wheels
+// are rendered as separate layers to keep the paint color out of the details.
 const CIVIC_LATERAL_PATH = civicLateralSvg.match(/<path[^>]*\sd="([^"]+)"/)?.[1];
-const CIVIC_WHEEL_PATH = CIVIC_LATERAL_PATH?.slice(
-  0,
-  CIVIC_LATERAL_PATH.indexOf("M179.4 227"),
-).trim();
+const CIVIC_BODY_PATH = CIVIC_LATERAL_PATH?.split(/(?=M)/).find((path) =>
+  path.startsWith("M179.4 227"),
+);
+const CIVIC_GLASS_PATH =
+  "M180 165 L250 107 Q300 78 370 82 L465 91 Q505 98 540 122 L510 132 Q470 109 420 105 L270 105 Q230 120 195 165 Z";
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -29,7 +28,7 @@ export function renderVehicleArt(
   color: string,
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
-  if (model === "civic" && CIVIC_LATERAL_PATH && CIVIC_WHEEL_PATH) {
+  if (model === "civic" && CIVIC_LATERAL_PATH && CIVIC_BODY_PATH) {
     return html`<svg
       class="vehicle-art civic-lateral-art"
       viewBox="0 0 623 300"
@@ -38,22 +37,25 @@ export function renderVehicleArt(
       style="color: ${color}"
     >
       <title>Honda Civic - vista lateral</title>
+      <path d=${CIVIC_BODY_PATH} fill="currentColor" fill-rule="evenodd"></path>
+      <path d=${CIVIC_GLASS_PATH} fill="#d8e2e6" stroke="#20252b" stroke-width="3"></path>
+      ${[
+        [133, 210],
+        [450, 210],
+      ].map(
+        ([cx, cy]) =>
+          html`<g>
+            <circle cx=${cx} cy=${cy} r="38" fill="#20252b"></circle>
+            <circle cx=${cx} cy=${cy} r="27" fill="#d8e2e6"></circle>
+          </g>`,
+      )}
       <path
         d=${CIVIC_LATERAL_PATH}
-        fill="currentColor"
-        fill-rule="evenodd"
+        fill="none"
         stroke="#20252b"
-        stroke-width="1.8"
+        stroke-width="2"
         stroke-linejoin="round"
-        paint-order="stroke fill"
-      ></path>
-      <path
-        d=${CIVIC_WHEEL_PATH}
-        fill="#20252b"
-        fill-rule="evenodd"
-        stroke="#111417"
-        stroke-width="1.2"
-        stroke-linejoin="round"
+        stroke-linecap="round"
       ></path>
     </svg>`;
   }
