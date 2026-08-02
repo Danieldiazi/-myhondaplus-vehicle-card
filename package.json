@@ -1,6 +1,6 @@
 {
   "name": "myhondaplus-vehicle-card",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A polished Lovelace vehicle card for the unofficial My Honda+ Home Assistant integration",
   "type": "module",
   "license": "MIT",
@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check package.json tsconfig.json vite.config.ts src/*.ts tests/**/*.ts",
     "test": "vitest run",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {

@@ -2,7 +2,7 @@ import type { MyHondaPlusCardConfig } from "./types";
 
 export const CARD_TAG = "myhondaplus-vehicle-card";
 export const EDITOR_TAG = "myhondaplus-vehicle-card-editor";
-export const VERSION = "0.5.0";
+export const VERSION = "0.5.1";
 
 export const DEFAULT_CONFIG: Required<
   Pick<
