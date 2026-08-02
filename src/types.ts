@@ -3,6 +3,9 @@ export interface HomeAssistant {
   callWS<T>(message: Record<string, unknown>): Promise<T>;
   callService(domain: string, service: string, data?: Record<string, unknown>): Promise<void>;
   language?: string;
+  config?: {
+    version?: string;
+  };
 }
 
 export interface HassEntity {
@@ -37,6 +40,7 @@ export type CardLayout = "full" | "compact";
 export type ImageMode = "rendered" | "custom";
 export type VehicleModelKey =
   "civic" | "hrv" | "crv" | "zrv" | "jazz" | "honda_e" | "eny1" | "generic";
+export type CardLocale = "auto" | "en" | "es" | "gl";
 
 export interface MyHondaPlusCardConfig {
   type: string;
@@ -53,6 +57,10 @@ export interface MyHondaPlusCardConfig {
   show_model?: boolean;
   animate?: boolean;
   confirm_unlock?: boolean;
+  locale?: CardLocale;
+  debug?: boolean;
+  controls?: Array<"lock" | "climate" | "refresh" | "location">;
+  metrics?: Array<"range" | "battery" | "odometer">;
   entities?: Partial<EntityMap>;
 }
 
@@ -71,4 +79,34 @@ export interface EntityMap {
   trunk: string;
   hood: string;
   lights: string;
+}
+
+export interface VehicleState {
+  locked?: boolean;
+  range: string;
+  battery: string;
+  odometer: string;
+  climateActive: boolean;
+  charging: boolean;
+  doorsOpen: boolean;
+  windowsOpen: boolean;
+  trunkOpen: boolean;
+  hoodOpen: boolean;
+  lightsOn: boolean;
+  ageSeconds?: number;
+  stale: boolean;
+}
+
+export interface DiagnosticEntity {
+  key: keyof EntityMap;
+  entityId?: string;
+  available: boolean;
+}
+
+export interface CardDiagnostics {
+  cardVersion: string;
+  homeAssistantVersion?: string;
+  model: VehicleModelKey;
+  locale: string;
+  entities: DiagnosticEntity[];
 }

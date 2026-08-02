@@ -1,7 +1,9 @@
 import { css, html, LitElement, nothing, type TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { CARD_TAG, DEFAULT_CONFIG, PAINT_PRESETS } from "./constants";
+import { createDiagnostics, diagnosticsText } from "./diagnostics";
 import { resolveEntities } from "./entity-resolver";
+import { localize, normalizeLocale, type TranslationKey } from "./localize";
 import { resolveVehicleModel, vehicleModelLabel } from "./model-resolver";
 import type {
   DeviceRegistryEntry,
@@ -11,8 +13,13 @@ import type {
   HomeAssistant,
   MyHondaPlusCardConfig,
   VehicleModelKey,
+  VehicleState,
 } from "./types";
 import { renderVehicleArt } from "./vehicle-art";
+import { buildVehicleState } from "./vehicle-state";
+
+const DEFAULT_CONTROLS = ["lock", "climate", "refresh", "location"] as const;
+const DEFAULT_METRICS = ["range", "battery", "odometer"] as const;
 
 @customElement(CARD_TAG)
 export class MyHondaPlusVehicleCard extends LitElement {
@@ -20,6 +27,8 @@ export class MyHondaPlusVehicleCard extends LitElement {
   @state() private config: MyHondaPlusCardConfig = { ...DEFAULT_CONFIG };
   @state() private entities: Partial<EntityMap> = {};
   @state() private device?: DeviceRegistryEntry;
+  @state() private busy?: keyof EntityMap;
+  @state() private message?: { kind: "error" | "success"; text: string };
   private loadedDevice?: string;
 
   public static async getConfigElement(): Promise<HTMLElement> {
@@ -32,7 +41,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
   }
 
   public setConfig(config: MyHondaPlusCardConfig): void {
-    if (!config) throw new Error("La configuración es obligatoria");
+    if (!config) throw new Error(localize("required_config", "es"));
     this.config = { ...DEFAULT_CONFIG, ...config };
     this.entities = { ...(config.entities ?? {}) };
     this.loadedDevice = undefined;
@@ -46,9 +55,20 @@ export class MyHondaPlusVehicleCard extends LitElement {
     void this.loadDeviceData();
   }
 
+  private locale(): string {
+    return this.config.locale && this.config.locale !== "auto"
+      ? this.config.locale
+      : normalizeLocale(this.hass?.language);
+  }
+
+  private t(key: TranslationKey, replacements: Record<string, string | number> = {}): string {
+    return localize(key, this.locale(), replacements);
+  }
+
   private async loadDeviceData(): Promise<void> {
     if (!this.hass || !this.config.device || this.loadedDevice === this.config.device) return;
     this.loadedDevice = this.config.device;
+
     try {
       const [registry, devices] = await Promise.all([
         this.hass.callWS<EntityRegistryEntry[]>({ type: "config/entity_registry/list" }),
@@ -59,32 +79,30 @@ export class MyHondaPlusVehicleCard extends LitElement {
         this.config.entities,
       );
       this.device = devices.find((device) => device.id === this.config.device);
+      this.message = undefined;
     } catch (error) {
       this.loadedDevice = undefined;
+      this.message = { kind: "error", text: this.t("discovery_failed") };
       console.warn("My Honda+ Vehicle Card: discovery failed", error);
     }
   }
 
   private entity(key: keyof EntityMap): HassEntity | undefined {
-    const id = this.entities[key];
-    return id ? this.hass?.states[id] : undefined;
+    const entityId = this.entities[key];
+    return entityId ? this.hass?.states[entityId] : undefined;
   }
 
-  private value(key: keyof EntityMap): string {
-    const entity = this.entity(key);
-    if (!entity || ["unknown", "unavailable", "none"].includes(entity.state)) return "—";
-    const unit = entity.attributes.unit_of_measurement;
-    return `${entity.state}${unit ? ` ${String(unit)}` : ""}`;
+  private entityRecord(): Partial<Record<keyof EntityMap, HassEntity | undefined>> {
+    return Object.fromEntries(
+      (Object.keys(this.entities) as (keyof EntityMap)[]).map((key) => [key, this.entity(key)]),
+    ) as Partial<Record<keyof EntityMap, HassEntity | undefined>>;
   }
 
-  private isOn(key: keyof EntityMap): boolean {
-    return ["on", "open", "unlocked", "active", "charging", "plugged", "true"].includes(
-      this.entity(key)?.state.toLowerCase() ?? "",
+  private vehicleState(): VehicleState {
+    return buildVehicleState(
+      this.entityRecord(),
+      this.config.stale_after ?? DEFAULT_CONFIG.stale_after,
     );
-  }
-
-  private isLocked(): boolean {
-    return this.entity("lock")?.state === "locked";
   }
 
   private model(): VehicleModelKey {
@@ -100,26 +118,18 @@ export class MyHondaPlusVehicleCard extends LitElement {
     return /^#[0-9a-f]{6}$/i.test(custom) ? custom : DEFAULT_CONFIG.vehicle_color;
   }
 
-  private ageText(): string {
-    const source = this.entity("updated") ?? this.entity("range") ?? this.entity("odometer");
-    if (!source) return "Sin fecha de actualización";
-    const seconds = Math.max(0, Math.floor((Date.now() - Date.parse(source.last_updated)) / 1000));
-    if (seconds < 60) return "Actualizado ahora";
-    if (seconds < 3600) return `Actualizado hace ${Math.floor(seconds / 60)} min`;
-    return `Actualizado hace ${Math.floor(seconds / 3600)} h`;
-  }
-
-  private isStale(): boolean {
-    const source = this.entity("updated") ?? this.entity("range") ?? this.entity("odometer");
-    if (!source) return false;
-    return (
-      Date.now() - Date.parse(source.last_updated) > (this.config.stale_after ?? 21_600) * 1000
-    );
+  private ageText(state: VehicleState): string {
+    if (state.ageSeconds === undefined) return this.t("no_update_date");
+    if (state.ageSeconds < 60) return this.t("updated_now");
+    if (state.ageSeconds < 3600)
+      return this.t("updated_minutes", { count: Math.floor(state.ageSeconds / 60) });
+    return this.t("updated_hours", { count: Math.floor(state.ageSeconds / 3600) });
   }
 
   private async execute(key: keyof EntityMap): Promise<void> {
     const entityId = this.entities[key];
-    if (!entityId || !this.hass) return;
+    if (!entityId || !this.hass || this.busy) return;
+
     if (key === "location") {
       this.dispatchEvent(
         new CustomEvent("hass-more-info", {
@@ -130,125 +140,209 @@ export class MyHondaPlusVehicleCard extends LitElement {
       );
       return;
     }
+
+    const state = this.vehicleState();
     const domain = entityId.split(".")[0] ?? "";
-    let service = domain === "button" ? "press" : this.isOn(key) ? "turn_off" : "turn_on";
-    if (domain === "lock") service = this.isLocked() ? "unlock" : "lock";
+    let service =
+      domain === "button" ? "press" : this.entity(key)?.state === "on" ? "turn_off" : "turn_on";
+    if (domain === "lock") service = state.locked ? "unlock" : "lock";
+
     if (
       domain === "lock" &&
       service === "unlock" &&
       this.config.confirm_unlock !== false &&
-      !window.confirm("¿Abrir las puertas del vehículo?")
+      !window.confirm(this.t("confirm_unlock"))
     )
       return;
-    await this.hass.callService(domain, service, { entity_id: entityId });
+
+    this.busy = key;
+    this.message = undefined;
+    try {
+      await this.hass.callService(domain, service, { entity_id: entityId });
+    } catch (error) {
+      this.message = { kind: "error", text: this.t("action_failed") };
+      console.warn("My Honda+ Vehicle Card: service call failed", { domain, service, error });
+    } finally {
+      this.busy = undefined;
+    }
   }
 
-  private metric(icon: string, label: string, key: keyof EntityMap): TemplateResult {
+  private async copyDiagnostics(): Promise<void> {
+    const text = diagnosticsText(
+      createDiagnostics(this.hass, this.entities, this.model(), this.locale()),
+    );
+    try {
+      await navigator.clipboard.writeText(text);
+      this.message = { kind: "success", text: "Diagnostics copied" };
+    } catch {
+      this.message = { kind: "error", text };
+    }
+  }
+
+  private metric(key: "range" | "battery" | "odometer", state: VehicleState): TemplateResult {
+    const metadata = {
+      range: { icon: "🛣️", label: this.t("range"), value: state.range },
+      battery: { icon: "🔋", label: this.t("battery"), value: state.battery },
+      odometer: { icon: "◉", label: this.t("odometer"), value: state.odometer },
+    }[key];
+
     return html`<div class="metric">
-      <span>${icon}</span>
-      <div><small>${label}</small><strong>${this.value(key)}</strong></div>
+      <span aria-hidden="true">${metadata.icon}</span>
+      <div><small>${metadata.label}</small><strong>${metadata.value}</strong></div>
     </div>`;
   }
 
   private status(
     icon: string,
     label: string,
-    key: keyof EntityMap,
-    on = "Abierto",
-    off = "Cerrado",
-  ): TemplateResult | typeof nothing {
-    if (!this.entity(key)) return nothing;
-    const active = this.isOn(key);
-    return html`<div class="status ${active ? "warning" : ""}">
-      <span class="status-icon">${icon}</span>
-      <div><b>${label}</b><small>${active ? on : off}</small></div>
-      <i></i>
+    active: boolean,
+    activeText: string,
+    inactiveText: string,
+  ): TemplateResult {
+    return html`<div
+      class="status ${active ? "warning" : ""}"
+      aria-label=${`${label}: ${active ? activeText : inactiveText}`}
+    >
+      <span class="status-icon" aria-hidden="true">${icon}</span>
+      <div><b>${label}</b><small>${active ? activeText : inactiveText}</small></div>
+      <i aria-hidden="true"></i>
     </div>`;
   }
 
   private control(
     icon: string,
     label: string,
-    key: keyof EntityMap,
+    key: "lock" | "climate" | "refresh" | "location",
   ): TemplateResult | typeof nothing {
     if (!this.entities[key]) return nothing;
-    return html`<button type="button" @click=${() => void this.execute(key)}>
-      <span>${icon}</span><small>${label}</small>
+    const loading = this.busy === key;
+    return html`<button
+      type="button"
+      aria-label=${label}
+      aria-busy=${loading ? "true" : "false"}
+      ?disabled=${Boolean(this.busy)}
+      @click=${() => void this.execute(key)}
+    >
+      <span aria-hidden="true">${loading ? "…" : icon}</span><small>${label}</small>
     </button>`;
   }
 
-  private vehicleVisual(): TemplateResult {
+  private vehicleVisual(state: VehicleState): TemplateResult {
     if (this.config.image_mode === "custom" && this.config.vehicle_image) {
-      return html`<img src=${this.config.vehicle_image} alt="Vehículo" loading="lazy" />`;
+      return html`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />`;
     }
     return renderVehicleArt(this.model(), this.paintColor(), {
-      charging: this.isOn("charging"),
-      climate: this.isOn("climate"),
-      lights: this.isOn("lights"),
+      charging: state.charging,
+      climate: state.climateActive,
+      lights: state.lightsOn,
     });
   }
 
   protected override render(): TemplateResult {
-    const lockState = this.entity("lock")?.state;
-    const lockText =
-      lockState === "locked"
-        ? "Cerrado"
-        : lockState === "unlocked"
-          ? "Desbloqueado"
-          : "Estado desconocido";
-    const modelLabel = vehicleModelLabel(this.model());
+    const state = this.vehicleState();
+    const lockedText =
+      state.locked === true
+        ? this.t("locked")
+        : state.locked === false
+          ? this.t("unlocked")
+          : this.t("unknown_state");
+    const controls = this.config.controls ?? [...DEFAULT_CONTROLS];
+    const metrics = this.config.metrics ?? [...DEFAULT_METRICS];
+
     return html`<ha-card class=${this.config.animate === false ? "reduce-motion" : ""}>
       <header>
         <div>
           <h2>${this.config.name}</h2>
-          ${this.config.show_model !== false ? html`<p>${modelLabel}</p>` : nothing}
+          ${this.config.show_model !== false ? html`<p>${vehicleModelLabel(this.model())}</p>` : nothing}
         </div>
-        <span class="badge ${lockState === "unlocked" ? "alert" : ""}"
-          >${this.isLocked() ? "🔒" : "🔓"} ${lockText}</span
-        >
+        <span class="badge ${state.locked === false ? "alert" : ""}">
+          ${state.locked ? "🔒" : "🔓"} ${lockedText}
+        </span>
       </header>
-      <section class="vehicle ${this.isOn("charging") ? "is-charging" : ""}">
-        ${this.vehicleVisual()}
-        <div class="freshness ${this.isStale() ? "stale" : ""}">${this.ageText()}</div>
+
+      <div class="announcer" aria-live="polite">
+        ${this.busy ? this.t("action_in_progress") : (this.message?.text ?? "")}
+      </div>
+      ${this.message ? html`<div class="message ${this.message.kind}">${this.message.text}</div>` : nothing}
+
+      <section class="vehicle ${state.charging ? "is-charging" : ""}">
+        ${this.vehicleVisual(state)}
+        <div
+          class="freshness ${state.stale ? "stale" : ""}"
+          title=${state.stale ? this.t("stale_data") : ""}
+        >
+          ${this.ageText(state)}
+        </div>
       </section>
+
       ${
         this.config.device
           ? html`<section class="metrics">
-              ${this.metric("🛣️", "Autonomía", "range")}${this.metric("🔋", "Batería", "battery")}${this.metric("◉", "Kilometraje", "odometer")}
+              ${metrics.map((key) => this.metric(key, state))}
             </section>`
-          : html`<div class="setup">Selecciona el vehículo en el editor.</div>`
+          : html`<div class="setup">${this.t("select_vehicle")}</div>`
       }
       ${
         this.config.layout !== "compact"
           ? html`<section class="statuses">
-              ${this.status("🚪", "Puertas", "doors")}${this.status("▤", "Ventanas", "windows")}${this.status("▰", "Maletero", "trunk")}${this.status("▱", "Capó", "hood")}${this.status("💡", "Luces", "lights", "Encendidas", "Apagadas")}${this.status("⚡", "Carga", "charging", "Cargando", "Inactiva")}
+              ${this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed"))}
+              ${this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed"))}
+              ${this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off"))}
+              ${this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive"))}
             </section>`
           : nothing
       }
       ${
         this.config.show_controls !== false
-          ? html`<nav class="controls">
-              ${this.control(this.isLocked() ? "🔓" : "🔒", this.isLocked() ? "Abrir" : "Cerrar", "lock")}${this.control("❄️", "Clima", "climate")}${this.control("↻", "Actualizar", "refresh")}${this.control("⌖", "Ubicación", "location")}
+          ? html`<nav class="controls" aria-label="Vehicle controls">
+              ${controls.map((key) => {
+                const metadata = {
+                  lock: {
+                    icon: state.locked ? "🔓" : "🔒",
+                    label: state.locked ? this.t("unlock") : this.t("lock"),
+                  },
+                  climate: { icon: "❄️", label: this.t("climate") },
+                  refresh: { icon: "↻", label: this.t("refresh") },
+                  location: { icon: "⌖", label: this.t("location") },
+                }[key];
+                return this.control(metadata.icon, metadata.label, key);
+              })}
             </nav>`
+          : nothing
+      }
+      ${
+        this.config.debug
+          ? html`<details class="diagnostics">
+              <summary>Diagnostics</summary>
+              <button type="button" @click=${() => void this.copyDiagnostics()}>
+                Copy anonymized diagnostics
+              </button>
+              <pre>
+${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this.locale()))}</pre>
+            </details>`
           : nothing
       }
     </ha-card>`;
   }
 
   public static override styles = css`
+    :host {
+      display: block;
+    }
     ha-card {
       padding: 20px;
       overflow: hidden;
       color: var(--primary-text-color);
       background: linear-gradient(
         145deg,
-        var(--ha-card-background, var(--card-background-color)) 0%,
+        var(--ha-card-background, var(--card-background-color)),
         color-mix(
-            in srgb,
-            var(--ha-card-background, var(--card-background-color)) 90%,
-            var(--primary-color) 10%
-          )
-          100%
+          in srgb,
+          var(--ha-card-background, var(--card-background-color)) 90%,
+          var(--primary-color) 10%
+        )
       );
     }
     header {
@@ -260,7 +354,6 @@ export class MyHondaPlusVehicleCard extends LitElement {
     h2 {
       margin: 0;
       font-size: 1.25rem;
-      letter-spacing: -0.02em;
     }
     p {
       margin: 4px 0 0;
@@ -270,13 +363,27 @@ export class MyHondaPlusVehicleCard extends LitElement {
     .badge {
       padding: 7px 11px;
       border-radius: 999px;
-      background: color-mix(in srgb, var(--secondary-background-color) 88%, transparent);
-      height: fit-content;
-      font-size: 0.76rem;
+      background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
+      font-size: 0.76rem;
     }
-    .alert {
+    .alert,
+    .message.error {
       color: var(--error-color);
+    }
+    .announcer {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .message {
+      margin-top: 10px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: var(--secondary-background-color);
+      font-size: 0.8rem;
     }
     .vehicle {
       position: relative;
@@ -303,10 +410,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
     }
     .freshness.stale {
       color: var(--warning-color, #f9a825);
+      font-weight: 600;
     }
-    .metrics {
+    .metrics,
+    .controls {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 9px;
     }
     .metric {
@@ -315,25 +424,22 @@ export class MyHondaPlusVehicleCard extends LitElement {
       gap: 9px;
       padding: 11px;
       border-radius: 14px;
-      background: color-mix(in srgb, var(--secondary-background-color) 86%, transparent);
-      border: 1px solid color-mix(in srgb, var(--divider-color) 70%, transparent);
+      background: var(--secondary-background-color);
+      border: 1px solid var(--divider-color);
     }
-    .metric > span {
-      font-size: 1.15rem;
-    }
-    .metric small {
+    .metric small,
+    .metric strong,
+    .status small,
+    .status b {
       display: block;
+    }
+    .metric small,
+    .status small {
       color: var(--secondary-text-color);
-      font-size: 0.7rem;
-    }
-    .metric strong {
-      display: block;
-      margin-top: 3px;
-      font-size: 0.93rem;
     }
     .statuses {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-top: 13px;
     }
@@ -347,32 +453,17 @@ export class MyHondaPlusVehicleCard extends LitElement {
       border-radius: 12px;
       font-size: 0.78rem;
     }
-    .status-icon {
-      font-size: 1rem;
-    }
-    .status b,
-    .status small {
-      display: block;
-    }
-    .status small {
-      color: var(--secondary-text-color);
-      margin-top: 2px;
-    }
     .status i {
       width: 9px;
       height: 9px;
       border-radius: 50%;
       background: var(--success-color, #43a047);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--success-color, #43a047) 18%, transparent);
     }
     .status.warning i {
       background: var(--error-color);
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--error-color) 18%, transparent);
     }
     .controls {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 9px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       margin-top: 15px;
     }
     button {
@@ -382,26 +473,21 @@ export class MyHondaPlusVehicleCard extends LitElement {
       border: 1px solid var(--divider-color);
       border-radius: 14px;
       padding: 10px 5px;
-      background: color-mix(in srgb, var(--secondary-background-color) 84%, transparent);
+      background: var(--secondary-background-color);
       color: var(--primary-text-color);
       cursor: pointer;
-      transition:
-        transform 0.18s ease,
-        background 0.18s ease;
+      transition: transform 0.18s ease;
     }
-    button:hover {
+    button:hover:not(:disabled) {
       transform: translateY(-2px);
-      background: color-mix(
-        in srgb,
-        var(--secondary-background-color) 70%,
-        var(--primary-color) 30%
-      );
     }
-    button span {
-      font-size: 1.2rem;
+    button:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
-    button small {
-      font-size: 0.72rem;
+    button:disabled {
+      cursor: progress;
+      opacity: 0.65;
     }
     .setup {
       padding: 18px;
@@ -410,35 +496,31 @@ export class MyHondaPlusVehicleCard extends LitElement {
       text-align: center;
       color: var(--secondary-text-color);
     }
-    .charge {
-      transform-origin: center;
-      animation: pulse 1.5s ease-in-out infinite;
+    .diagnostics {
+      margin-top: 14px;
+      font-size: 0.8rem;
     }
-    .climate-wave {
-      animation: float 2s ease-in-out infinite;
+    .diagnostics pre {
+      overflow: auto;
+      max-height: 260px;
+      padding: 10px;
+      background: var(--secondary-background-color);
+      border-radius: 10px;
+      white-space: pre-wrap;
     }
-    .headlight {
-      animation: glow 1.8s ease-in-out infinite;
-    }
-    .reduce-motion * {
+    .reduce-motion *,
+    .reduce-motion *::before,
+    .reduce-motion *::after {
       animation: none !important;
       transition: none !important;
     }
-    @keyframes pulse {
-      50% {
-        opacity: 0.55;
-        transform: translate(730px, 154px) scale(1.12);
-      }
-    }
-    @keyframes float {
-      50% {
-        transform: translateY(-7px);
-        opacity: 0.25;
-      }
-    }
-    @keyframes glow {
-      50% {
-        opacity: 0.68;
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
       }
     }
     @media (max-width: 520px) {
@@ -448,14 +530,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
       .vehicle {
         min-height: 190px;
       }
-      .metrics {
-        grid-template-columns: 1fr;
-      }
+      .metrics,
       .statuses {
         grid-template-columns: 1fr;
       }
       .controls {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
   `;
