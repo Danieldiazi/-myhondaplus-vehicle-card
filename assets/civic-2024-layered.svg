@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 623 300" role="img" aria-labelledby="title desc">
+  <title id="title">Honda Civic 2024, vista lateral</title>
+  <desc id="desc">Ilustración lateral de un Honda Civic con carrocería coloreable, cristales y ruedas independientes.</desc>
+
+  <defs>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9e8ee" />
+      <stop offset="1" stop-color="#8299a5" />
+    </linearGradient>
+    <linearGradient id="tire" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#30383d" />
+      <stop offset="1" stop-color="#111518" />
+    </linearGradient>
+  </defs>
+
+  <g class="vehicle-shadow" opacity=".16">
+    <ellipse cx="312" cy="242" rx="267" ry="14" fill="#000" />
+  </g>
+
+  <g class="body" fill="currentColor">
+    <path d="M27 207c5-18 22-30 53-38l93-14 68-54c24-19 51-29 86-31l69 4c38 3 71 15 104 31l49 24 27 3 4 26-11 10 21 12v35l-43 5c-5-23-23-39-48-39s-45 16-50 39H181c-5-23-24-39-49-39s-44 16-49 39H34z" />
+    <path d="M34 207h49c5-23 24-39 49-39s44 16 49 39h268c5-23 25-39 50-39s43 16 48 39h43l-2 15-68 5H177l-90-3-52-4z" />
+  </g>
+
+  <g class="glass" fill="url(#glass)" stroke="#20272b" stroke-width="3" stroke-linejoin="round">
+    <path d="m184 153 57-45c22-18 48-28 80-29l67 4c36 3 66 13 96 28l36 18-25 8-34-25c-22-9-46-14-73-16l-65-3c-29 1-51 9-71 25l-43 35z" />
+    <path d="m319 81-12 73M404 87l38 67" fill="none" />
+  </g>
+
+  <g class="wheels">
+    <g transform="translate(132 207)">
+      <circle r="37" fill="url(#tire)" stroke="#15191c" stroke-width="3" />
+      <circle r="27" fill="#c5cdd0" stroke="#20272b" stroke-width="3" />
+      <circle r="19" fill="#879298" stroke="#20272b" stroke-width="2" />
+      <path d="M0-17v34M-17 0h34M-12-12l24 24M12-12-12 12" stroke="#273035" stroke-width="3" />
+      <circle r="5" fill="#20272b" />
+    </g>
+    <g transform="translate(487 207)">
+      <circle r="37" fill="url(#tire)" stroke="#15191c" stroke-width="3" />
+      <circle r="27" fill="#c5cdd0" stroke="#20272b" stroke-width="3" />
+      <circle r="19" fill="#879298" stroke="#20272b" stroke-width="2" />
+      <path d="M0-17v34M-17 0h34M-12-12l24 24M12-12-12 12" stroke="#273035" stroke-width="3" />
+      <circle r="5" fill="#20272b" />
+    </g>
+  </g>
+
+  <g class="lines" fill="none" stroke="#20272b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M27 207c5-18 22-30 53-38l93-14 68-54c24-19 51-29 86-31l69 4c38 3 71 15 104 31l49 24 27 3 4 26-11 10 21 12v35l-43 5M34 222l52 5 91 3h278l68-5" />
+    <path d="M80 169c29-5 60-9 93-12M493 129l42 6 28 18-24 10-39-19-35-3" />
+    <path d="M181 153v67M314 154l-1 66M440 154l18 66M181 201h277" />
+    <path d="M80 184c16-8 34-11 54-10M513 181l45 3M29 207l17-17 36-6M35 220l35-2" />
+    <path d="M543 151h30M548 157l25 3" stroke-width="2" />
+    <path d="M87 224c5-23 24-39 49-39s44 16 49 39M438 224c5-23 25-39 50-39s43 16 48 39" />
+  </g>
+
+  <g class="lights" fill="#f5f1c4" stroke="#20272b" stroke-width="2">
+    <path d="M39 187c12-9 26-13 43-14l-12 14-31 8z" />
+    <path d="M560 148h18l6 10-22 3z" />
+  </g>
+</svg>
