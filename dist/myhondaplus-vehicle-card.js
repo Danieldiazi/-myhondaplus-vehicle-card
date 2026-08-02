@@ -284,9 +284,9 @@ S.elementStyles = [], S.shadowRootOptions = { mode: "open" }, S[H("elementProper
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const z = globalThis, c1 = (t) => t, B = z.trustedTypes, l1 = B ? B.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, A1 = "$lit$", v = `lit$${Math.random().toFixed(9).slice(2)}$`, w1 = "?" + v, D1 = `<${w1}>`, k = document, T = () => k.createComment(""), U = (t) => t === null || typeof t != "object" && typeof t != "function", i1 = Array.isArray, R1 = (t) => i1(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", G = `[ 	
+const z = globalThis, c1 = (t) => t, Q = z.trustedTypes, l1 = Q ? Q.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, A1 = "$lit$", v = `lit$${Math.random().toFixed(9).slice(2)}$`, w1 = "?" + v, D1 = `<${w1}>`, k = document, T = () => k.createComment(""), U = (t) => t === null || typeof t != "object" && typeof t != "function", i1 = Array.isArray, R1 = (t) => i1(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", G = `[ 	
 \f\r]`, O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, d1 = /-->/g, h1 = />/g, y = RegExp(`>|${G}(?:([^\\s"'>=/]+)(${G}*=${G}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), C1 = /'/g, u1 = /"/g, x1 = /^(?:script|style|textarea|title)$/i, V1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = V1(1), L = Symbol.for("lit-noChange"), h = Symbol.for("lit-nothing"), p1 = /* @__PURE__ */ new WeakMap(), w = k.createTreeWalker(k, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), C1 = /'/g, u1 = /"/g, x1 = /^(?:script|style|textarea|title)$/i, V1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), l = V1(1), L = Symbol.for("lit-noChange"), h = Symbol.for("lit-nothing"), p1 = /* @__PURE__ */ new WeakMap(), w = k.createTreeWalker(k, 129);
 function k1(t, e) {
   if (!i1(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return l1 !== void 0 ? l1.createHTML(e) : e;
@@ -296,10 +296,10 @@ const j1 = (t, e) => {
   let s, r = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", a = O;
   for (let c = 0; c < i; c++) {
     const n = t[c];
-    let C, u, l = -1, g = 0;
-    for (; g < n.length && (a.lastIndex = g, u = a.exec(n), u !== null); ) g = a.lastIndex, a === O ? u[1] === "!--" ? a = d1 : u[1] !== void 0 ? a = h1 : u[2] !== void 0 ? (x1.test(u[2]) && (s = RegExp("</" + u[2], "g")), a = y) : u[3] !== void 0 && (a = y) : a === y ? u[0] === ">" ? (a = s ?? O, l = -1) : u[1] === void 0 ? l = -2 : (l = a.lastIndex - u[2].length, C = u[1], a = u[3] === void 0 ? y : u[3] === '"' ? u1 : C1) : a === u1 || a === C1 ? a = y : a === d1 || a === h1 ? a = O : (a = y, s = void 0);
+    let C, u, d = -1, g = 0;
+    for (; g < n.length && (a.lastIndex = g, u = a.exec(n), u !== null); ) g = a.lastIndex, a === O ? u[1] === "!--" ? a = d1 : u[1] !== void 0 ? a = h1 : u[2] !== void 0 ? (x1.test(u[2]) && (s = RegExp("</" + u[2], "g")), a = y) : u[3] !== void 0 && (a = y) : a === y ? u[0] === ">" ? (a = s ?? O, d = -1) : u[1] === void 0 ? d = -2 : (d = a.lastIndex - u[2].length, C = u[1], a = u[3] === void 0 ? y : u[3] === '"' ? u1 : C1) : a === u1 || a === C1 ? a = y : a === d1 || a === h1 ? a = O : (a = y, s = void 0);
     const m = a === y && t[c + 1].startsWith("/>") ? " " : "";
-    r += a === O ? n + D1 : l >= 0 ? (o.push(C), n.slice(0, l) + A1 + n.slice(l) + v + m) : n + v + (l === -2 ? c : m);
+    r += a === O ? n + D1 : d >= 0 ? (o.push(C), n.slice(0, d) + A1 + n.slice(d) + v + m) : n + v + (d === -2 ? c : m);
   }
   return [k1(t, r + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
@@ -310,27 +310,27 @@ class N {
     let r = 0, a = 0;
     const c = e.length - 1, n = this.parts, [C, u] = j1(e, i);
     if (this.el = N.createElement(C, o), w.currentNode = this.el.content, i === 2 || i === 3) {
-      const l = this.el.content.firstChild;
-      l.replaceWith(...l.childNodes);
+      const d = this.el.content.firstChild;
+      d.replaceWith(...d.childNodes);
     }
     for (; (s = w.nextNode()) !== null && n.length < c; ) {
       if (s.nodeType === 1) {
-        if (s.hasAttributes()) for (const l of s.getAttributeNames()) if (l.endsWith(A1)) {
-          const g = u[a++], m = s.getAttribute(l).split(v), V = /([.?@])?(.*)/.exec(g);
-          n.push({ type: 1, index: r, name: V[2], strings: m, ctor: V[1] === "." ? B1 : V[1] === "?" ? Q1 : V[1] === "@" ? F1 : q }), s.removeAttribute(l);
-        } else l.startsWith(v) && (n.push({ type: 6, index: r }), s.removeAttribute(l));
+        if (s.hasAttributes()) for (const d of s.getAttributeNames()) if (d.endsWith(A1)) {
+          const g = u[a++], m = s.getAttribute(d).split(v), V = /([.?@])?(.*)/.exec(g);
+          n.push({ type: 1, index: r, name: V[2], strings: m, ctor: V[1] === "." ? Q1 : V[1] === "?" ? B1 : V[1] === "@" ? F1 : q }), s.removeAttribute(d);
+        } else d.startsWith(v) && (n.push({ type: 6, index: r }), s.removeAttribute(d));
         if (x1.test(s.tagName)) {
-          const l = s.textContent.split(v), g = l.length - 1;
+          const d = s.textContent.split(v), g = d.length - 1;
           if (g > 0) {
-            s.textContent = B ? B.emptyScript : "";
-            for (let m = 0; m < g; m++) s.append(l[m], T()), w.nextNode(), n.push({ type: 2, index: ++r });
-            s.append(l[g], T());
+            s.textContent = Q ? Q.emptyScript : "";
+            for (let m = 0; m < g; m++) s.append(d[m], T()), w.nextNode(), n.push({ type: 2, index: ++r });
+            s.append(d[g], T());
           }
         }
       } else if (s.nodeType === 8) if (s.data === w1) n.push({ type: 2, index: r });
       else {
-        let l = -1;
-        for (; (l = s.data.indexOf(v, l + 1)) !== -1; ) n.push({ type: 7, index: r }), l += v.length - 1;
+        let d = -1;
+        for (; (d = s.data.indexOf(v, d + 1)) !== -1; ) n.push({ type: 7, index: r }), d += v.length - 1;
       }
       r++;
     }
@@ -463,7 +463,7 @@ class q {
     e === h ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
-class B1 extends q {
+class Q1 extends q {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -471,7 +471,7 @@ class B1 extends q {
     this.element[this.name] = e === h ? void 0 : e;
   }
 }
-class Q1 extends q {
+class B1 extends q {
   constructor() {
     super(...arguments), this.type = 4;
   }
@@ -601,8 +601,8 @@ function o1(t) {
 function b(t) {
   return o1({ ...t, state: !0, attribute: !1 });
 }
-const Q = "myhondaplus-vehicle-card", J1 = "myhondaplus-vehicle-card-editor", S1 = "0.5.1", p = {
-  type: `custom:${Q}`,
+const B = "myhondaplus-vehicle-card", J1 = "myhondaplus-vehicle-card-editor", S1 = "0.5.1", p = {
+  type: `custom:${B}`,
   name: "My Honda+",
   vehicle_color: "#a51d2d",
   color_preset: "rallye_red",
@@ -689,7 +689,7 @@ function te(t, e = {}) {
     if (i[o]) continue;
     const r = t.filter((a) => !a.disabled_by).filter((a) => s.domains.includes(a.entity_id.split(".")[0] ?? "")).map((a) => {
       const c = ee(a), n = s.hints.reduce(
-        (C, u, l) => C + (c.includes(u) ? 100 - l : 0),
+        (C, u, d) => C + (c.includes(u) ? 100 - d : 0),
         0
       );
       return { entry: a, score: n };
@@ -855,7 +855,7 @@ const re = '<svg xmlns="http://www.w3.org/2000/svg" width="623" height="300" vie
 var $1;
 const Z = ($1 = re.match(/<path[^>]*\sd="([^"]+)"/)) == null ? void 0 : $1[1], v1 = Z == null ? void 0 : Z.split(/(?=M)/).find(
   (t) => t.startsWith("M179.4 227")
-), ne = {
+), ne = "M180 165 L250 107 Q300 78 370 82 L465 91 Q505 98 540 122 L510 132 Q470 109 420 105 L270 105 Q230 120 195 165 Z", ce = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
   hrv: "M250 174 L335 78 Q388 45 486 50 L642 66 Q702 77 758 171",
   crv: "M235 174 L320 62 Q380 30 500 38 L660 55 Q724 70 775 171",
@@ -865,8 +865,8 @@ const Z = ($1 = re.match(/<path[^>]*\sd="([^"]+)"/)) == null ? void 0 : $1[1], v
   eny1: "M240 174 L326 70 Q388 36 500 42 L655 58 Q716 72 770 171",
   generic: "M260 174 L340 82 Q395 50 488 55 L625 68 Q687 78 745 171"
 };
-function ce(t, e, i) {
-  return t === "civic" && Z && v1 ? d`<svg
+function le(t, e, i) {
+  return t === "civic" && Z && v1 ? l`<svg
       class="vehicle-art civic-lateral-art"
       viewBox="0 0 623 300"
       role="img"
@@ -874,9 +874,26 @@ function ce(t, e, i) {
       style="color: ${e}"
     >
       <title>Honda Civic - vista lateral</title>
-      <path d=${Z} fill="#20252b" fill-rule="evenodd"></path>
       <path d=${v1} fill="currentColor" fill-rule="evenodd"></path>
-    </svg>` : d`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${t}">
+      <path d=${ne} fill="#d8e2e6" stroke="#20252b" stroke-width="3"></path>
+      ${[
+    [133, 210],
+    [450, 210]
+  ].map(
+    ([o, s]) => l`<g>
+            <circle cx=${o} cy=${s} r="38" fill="#20252b"></circle>
+            <circle cx=${o} cy=${s} r="27" fill="#d8e2e6"></circle>
+          </g>`
+  )}
+      <path
+        d=${Z}
+        fill="none"
+        stroke="#20252b"
+        stroke-width="2"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      ></path>
+    </svg>` : l`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${t}">
     <defs>
       <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#fff" stop-opacity=".46"></stop>
@@ -891,9 +908,9 @@ function ce(t, e, i) {
       <filter id="glow"><feGaussianBlur stdDeviation="8"></feGaussianBlur></filter>
     </defs>
     <ellipse cx="480" cy="316" rx="350" ry="22" fill="rgba(0,0,0,.22)"></ellipse>
-    ${i.climate ? d`<g class="climate-wave" fill="none" stroke="var(--info-color,#42a5f5)" stroke-width="5" opacity=".55"><path d="M390 82q-20-25 0-48"></path><path d="M470 72q-20-25 0-48"></path><path d="M550 82q-20-25 0-48"></path></g>` : null}
+    ${i.climate ? l`<g class="climate-wave" fill="none" stroke="var(--info-color,#42a5f5)" stroke-width="5" opacity=".55"><path d="M390 82q-20-25 0-48"></path><path d="M470 72q-20-25 0-48"></path><path d="M550 82q-20-25 0-48"></path></g>` : null}
     <path
-      d="M95 245 Q120 198 210 182 L270 174 ${ne[t]} L840 196 Q894 207 915 254 L899 291 L790 300 Q778 235 705 235 Q632 235 620 300 L350 300 Q338 235 265 235 Q192 235 180 300 L87 284 Z"
+      d="M95 245 Q120 198 210 182 L270 174 ${ce[t]} L840 196 Q894 207 915 254 L899 291 L790 300 Q778 235 705 235 Q632 235 620 300 L350 300 Q338 235 265 235 Q192 235 180 300 L87 284 Z"
       fill="url(#paint)"
       stroke="rgba(0,0,0,.45)"
       stroke-width="5"
@@ -917,27 +934,27 @@ function ce(t, e, i) {
       stroke-width="6"
       stroke-linecap="round"
     ></path>
-    ${i.lights ? d`<g class="headlight"><ellipse cx="864" cy="228" rx="28" ry="10" fill="#fff7c2"></ellipse><path d="M880 226 L950 206 L950 248 Z" fill="#fff7c2" opacity=".24" filter="url(#glow)"></path></g>` : null}
-    ${i.charging ? d`<g class="charge" transform="translate(730 154)"><circle r="26" fill="var(--success-color,#43a047)" opacity=".92"></circle><path d="M4-18L-10 3H0L-5 19L12-5H2Z" fill="white"></path></g>` : null}
-    ${[265, 705].map((o) => d`<g><circle cx=${o} cy="288" r="65" fill="#15191c"></circle><circle cx=${o} cy="288" r="37" fill="#8f979d"></circle><circle cx=${o} cy="288" r="13" fill="#34393d"></circle></g>`)}
+    ${i.lights ? l`<g class="headlight"><ellipse cx="864" cy="228" rx="28" ry="10" fill="#fff7c2"></ellipse><path d="M880 226 L950 206 L950 248 Z" fill="#fff7c2" opacity=".24" filter="url(#glow)"></path></g>` : null}
+    ${i.charging ? l`<g class="charge" transform="translate(730 154)"><circle r="26" fill="var(--success-color,#43a047)" opacity=".92"></circle><path d="M4-18L-10 3H0L-5 19L12-5H2Z" fill="white"></path></g>` : null}
+    ${[265, 705].map((o) => l`<g><circle cx=${o} cy="288" r="65" fill="#15191c"></circle><circle cx=${o} cy="288" r="37" fill="#8f979d"></circle><circle cx=${o} cy="288" r="13" fill="#34393d"></circle></g>`)}
   </svg>`;
 }
-const le = /* @__PURE__ */ new Set(["on", "open", "unlocked", "active", "charging", "plugged", "true"]), de = /* @__PURE__ */ new Set(["unknown", "unavailable", "none"]);
+const de = /* @__PURE__ */ new Set(["on", "open", "unlocked", "active", "charging", "plugged", "true"]), he = /* @__PURE__ */ new Set(["unknown", "unavailable", "none"]);
 function A(t) {
-  return le.has((t == null ? void 0 : t.state.toLowerCase()) ?? "");
+  return de.has((t == null ? void 0 : t.state.toLowerCase()) ?? "");
 }
 function K(t) {
-  if (!t || de.has(t.state.toLowerCase())) return "—";
+  if (!t || he.has(t.state.toLowerCase())) return "—";
   const e = t.attributes.unit_of_measurement;
   return `${t.state}${e ? ` ${String(e)}` : ""}`;
 }
-function he(t, e = Date.now()) {
+function Ce(t, e = Date.now()) {
   if (!t) return;
   const i = Date.parse(t.last_updated);
   return Number.isFinite(i) ? Math.max(0, Math.floor((e - i) / 1e3)) : void 0;
 }
-function Ce(t, e, i = Date.now()) {
-  const o = t.updated ?? t.range ?? t.odometer, s = he(o, i);
+function ue(t, e, i = Date.now()) {
+  const o = t.updated ?? t.range ?? t.odometer, s = Ce(o, i);
   return {
     locked: t.lock ? t.lock.state === "locked" : void 0,
     range: K(t.range),
@@ -954,18 +971,18 @@ function Ce(t, e, i = Date.now()) {
     stale: s !== void 0 && s > e
   };
 }
-var ue = Object.defineProperty, pe = Object.getOwnPropertyDescriptor, M = (t, e, i, o) => {
-  for (var s = o > 1 ? void 0 : o ? pe(e, i) : e, r = t.length - 1, a; r >= 0; r--)
+var pe = Object.defineProperty, ge = Object.getOwnPropertyDescriptor, M = (t, e, i, o) => {
+  for (var s = o > 1 ? void 0 : o ? ge(e, i) : e, r = t.length - 1, a; r >= 0; r--)
     (a = t[r]) && (s = (o ? a(e, i, s) : a(s)) || s);
-  return o && s && ue(e, i, s), s;
+  return o && s && pe(e, i, s), s;
 };
-const ge = ["lock", "climate", "refresh", "location"], fe = ["range", "battery", "odometer"];
+const fe = ["lock", "climate", "refresh", "location"], me = ["range", "battery", "odometer"];
 let f = class extends E {
   constructor() {
     super(...arguments), this.config = { ...p }, this.entities = {};
   }
   static async getConfigElement() {
-    return await Promise.resolve().then(() => _e), document.createElement("myhondaplus-vehicle-card-editor");
+    return await Promise.resolve().then(() => $e), document.createElement("myhondaplus-vehicle-card-editor");
   }
   static getStubConfig() {
     return { ...p };
@@ -1015,7 +1032,7 @@ let f = class extends E {
     );
   }
   vehicleState() {
-    return Ce(
+    return ue(
       this.entityRecord(),
       this.config.stale_after ?? p.stale_after
     );
@@ -1075,13 +1092,13 @@ let f = class extends E {
       battery: { icon: "🔋", label: this.t("battery"), value: e.battery },
       odometer: { icon: "◉", label: this.t("odometer"), value: e.odometer }
     }[t];
-    return d`<div class="metric">
+    return l`<div class="metric">
       <span aria-hidden="true">${i.icon}</span>
       <div><small>${i.label}</small><strong>${i.value}</strong></div>
     </div>`;
   }
   status(t, e, i, o, s) {
-    return d`<div
+    return l`<div
       class="status ${i ? "warning" : ""}"
       aria-label=${`${e}: ${i ? o : s}`}
     >
@@ -1093,7 +1110,7 @@ let f = class extends E {
   control(t, e, i) {
     if (!this.entities[i]) return h;
     const o = this.busy === i;
-    return d`<button
+    return l`<button
       type="button"
       aria-label=${e}
       aria-busy=${o ? "true" : "false"}
@@ -1104,7 +1121,7 @@ let f = class extends E {
     </button>`;
   }
   vehicleVisual(t) {
-    return this.config.image_mode === "custom" && this.config.vehicle_image ? d`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />` : ce(this.model(), this.paintColor(), {
+    return this.config.image_mode === "custom" && this.config.vehicle_image ? l`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />` : le(this.model(), this.paintColor(), {
       charging: t.charging,
       climate: t.climateActive,
       lights: t.lightsOn
@@ -1112,12 +1129,12 @@ let f = class extends E {
   }
   render() {
     var s;
-    const t = this.vehicleState(), e = t.locked === !0 ? this.t("locked") : t.locked === !1 ? this.t("unlocked") : this.t("unknown_state"), i = this.config.controls ?? [...ge], o = this.config.metrics ?? [...fe];
-    return d`<ha-card class=${this.config.animate === !1 ? "reduce-motion" : ""}>
+    const t = this.vehicleState(), e = t.locked === !0 ? this.t("locked") : t.locked === !1 ? this.t("unlocked") : this.t("unknown_state"), i = this.config.controls ?? [...fe], o = this.config.metrics ?? [...me];
+    return l`<ha-card class=${this.config.animate === !1 ? "reduce-motion" : ""}>
       <header>
         <div>
           <h2>${this.config.name}</h2>
-          ${this.config.show_model !== !1 ? d`<p>${ae(this.model())}</p>` : h}
+          ${this.config.show_model !== !1 ? l`<p>${ae(this.model())}</p>` : h}
         </div>
         <span class="badge ${t.locked === !1 ? "alert" : ""}">
           ${t.locked ? "🔒" : "🔓"} ${e}
@@ -1127,7 +1144,7 @@ let f = class extends E {
       <div class="announcer" aria-live="polite">
         ${this.busy ? this.t("action_in_progress") : ((s = this.message) == null ? void 0 : s.text) ?? ""}
       </div>
-      ${this.message ? d`<div class="message ${this.message.kind}">${this.message.text}</div>` : h}
+      ${this.message ? l`<div class="message ${this.message.kind}">${this.message.text}</div>` : h}
 
       <section class="vehicle ${t.charging ? "is-charging" : ""}">
         ${this.vehicleVisual(t)}
@@ -1139,10 +1156,10 @@ let f = class extends E {
         </div>
       </section>
 
-      ${this.config.device ? d`<section class="metrics">
+      ${this.config.device ? l`<section class="metrics">
               ${o.map((r) => this.metric(r, t))}
-            </section>` : d`<div class="setup">${this.t("select_vehicle")}</div>`}
-      ${this.config.layout !== "compact" ? d`<section class="statuses">
+            </section>` : l`<div class="setup">${this.t("select_vehicle")}</div>`}
+      ${this.config.layout !== "compact" ? l`<section class="statuses">
               ${this.status("🚪", this.t("doors"), t.doorsOpen, this.t("open"), this.t("closed"))}
               ${this.status("▤", this.t("windows"), t.windowsOpen, this.t("open"), this.t("closed"))}
               ${this.status("▰", this.t("trunk"), t.trunkOpen, this.t("open"), this.t("closed"))}
@@ -1150,7 +1167,7 @@ let f = class extends E {
               ${this.status("💡", this.t("lights"), t.lightsOn, this.t("on"), this.t("off"))}
               ${this.status("⚡", this.t("charging"), t.charging, this.t("active"), this.t("inactive"))}
             </section>` : h}
-      ${this.config.show_controls !== !1 ? d`<nav class="controls" aria-label="Vehicle controls">
+      ${this.config.show_controls !== !1 ? l`<nav class="controls" aria-label="Vehicle controls">
               ${i.map((r) => {
       const a = {
         lock: {
@@ -1164,7 +1181,7 @@ let f = class extends E {
       return this.control(a.icon, a.label, r);
     })}
             </nav>` : h}
-      ${this.config.debug ? d`<details class="diagnostics">
+      ${this.config.debug ? l`<details class="diagnostics">
               <summary>Diagnostics</summary>
               <button type="button" @click=${() => void this.copyDiagnostics()}>
                 Copy anonymized diagnostics
@@ -1406,11 +1423,11 @@ M([
   b()
 ], f.prototype, "message", 2);
 f = M([
-  M1(Q)
+  M1(B)
 ], f);
 window.customCards ?? (window.customCards = []);
-window.customCards.some((t) => t.type === Q) || window.customCards.push({
-  type: Q,
+window.customCards.some((t) => t.type === B) || window.customCards.push({
+  type: B,
   name: "My Honda+ Vehicle Card",
   description: "Tarjeta visual para vehículos conectados mediante My Honda+.",
   preview: !0,
@@ -1421,10 +1438,10 @@ console.info(
   "color:white;background:#a51d2d;font-weight:700",
   "color:#a51d2d;background:white;font-weight:700"
 );
-var me = Object.defineProperty, ve = Object.getOwnPropertyDescriptor, R = (t, e, i, o) => {
-  for (var s = o > 1 ? void 0 : o ? ve(e, i) : e, r = t.length - 1, a; r >= 0; r--)
+var ve = Object.defineProperty, _e = Object.getOwnPropertyDescriptor, R = (t, e, i, o) => {
+  for (var s = o > 1 ? void 0 : o ? _e(e, i) : e, r = t.length - 1, a; r >= 0; r--)
     (a = t[r]) && (s = (o ? a(e, i, s) : a(s)) || s);
-  return o && s && me(e, i, s), s;
+  return o && s && ve(e, i, s), s;
 };
 let $ = class extends E {
   constructor() {
@@ -1485,11 +1502,11 @@ let $ = class extends E {
   }
   checklist(t, e, i) {
     const o = new Set(this.config[e] ?? p[e]);
-    return d`<fieldset>
+    return l`<fieldset>
       <legend>${t}</legend>
       <div class="checks">
         ${i.map(
-      ([s, r]) => d`<label class="check">
+      ([s, r]) => l`<label class="check">
               <input
                 type="checkbox"
                 .value=${s}
@@ -1503,7 +1520,7 @@ let $ = class extends E {
     </fieldset>`;
   }
   render() {
-    return d`<div class="grid">
+    return l`<div class="grid">
       <section>
         <h3>Vehículo</h3>
         <label
@@ -1511,7 +1528,7 @@ let $ = class extends E {
           <select name="device" @change=${this.updateField}>
             <option value="">Selecciona un vehículo My Honda+</option>
             ${this.devices.map(
-      (t) => d`<option value=${t.id} ?selected=${this.config.device === t.id}>
+      (t) => l`<option value=${t.id} ?selected=${this.config.device === t.id}>
                   ${this.deviceName(t)}
                 </option>`
     )}
@@ -1538,7 +1555,7 @@ let $ = class extends E {
       ["eny1", "Honda e:Ny1"],
       ["generic", "Honda genérico"]
     ].map(
-      ([t, e]) => d`<option value=${t} ?selected=${this.config.vehicle_model === t}>
+      ([t, e]) => l`<option value=${t} ?selected=${this.config.vehicle_model === t}>
                   ${e}
                 </option>`
     )}
@@ -1552,13 +1569,13 @@ let $ = class extends E {
           >Color de fábrica
           <select name="color_preset" @change=${this.updateField}>
             ${Object.entries(F).map(
-      ([t, e]) => d`<option value=${t} ?selected=${this.config.color_preset === t}>
+      ([t, e]) => l`<option value=${t} ?selected=${this.config.color_preset === t}>
                   ${e.label}
                 </option>`
     )}
           </select>
         </label>
-        ${this.config.color_preset === "custom" ? d`<label
+        ${this.config.color_preset === "custom" ? l`<label
                 >Color personalizado
                 <input
                   name="vehicle_color"
@@ -1585,7 +1602,7 @@ let $ = class extends E {
             </option>
           </select>
         </label>
-        ${this.config.image_mode === "custom" ? d`<label
+        ${this.config.image_mode === "custom" ? l`<label
                 >URL de imagen
                 <input
                   name="vehicle_image"
@@ -1767,7 +1784,7 @@ R([
 $ = R([
   M1(J1)
 ], $);
-const _e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const $e = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   get MyHondaPlusVehicleCardEditor() {
     return $;
