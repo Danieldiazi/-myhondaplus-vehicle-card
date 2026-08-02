@@ -1,0 +1,65 @@
+name: Bug report
+description: Report a reproducible problem with the card
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the card. Remove VINs, coordinates, tokens and other private vehicle information before submitting.
+  - type: input
+    id: card-version
+    attributes:
+      label: Card version
+      placeholder: 0.5.0
+    validations:
+      required: true
+  - type: input
+    id: home-assistant-version
+    attributes:
+      label: Home Assistant version
+    validations:
+      required: true
+  - type: dropdown
+    id: model
+    attributes:
+      label: Vehicle model
+      options:
+        - Civic
+        - HR-V
+        - CR-V
+        - ZR-V
+        - Jazz
+        - Honda e
+        - Honda e:Ny1
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Include the expected and actual behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Add the card...
+        2. Select...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Anonymized diagnostics
+      description: Paste the output from the card diagnostic tool. Do not paste raw entity states or coordinates.
+      render: json
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag screenshots here after checking that they contain no private location or vehicle data.
