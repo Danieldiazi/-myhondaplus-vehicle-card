@@ -35,6 +35,8 @@ export interface DeviceRegistryEntry {
 
 export type CardLayout = "full" | "compact";
 export type ImageMode = "rendered" | "custom";
+export type VehicleModelKey =
+  "civic" | "hrv" | "crv" | "zrv" | "jazz" | "honda_e" | "eny1" | "generic";
 
 export interface MyHondaPlusCardConfig {
   type: string;
@@ -44,9 +46,12 @@ export interface MyHondaPlusCardConfig {
   color_preset?: string;
   image_mode?: ImageMode;
   vehicle_image?: string;
+  vehicle_model?: VehicleModelKey | "auto";
   layout?: CardLayout;
   stale_after?: number;
   show_controls?: boolean;
+  show_model?: boolean;
+  animate?: boolean;
   confirm_unlock?: boolean;
   entities?: Partial<EntityMap>;
 }
@@ -58,6 +63,7 @@ export interface EntityMap {
   odometer: string;
   updated: string;
   climate: string;
+  charging: string;
   refresh: string;
   location: string;
   doors: string;
