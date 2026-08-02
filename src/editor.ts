@@ -3,6 +3,18 @@ import { customElement, property, state } from "lit/decorators.js";
 import { DEFAULT_CONFIG, EDITOR_TAG, PAINT_PRESETS } from "./constants";
 import type { DeviceRegistryEntry, EntityRegistryEntry, HomeAssistant, MyHondaPlusCardConfig } from "./types";
 
+const VEHICLE_MODELS = {
+  auto: "Automático",
+  civic: "Honda Civic",
+  hrv: "Honda HR-V",
+  crv: "Honda CR-V",
+  zrv: "Honda ZR-V",
+  jazz: "Honda Jazz",
+  honda_e: "Honda e",
+  eny1: "Honda e:Ny1",
+  generic: "Honda genérico",
+};
+
 @customElement(EDITOR_TAG)
 export class MyHondaPlusVehicleCardEditor extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
@@ -76,6 +88,11 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
         <span class="hint">${this.loading ? "Buscando vehículos…" : `${this.devices.length} vehículo(s) encontrado(s)`}</span>
       </label>
       <label>Nombre<input name="name" .value=${this.config.name ?? ""} @change=${this.updateField} /></label>
+      <label>Modelo visual
+        <select name="vehicle_model" @change=${this.updateField}>
+          ${Object.entries(VEHICLE_MODELS).map(([key, label]) => html`<option value=${key} ?selected=${this.config.vehicle_model === key}>${label}</option>`)}
+        </select>
+      </label>
       <label>Color de fábrica
         <select name="color_preset" @change=${this.updateField}>
           ${Object.entries(PAINT_PRESETS).map(([key, preset]) => html`<option value=${key} ?selected=${this.config.color_preset === key}>${preset.label}</option>`)}
@@ -87,6 +104,8 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       ${this.config.image_mode === "custom" ? html`<label>URL de imagen<input name="vehicle_image" .value=${this.config.vehicle_image ?? ""} placeholder="/local/coches/mi-civic.png" @change=${this.updateField} /></label>` : nothing}
       <label>Datos antiguos después de (segundos)<input name="stale_after" type="number" min="300" step="300" .value=${String(this.config.stale_after ?? DEFAULT_CONFIG.stale_after)} @change=${this.updateField} /></label>
       <label class="check"><input name="show_controls" type="checkbox" .checked=${this.config.show_controls !== false} @change=${this.updateField} /> Mostrar controles</label>
+      <label class="check"><input name="show_model" type="checkbox" .checked=${this.config.show_model !== false} @change=${this.updateField} /> Mostrar modelo detectado</label>
+      <label class="check"><input name="animate" type="checkbox" .checked=${this.config.animate !== false} @change=${this.updateField} /> Activar animaciones</label>
       <label class="check"><input name="confirm_unlock" type="checkbox" .checked=${this.config.confirm_unlock !== false} @change=${this.updateField} /> Confirmar antes de abrir</label>
     </div>`;
   }
