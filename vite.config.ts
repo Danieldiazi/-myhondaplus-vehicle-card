@@ -10,7 +10,12 @@ export default defineConfig({
     },
     outDir: "dist",
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
     minify: "esbuild",
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+      },
+    },
   },
 });
