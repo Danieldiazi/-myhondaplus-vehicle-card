@@ -1,19 +1,19 @@
 # My Honda+ Vehicle Card
 
-Tarjeta Lovelace no oficial, moderna y configurable para vehículos conectados mediante [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant).
+Tarjeta Lovelace no oficial para mostrar y controlar vehículos conectados mediante [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant).
 
 > Proyecto comunitario, no afiliado a Honda Motor Co., Ltd.
 
-## Características
+## Lo más destacado
 
-- Configuración visual sin copiar identificadores internos.
-- Detección automática de entidades y modelos Honda compatibles.
-- Ilustraciones vectoriales recoloreables e imagen personalizada opcional.
-- Autonomía, batería, kilometraje, cierres, aperturas, luces, carga y antigüedad de datos.
-- Controles para cierre, climatización, actualización y ubicación.
-- Diseño completo o compacto, responsive, animado y compatible con modo oscuro.
-- Confirmación antes de desbloquear.
-- TypeScript estricto, Lit, Vite, Vitest, ESLint y GitHub Actions.
+- Configuración visual con descubrimiento automático del vehículo.
+- Diseños específicos para Civic, HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1.
+- Métricas y controles configurables.
+- Español, inglés y gallego con selección automática de idioma.
+- Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
+- Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
+- Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
+- Confirmación antes de desbloquear y bloqueo de acciones duplicadas.
 
 ## Instalación rápida
 
@@ -23,28 +23,14 @@ Tarjeta Lovelace no oficial, moderna y configurable para vehículos conectados m
 4. Recarga completamente el navegador.
 5. Añade una tarjeta y selecciona **My Honda+ Vehicle Card**.
 
-Configuración mínima:
+La configuración mínima es:
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
 device: ID_DEL_DISPOSITIVO
 ```
 
-Consulta la [guía de usuario](docs/USER_GUIDE.md) para personalización, entidades manuales, seguridad y resolución de problemas.
-
-## Modelos visuales
-
-| Valor | Modelo |
-|---|---|
-| `auto` | Detección automática |
-| `civic` | Honda Civic |
-| `hrv` | Honda HR-V |
-| `crv` | Honda CR-V |
-| `zrv` | Honda ZR-V |
-| `jazz` | Honda Jazz |
-| `honda_e` | Honda e |
-| `eny1` | Honda e:Ny1 |
-| `generic` | Honda genérico |
+La mayor parte de la configuración se puede realizar desde el editor visual.
 
 ## Documentación
 
@@ -52,8 +38,8 @@ Consulta la [guía de usuario](docs/USER_GUIDE.md) para personalización, entida
 - [Referencia de configuración](docs/CONFIGURATION.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Cómo contribuir](CONTRIBUTING.md)
-- [Roadmap](ROADMAP.md)
 - [Historial de cambios](CHANGELOG.md)
+- [Roadmap](ROADMAP.md)
 
 ## Desarrollo
 
@@ -65,15 +51,11 @@ npm run check
 npm run dev
 ```
 
-La distribución HACS se genera como un único archivo autocontenido en:
-
-```text
-dist/myhondaplus-vehicle-card.js
-```
+La distribución HACS se genera como un único archivo autocontenido en `dist/myhondaplus-vehicle-card.js`.
 
 ## Privacidad y seguridad
 
-La tarjeta no se conecta directamente a Honda ni almacena credenciales. Solo consume entidades ya creadas por Home Assistant. Los comandos sensibles, como desbloquear puertas, requieren confirmación de forma predeterminada.
+La tarjeta no se conecta directamente a Honda ni almacena credenciales. Solo consume entidades ya creadas por Home Assistant. Los comandos sensibles requieren confirmación de forma predeterminada y los diagnósticos ocultan identificadores y datos de localización.
 
 ## Licencia
 
