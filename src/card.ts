@@ -298,17 +298,17 @@ export class MyHondaPlusVehicleCard extends LitElement {
         this.config.show_controls !== false
           ? html`<nav class="controls" aria-label="Vehicle controls">
               ${controls.map((key) => {
-              const metadata = {
-                lock: {
-                  icon: state.locked ? "🔓" : "🔒",
-                  label: state.locked ? this.t("unlock") : this.t("lock"),
-                },
-                climate: { icon: "❄️", label: this.t("climate") },
-                refresh: { icon: "↻", label: this.t("refresh") },
-                location: { icon: "⌖", label: this.t("location") },
-              }[key];
-              return this.control(metadata.icon, metadata.label, key);
-            })}
+                const metadata = {
+                  lock: {
+                    icon: state.locked ? "🔓" : "🔒",
+                    label: state.locked ? this.t("unlock") : this.t("lock"),
+                  },
+                  climate: { icon: "❄️", label: this.t("climate") },
+                  refresh: { icon: "↻", label: this.t("refresh") },
+                  location: { icon: "⌖", label: this.t("location") },
+                }[key];
+                return this.control(metadata.icon, metadata.label, key);
+              })}
             </nav>`
           : nothing
       }
