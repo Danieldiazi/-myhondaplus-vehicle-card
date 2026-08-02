@@ -1,5 +1,11 @@
 import { html, type TemplateResult } from "lit";
 import type { VehicleModelKey } from "./types";
+import civicLateralSvg from "../assets/civic-lateral.svg?raw";
+
+// The supplied Civic artwork is intentionally kept as an SVG asset. Extracting
+// its path lets us render it inline, so `currentColor` follows the selected
+// paint preset or custom vehicle color without loading a separate image URL.
+const CIVIC_LATERAL_PATH = civicLateralSvg.match(/<path[^>]*\sd="([^"]+)"/)?.[1];
 
 const ROOFLINES: Record<VehicleModelKey, string> = {
   civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
@@ -17,6 +23,19 @@ export function renderVehicleArt(
   color: string,
   options: { charging: boolean; climate: boolean; lights: boolean },
 ): TemplateResult {
+  if (model === "civic" && CIVIC_LATERAL_PATH) {
+    return html`<svg
+      class="vehicle-art civic-lateral-art"
+      viewBox="0 0 623 300"
+      role="img"
+      aria-label="Honda Civic"
+      style="color: ${color}"
+    >
+      <title>Honda Civic - vista lateral</title>
+      <path d=${CIVIC_LATERAL_PATH} fill="currentColor" fill-rule="evenodd"></path>
+    </svg>`;
+  }
+
   return html`<svg class="vehicle-art" viewBox="0 0 960 360" role="img" aria-label="${model}">
     <defs>
       <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1">
