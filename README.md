@@ -6,21 +6,16 @@ Tarjeta Lovelace no oficial, moderna y configurable para vehículos conectados m
 
 ## Características
 
-- Selector visual del vehículo, sin copiar identificadores internos.
-- Detección automática de entidades por dispositivo, dominio y claves estables.
-- Detección automática de Honda Civic, HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1.
-- Renderer vectorial adaptable a la familia del vehículo.
-- Colores Honda predefinidos, efecto perlado y color personalizado.
-- Imagen propia opcional.
-- Autonomía, batería, kilometraje y antigüedad de los datos.
-- Puertas, ventanas, maletero, capó, luces y estado de carga.
-- Cierre, climatización, actualización y ubicación.
-- Animaciones para carga, climatización y luces.
+- Configuración visual sin copiar identificadores internos.
+- Detección automática de entidades y modelos Honda compatibles.
+- Ilustraciones vectoriales recoloreables e imagen personalizada opcional.
+- Autonomía, batería, kilometraje, cierres, aperturas, luces, carga y antigüedad de datos.
+- Controles para cierre, climatización, actualización y ubicación.
+- Diseño completo o compacto, responsive, animado y compatible con modo oscuro.
 - Confirmación antes de desbloquear.
-- Diseño completo o compacto, responsive y compatible con modo oscuro.
-- TypeScript, Lit, Vite, Vitest, ESLint y GitHub Actions.
+- TypeScript estricto, Lit, Vite, Vitest, ESLint y GitHub Actions.
 
-## Instalación con HACS
+## Instalación rápida
 
 1. Abre **HACS → Frontend**.
 2. Añade `https://github.com/Danieldiazi/myhondaplus-vehicle-card` como repositorio personalizado de tipo **Dashboard**.
@@ -28,38 +23,14 @@ Tarjeta Lovelace no oficial, moderna y configurable para vehículos conectados m
 4. Recarga completamente el navegador.
 5. Añade una tarjeta y selecciona **My Honda+ Vehicle Card**.
 
-## Configuración mínima
-
-La configuración habitual se realiza desde el editor visual:
+Configuración mínima:
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
 device: ID_DEL_DISPOSITIVO
-color_preset: rallye_red
-vehicle_model: auto
 ```
 
-## Personalización visual
-
-```yaml
-type: custom:myhondaplus-vehicle-card
-device: ID_DEL_DISPOSITIVO
-name: Mi Civic
-vehicle_model: civic
-color_preset: platinum_white
-layout: full
-animate: true
-show_model: true
-```
-
-## Imagen personalizada
-
-```yaml
-type: custom:myhondaplus-vehicle-card
-device: ID_DEL_DISPOSITIVO
-image_mode: custom
-vehicle_image: /local/coches/mi-civic.png
-```
+Consulta la [guía de usuario](docs/USER_GUIDE.md) para personalización, entidades manuales, seguridad y resolución de problemas.
 
 ## Modelos visuales
 
@@ -75,9 +46,18 @@ vehicle_image: /local/coches/mi-civic.png
 | `eny1` | Honda e:Ny1 |
 | `generic` | Honda genérico |
 
+## Documentación
+
+- [Guía de usuario](docs/USER_GUIDE.md)
+- [Referencia de configuración](docs/CONFIGURATION.md)
+- [Arquitectura](docs/ARCHITECTURE.md)
+- [Cómo contribuir](CONTRIBUTING.md)
+- [Roadmap](ROADMAP.md)
+- [Historial de cambios](CHANGELOG.md)
+
 ## Desarrollo
 
-Requiere Node.js 20 o posterior.
+Requiere Node.js 24 o posterior.
 
 ```bash
 npm install
@@ -85,9 +65,11 @@ npm run check
 npm run dev
 ```
 
-La distribución HACS se genera como un único archivo autocontenido en `dist/myhondaplus-vehicle-card.js`.
+La distribución HACS se genera como un único archivo autocontenido en:
 
-Consulta [CONTRIBUTING.md](CONTRIBUTING.md), [docs/CONFIGURATION.md](docs/CONFIGURATION.md) y [ROADMAP.md](ROADMAP.md).
+```text
+dist/myhondaplus-vehicle-card.js
+```
 
 ## Privacidad y seguridad
 
