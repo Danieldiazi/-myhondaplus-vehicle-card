@@ -10,6 +10,12 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-08-03
+
+### Changed
+
+- Versión de prueba para verificar la detección automática de actualizaciones mediante HACS.
+
 ## [0.5.3] - 2026-08-03
 
 ### Added
