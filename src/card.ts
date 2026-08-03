@@ -181,28 +181,28 @@ export class MyHondaPlusVehicleCard extends LitElement {
   private metric(key: MetricKey, state: VehicleState): TemplateResult | typeof nothing {
     if (!this.entities[key]) return nothing;
     const metadata = {
-      range: { icon: "🛣️", label: this.t("range"), value: state.range },
-      battery: { icon: "🔋", label: this.t("battery"), value: state.battery },
-      odometer: { icon: "◉", label: this.t("odometer"), value: state.odometer },
+      range: { icon: "mdi:map-marker-distance", label: this.t("range"), value: state.range },
+      battery: { icon: "mdi:battery", label: this.t("battery"), value: state.battery },
+      odometer: { icon: "mdi:counter", label: this.t("odometer"), value: state.odometer },
       trip_distance: {
-        icon: "↗",
+        icon: "mdi:map-marker-path",
         label: this.t("trip_distance"),
         value: state.tripDistance,
       },
       trip_consumption: {
-        icon: "◫",
+        icon: "mdi:gas-station",
         label: this.t("trip_consumption"),
         value: state.tripConsumption,
       },
       trip_duration: {
-        icon: "◷",
+        icon: "mdi:timer-outline",
         label: this.t("trip_duration"),
         value: state.tripDuration,
       },
     }[key];
 
     return html`<div class="metric">
-      <span aria-hidden="true">${metadata.icon}</span>
+      <ha-icon icon=${metadata.icon} aria-hidden="true"></ha-icon>
       <div><small>${metadata.label}</small><strong>${metadata.value}</strong></div>
     </div>`;
   }
@@ -478,6 +478,11 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       border-radius: 14px;
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
+    }
+    .metric ha-icon {
+      flex: 0 0 auto;
+      color: var(--secondary-text-color);
+      --mdc-icon-size: 20px;
     }
     .metric small,
     .metric strong,
