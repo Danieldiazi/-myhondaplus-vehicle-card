@@ -33,7 +33,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 - Iconos de métricas unificados con los iconos MDI nativos de Home Assistant.
 - Iconos de cierre, estados y controles unificados con los iconos MDI nativos de Home Assistant.
 - Logotipo genérico de Honda como fallback para modelos sin una ilustración SVG específica.
-- Estado de climatización independiente de la ilustración y etiquetas de color ajustadas a la sombra real.
+- Estado de climatización independiente de la ilustración, etiquetas de color ajustadas a la sombra real y fallback de Honda redimensionado con una sombra más visible.
 
 ## [0.5.0] - 2026-08-02
 
