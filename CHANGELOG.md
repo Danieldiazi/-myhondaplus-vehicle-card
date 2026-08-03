@@ -29,6 +29,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 - README, guía de usuario y referencia de configuración ampliados con instalación previa de la integración y orientación de soporte.
 - Estados inexistentes ocultos y entidades temporalmente no disponibles identificadas como sin datos.
 - Actualizaciones menores y de parche agrupadas en Dependabot; las mayores permanecen separadas.
+- Fondo de la tarjeta integrado con el tema activo de Home Assistant, sin mezclar el color primario.
 
 ## [0.5.0] - 2026-08-02
 
