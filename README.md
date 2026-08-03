@@ -8,6 +8,14 @@ Unofficial Lovelace card for displaying and controlling connected vehicles throu
 >
 > Community project, not affiliated with Honda Motor Co., Ltd. or with the author of the Home Assistant integration.
 
+## Preview
+
+<p align="center">
+  <img src="assets/screenshots/vehicle-card-hrv.png" alt="My Honda+ Vehicle Card showing an HR-V with the generic Honda fallback" width="420">
+</p>
+
+Example of the card displaying a Honda HR-V with the generic Honda fallback.
+
 ## Requirements
 
 Before installing the card, you need:

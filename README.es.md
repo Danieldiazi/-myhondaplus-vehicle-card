@@ -8,6 +8,14 @@ Tarjeta Lovelace no oficial para mostrar y controlar vehículos conectados media
 >
 > Proyecto comunitario, no afiliado a Honda Motor Co., Ltd. ni al autor de la integración de Home Assistant.
 
+## Vista previa
+
+<p align="center">
+  <img src="assets/screenshots/vehicle-card-hrv.png" alt="My Honda+ Vehicle Card mostrando un HR-V con el fallback genérico de Honda" width="420">
+</p>
+
+Ejemplo de la tarjeta mostrando un Honda HR-V con el fallback genérico de Honda.
+
 ## Requisitos
 
 Antes de instalar la tarjeta necesitas:
