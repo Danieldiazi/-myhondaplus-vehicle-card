@@ -20,13 +20,24 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 ## Lo más destacado
 
 - Configuración visual con descubrimiento automático del vehículo.
-- Diseños específicos para Civic, HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1.
+- Ilustración específica para Civic y una ilustración genérica cuidada para el resto de modelos.
+- Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
 - Métricas y controles configurables.
 - Español, inglés y gallego con selección automática de idioma.
 - Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
 - Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
 - Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
 - Confirmación antes de desbloquear y bloqueo de acciones duplicadas.
+
+## Compatibilidad visual y funcional
+
+| Modelo                                  | Ilustración            | Información y controles                  |
+| --------------------------------------- | ---------------------- | ---------------------------------------- |
+| Honda Civic                             | SVG lateral específico | Detectados desde sus entidades My Honda+ |
+| HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1 | Ilustración genérica   | Detectados desde sus entidades My Honda+ |
+| Otros Honda compatibles                 | Ilustración genérica   | Detectados desde sus entidades My Honda+ |
+
+El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
 
 ## Instalación rápida
 
@@ -95,10 +106,10 @@ La mayor parte de la configuración se puede realizar desde el editor visual, po
 
 ## Responsabilidad de cada proyecto
 
-| Proyecto | Responsabilidad |
-|---|---|
+| Proyecto                     | Responsabilidad                                                                                                             |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | My Honda+ for Home Assistant | Autenticación, comunicación con los servicios de Honda y creación de dispositivos, entidades y servicios en Home Assistant. |
-| My Honda+ Vehicle Card | Presentación visual, detección de entidades y ejecución de servicios ya disponibles en Home Assistant. |
+| My Honda+ Vehicle Card       | Presentación visual, detección de entidades y ejecución de servicios ya disponibles en Home Assistant.                      |
 
 Los problemas de autenticación, ausencia completa del vehículo o comunicación con Honda deben notificarse en el repositorio de la integración. Los problemas de diseño, detección de una entidad existente o funcionamiento de la tarjeta deben notificarse en este repositorio.
 

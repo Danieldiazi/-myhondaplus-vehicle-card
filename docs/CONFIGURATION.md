@@ -12,23 +12,27 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 
 ## Opciones
 
-| Opción | Tipo | Predeterminado | Descripción |
-|---|---|---:|---|
-| `device` | string | — | ID del dispositivo creado por My Honda+ for Home Assistant. El editor lo selecciona visualmente. |
-| `name` | string | `My Honda+` | Nombre mostrado. |
-| `color_preset` | string | `rallye_red` | Color predefinido de la carrocería. |
-| `vehicle_color` | string | `#a51d2d` | Color hexadecimal cuando el preset es `custom`. |
-| `image_mode` | `rendered` / `custom` | `rendered` | Ilustración recoloreable o imagen propia. |
-| `vehicle_image` | string | — | URL de la imagen personalizada. |
-| `layout` | `full` / `compact` | `full` | Densidad visual. |
-| `stale_after` | number | `21600` | Segundos antes de marcar los datos como antiguos. |
-| `show_controls` | boolean | `true` | Muestra los botones de acción. |
-| `confirm_unlock` | boolean | `true` | Solicita confirmación antes de abrir. |
-| `locale` | `auto` / `es` / `en` / `gl` | `auto` | Idioma de la tarjeta. `auto` utiliza el idioma de Home Assistant. |
-| `debug` | boolean | `false` | Muestra el diagnóstico anonimizado. |
-| `controls` | array | todos | Controles visibles y su orden. |
-| `metrics` | array | todas | Métricas visibles y su orden. |
-| `entities` | object | automático | Sobrescritura avanzada de entidades detectadas. |
+| Opción              | Tipo                        | Predeterminado | Descripción                                                                                      |
+| ------------------- | --------------------------- | -------------: | ------------------------------------------------------------------------------------------------ |
+| `device`            | string                      |              — | ID del dispositivo creado por My Honda+ for Home Assistant. El editor lo selecciona visualmente. |
+| `name`              | string                      |    `My Honda+` | Nombre mostrado.                                                                                 |
+| `color_preset`      | string                      |   `rallye_red` | Color predefinido de la carrocería.                                                              |
+| `vehicle_color`     | string                      |      `#a51d2d` | Color hexadecimal cuando el preset es `custom`.                                                  |
+| `image_mode`        | `rendered` / `custom`       |     `rendered` | Ilustración recoloreable o imagen propia.                                                        |
+| `vehicle_image`     | string                      |              — | URL de la imagen personalizada.                                                                  |
+| `vehicle_scale`     | number                      |          `100` | Escala de la ilustración, entre 70 y 140 %.                                                      |
+| `vehicle_alignment` | `left` / `center` / `right` |       `center` | Alineación horizontal de la ilustración.                                                         |
+| `vehicle_shadow`    | boolean                     |         `true` | Activa la sombra visual del vehículo.                                                            |
+| `shadow_intensity`  | number                      |           `60` | Intensidad de la sombra, entre 0 y 100 %.                                                        |
+| `layout`            | `full` / `compact`          |         `full` | Densidad visual.                                                                                 |
+| `stale_after`       | number                      |        `21600` | Segundos antes de marcar los datos como antiguos.                                                |
+| `show_controls`     | boolean                     |         `true` | Muestra los botones de acción.                                                                   |
+| `confirm_unlock`    | boolean                     |         `true` | Solicita confirmación antes de abrir.                                                            |
+| `locale`            | `auto` / `es` / `en` / `gl` |         `auto` | Idioma de la tarjeta. `auto` utiliza el idioma de Home Assistant.                                |
+| `debug`             | boolean                     |        `false` | Muestra el diagnóstico anonimizado.                                                              |
+| `controls`          | array                       |    compatibles | Controles preferidos y su orden. Los que no tengan entidad se ocultan.                           |
+| `metrics`           | array                       |    compatibles | Métricas preferidas y su orden. Las que no tengan entidad se ocultan.                            |
+| `entities`          | object                      |     automático | Sobrescritura avanzada de entidades detectadas.                                                  |
 
 ## Configuración mínima
 
@@ -49,6 +53,17 @@ entities:
 ```
 
 La detección automática usa el dispositivo, el dominio de Home Assistant y claves estables expuestas por My Honda+ for Home Assistant. Las sobrescrituras siempre tienen prioridad.
+
+## Detección de capacidades
+
+La tarjeta no asigna funciones por modelo. El modelo visual solo selecciona la ilustración; las capacidades se obtienen de las entidades activas de la plataforma `myhondaplus` asociadas al dispositivo.
+
+- Si una entidad no existe, su métrica, estado o control se oculta.
+- Si existe pero está `unknown` o `unavailable`, se muestra como **Sin datos** y los controles no disponibles se desactivan.
+- Si existe y tiene un estado válido, se muestra y puede utilizarse.
+- La batería solo se reconoce mediante claves específicas de batería de tracción; un nombre genérico no basta.
+
+Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia mensual, consumo medio y tiempo de conducción. Los controles incluyen cierre, climatización, bocina y luces, actualización almacenada, actualización desde el coche y ubicación, siempre que la integración publique la entidad correspondiente.
 
 ## Límites de responsabilidad
 

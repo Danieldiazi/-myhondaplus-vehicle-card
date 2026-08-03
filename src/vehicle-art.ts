@@ -17,7 +17,6 @@ export function renderVehicleArt(
       class="vehicle-art civic-lateral-art"
       src=${civicImage}
       alt="Honda Civic - vista lateral"
-      style="filter: drop-shadow(0 8px 6px ${color}99)"
     />`;
   }
 

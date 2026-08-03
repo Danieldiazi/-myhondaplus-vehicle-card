@@ -24,14 +24,19 @@ body:
         - Odometer
         - Last update
         - Climate
+        - Horn and lights
         - Charging
-        - Refresh
+        - Cached refresh
+        - Refresh from car
         - Location
         - Doors
         - Windows
         - Trunk
         - Hood
         - Lights
+        - Monthly trip distance
+        - Average consumption
+        - Driving time
     validations:
       required: true
   - type: textarea

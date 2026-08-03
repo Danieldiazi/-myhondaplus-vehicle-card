@@ -7,19 +7,18 @@ import { localize, normalizeLocale, type TranslationKey } from "./localize";
 import { resolveVehicleModel, vehicleModelLabel } from "./model-resolver";
 import type {
   DeviceRegistryEntry,
+  ControlKey,
   EntityMap,
   EntityRegistryEntry,
   HassEntity,
   HomeAssistant,
+  MetricKey,
   MyHondaPlusCardConfig,
   VehicleModelKey,
   VehicleState,
 } from "./types";
 import { renderVehicleArt } from "./vehicle-art";
 import { buildVehicleState } from "./vehicle-state";
-
-const DEFAULT_CONTROLS = ["lock", "climate", "refresh", "location"] as const;
-const DEFAULT_METRICS = ["range", "battery", "odometer"] as const;
 
 @customElement(CARD_TAG)
 export class MyHondaPlusVehicleCard extends LitElement {
@@ -179,11 +178,27 @@ export class MyHondaPlusVehicleCard extends LitElement {
     }
   }
 
-  private metric(key: "range" | "battery" | "odometer", state: VehicleState): TemplateResult {
+  private metric(key: MetricKey, state: VehicleState): TemplateResult | typeof nothing {
+    if (!this.entities[key]) return nothing;
     const metadata = {
       range: { icon: "🛣️", label: this.t("range"), value: state.range },
       battery: { icon: "🔋", label: this.t("battery"), value: state.battery },
       odometer: { icon: "◉", label: this.t("odometer"), value: state.odometer },
+      trip_distance: {
+        icon: "↗",
+        label: this.t("trip_distance"),
+        value: state.tripDistance,
+      },
+      trip_consumption: {
+        icon: "◫",
+        label: this.t("trip_consumption"),
+        value: state.tripConsumption,
+      },
+      trip_duration: {
+        icon: "◷",
+        label: this.t("trip_duration"),
+        value: state.tripDuration,
+      },
     }[key];
 
     return html`<div class="metric">
@@ -195,32 +210,36 @@ export class MyHondaPlusVehicleCard extends LitElement {
   private status(
     icon: string,
     label: string,
-    active: boolean,
+    active: boolean | undefined,
     activeText: string,
     inactiveText: string,
   ): TemplateResult {
+    const text = active === undefined ? this.t("unavailable") : active ? activeText : inactiveText;
     return html`<div
-      class="status ${active ? "warning" : ""}"
-      aria-label=${`${label}: ${active ? activeText : inactiveText}`}
+      class="status ${active === true ? "warning" : ""} ${active === undefined ? "unavailable" : ""}"
+      aria-label=${`${label}: ${text}`}
     >
       <span class="status-icon" aria-hidden="true">${icon}</span>
-      <div><b>${label}</b><small>${active ? activeText : inactiveText}</small></div>
+      <div><b>${label}</b><small>${text}</small></div>
       <i aria-hidden="true"></i>
     </div>`;
   }
 
-  private control(
-    icon: string,
-    label: string,
-    key: "lock" | "climate" | "refresh" | "location",
-  ): TemplateResult | typeof nothing {
+  private control(icon: string, label: string, key: ControlKey): TemplateResult | typeof nothing {
     if (!this.entities[key]) return nothing;
     const loading = this.busy === key;
+    const entity = this.entity(key);
+    const domain = this.entities[key]?.split(".")[0];
+    const state = entity?.state.toLowerCase();
+    const unavailable =
+      !entity ||
+      state === "unavailable" ||
+      (state === "unknown" && domain !== "button" && key !== "location");
     return html`<button
       type="button"
       aria-label=${label}
       aria-busy=${loading ? "true" : "false"}
-      ?disabled=${Boolean(this.busy)}
+      ?disabled=${Boolean(this.busy) || unavailable}
       @click=${() => void this.execute(key)}
     >
       <span aria-hidden="true">${loading ? "…" : icon}</span><small>${label}</small>
@@ -232,10 +251,22 @@ export class MyHondaPlusVehicleCard extends LitElement {
       return html`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />`;
     }
     return renderVehicleArt(this.model(), this.paintColor(), {
-      charging: state.charging,
-      climate: state.climateActive,
-      lights: state.lightsOn,
+      charging: state.charging === true,
+      climate: state.climateActive === true,
+      lights: state.lightsOn === true,
     });
+  }
+
+  private visualStyle(): string {
+    const scale = Math.min(140, Math.max(70, this.config.vehicle_scale ?? 100));
+    const intensity =
+      this.config.vehicle_shadow === false
+        ? 0
+        : Math.min(100, Math.max(0, this.config.shadow_intensity ?? 60));
+    const alpha = Math.round((intensity / 100) * 255)
+      .toString(16)
+      .padStart(2, "0");
+    return `--vehicle-scale:${scale / 100};--vehicle-shadow-opacity:${intensity / 100};--vehicle-shadow-color:${this.paintColor()}${alpha}`;
   }
 
   protected override render(): TemplateResult {
@@ -246,8 +277,9 @@ export class MyHondaPlusVehicleCard extends LitElement {
         : state.locked === false
           ? this.t("unlocked")
           : this.t("unknown_state");
-    const controls = this.config.controls ?? [...DEFAULT_CONTROLS];
-    const metrics = this.config.metrics ?? [...DEFAULT_METRICS];
+    const controls = this.config.controls ?? [...DEFAULT_CONFIG.controls];
+    const metrics = this.config.metrics ?? [...DEFAULT_CONFIG.metrics];
+    const alignment = this.config.vehicle_alignment ?? DEFAULT_CONFIG.vehicle_alignment;
 
     return html`<ha-card class=${this.config.animate === false ? "reduce-motion" : ""}>
       <header>
@@ -255,9 +287,13 @@ export class MyHondaPlusVehicleCard extends LitElement {
           <h2>${this.config.name}</h2>
           ${this.config.show_model !== false ? html`<p>${vehicleModelLabel(this.model())}</p>` : nothing}
         </div>
-        <span class="badge ${state.locked === false ? "alert" : ""}">
-          ${state.locked ? "🔒" : "🔓"} ${lockedText}
-        </span>
+        ${
+          this.entities.lock
+            ? html`<span class="badge ${state.locked === false ? "alert" : ""}">
+                ${state.locked === true ? "🔒" : state.locked === false ? "🔓" : "❔"} ${lockedText}
+              </span>`
+            : nothing
+        }
       </header>
 
       <div class="announcer" aria-live="polite">
@@ -265,7 +301,10 @@ export class MyHondaPlusVehicleCard extends LitElement {
       </div>
       ${this.message ? html`<div class="message ${this.message.kind}">${this.message.text}</div>` : nothing}
 
-      <section class="vehicle ${state.charging ? "is-charging" : ""}">
+      <section
+        class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
+        style=${this.visualStyle()}
+      >
         ${this.vehicleVisual(state)}
         <div
           class="freshness ${state.stale ? "stale" : ""}"
@@ -285,12 +324,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
       ${
         this.config.layout !== "compact"
           ? html`<section class="statuses">
-              ${this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed"))}
-              ${this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed"))}
-              ${this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed"))}
-              ${this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed"))}
-              ${this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off"))}
-              ${this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive"))}
+              ${this.entities.doors ? this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.windows ? this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.trunk ? this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.hood ? this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.lights ? this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
+              ${this.entities.charging ? this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
             </section>`
           : nothing
       }
@@ -304,7 +343,9 @@ export class MyHondaPlusVehicleCard extends LitElement {
                     label: state.locked ? this.t("unlock") : this.t("lock"),
                   },
                   climate: { icon: "❄️", label: this.t("climate") },
-                  refresh: { icon: "↻", label: this.t("refresh") },
+                  horn_lights: { icon: "📣", label: this.t("horn_lights") },
+                  refresh_cached: { icon: "↺", label: this.t("refresh_cached") },
+                  refresh: { icon: "↻", label: this.t("refresh_from_car") },
                   location: { icon: "⌖", label: this.t("location") },
                 }[key];
                 return this.control(metadata.icon, metadata.label, key);
@@ -397,7 +438,26 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       width: 100%;
       max-height: 250px;
       object-fit: contain;
-      filter: drop-shadow(0 16px 18px rgba(0, 0, 0, 0.12));
+      transform: scale(var(--vehicle-scale, 1));
+      filter: drop-shadow(0 16px 18px rgb(0 0 0 / calc(var(--vehicle-shadow-opacity, 0.6) * 0.2)));
+      transform-origin: center;
+    }
+    .vehicle.align-left {
+      justify-content: flex-start;
+    }
+    .vehicle.align-left svg,
+    .vehicle.align-left img {
+      transform-origin: left center;
+    }
+    .vehicle.align-right {
+      justify-content: flex-end;
+    }
+    .vehicle.align-right svg,
+    .vehicle.align-right img {
+      transform-origin: right center;
+    }
+    .vehicle img.civic-lateral-art {
+      filter: drop-shadow(0 8px 6px var(--vehicle-shadow-color));
     }
     .freshness {
       position: absolute;
@@ -461,6 +521,9 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .status.warning i {
       background: var(--error-color);
+    }
+    .status.unavailable i {
+      background: var(--disabled-text-color, var(--secondary-text-color));
     }
     .controls {
       grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -159,12 +159,12 @@ Selecciona manualmente `vehicle_model` en el editor o en YAML. La detección aut
 
 ## Dónde solicitar ayuda
 
-| Problema | Repositorio adecuado |
-|---|---|
-| Inicio de sesión, autenticación o conexión con Honda | My Honda+ for Home Assistant |
+| Problema                                                        | Repositorio adecuado         |
+| --------------------------------------------------------------- | ---------------------------- |
+| Inicio de sesión, autenticación o conexión con Honda            | My Honda+ for Home Assistant |
 | El vehículo o todas sus entidades no aparecen en Home Assistant | My Honda+ for Home Assistant |
-| Una entidad existente no se detecta correctamente | My Honda+ Vehicle Card |
-| Diseño, traducción, editor o controles de la tarjeta | My Honda+ Vehicle Card |
+| Una entidad existente no se detecta correctamente               | My Honda+ Vehicle Card       |
+| Diseño, traducción, editor o controles de la tarjeta            | My Honda+ Vehicle Card       |
 
 Al abrir una incidencia sobre la tarjeta, incluye:
 

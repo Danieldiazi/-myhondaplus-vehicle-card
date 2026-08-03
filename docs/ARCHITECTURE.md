@@ -29,9 +29,10 @@ src/
 1. Home Assistant entrega el objeto `hass` al componente.
 2. La tarjeta consulta el registro de entidades del dispositivo seleccionado.
 3. `entity-resolver.ts` asigna las entidades conocidas al modelo interno `EntityMap`.
-4. `model-resolver.ts` determina la familia visual usando los datos del dispositivo.
-5. `card.ts` convierte el estado de las entidades en métricas, estados y acciones.
-6. `vehicle-art.ts` renderiza la ilustración sin acceder directamente a Home Assistant.
+4. La presencia de esas entidades determina las capacidades visibles; el modelo del coche no activa funciones.
+5. `model-resolver.ts` determina exclusivamente la familia visual usando los datos del dispositivo.
+6. `card.ts` convierte el estado de las entidades en métricas, estados y acciones.
+7. `vehicle-art.ts` renderiza la ilustración sin acceder directamente a Home Assistant.
 
 ## Responsabilidades
 
@@ -41,7 +42,7 @@ Debe coordinar la interfaz, pero no contener reglas extensas de detección. Las 
 
 ### `entity-resolver.ts`
 
-Las reglas se basan en dominio, identificadores estables y claves de traducción. Los nombres visibles solo deben actuar como señal secundaria.
+Las reglas se basan en la plataforma `myhondaplus`, el dispositivo, el dominio, identificadores estables y claves de traducción. Los nombres visibles solo deben actuar como señal secundaria. Una capacidad inexistente no debe representarse como un estado inactivo.
 
 ### `model-resolver.ts`
 

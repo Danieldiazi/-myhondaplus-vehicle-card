@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { HassEntity } from "../src/types";
-import { buildVehicleState, entityDisplayValue } from "../src/vehicle-state";
+import { buildVehicleState, entityDisplayValue, isEntityActive } from "../src/vehicle-state";
 
 const entity = (
   state: string,
@@ -36,5 +36,27 @@ describe("vehicle state", () => {
     expect(state.charging).toBe(true);
     expect(state.doorsOpen).toBe(false);
     expect(state.stale).toBe(true);
+  });
+
+  it("distinguishes missing or unavailable states from inactive states", () => {
+    expect(isEntityActive()).toBeUndefined();
+    expect(isEntityActive(entity("unavailable"))).toBeUndefined();
+    expect(isEntityActive(entity("off"))).toBe(false);
+  });
+
+  it("formats monthly trip metrics when the integration exposes them", () => {
+    const state = buildVehicleState(
+      {
+        trip_distance: entity("312", "km"),
+        trip_consumption: entity("4.7", "L/100 km"),
+        trip_duration: entity("510", "min"),
+      },
+      300,
+    );
+
+    expect(state.tripDistance).toBe("312 km");
+    expect(state.tripConsumption).toBe("4.7 L/100 km");
+    expect(state.tripDuration).toBe("510 min");
+    expect(state.charging).toBeUndefined();
   });
 });

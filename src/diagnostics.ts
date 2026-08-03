@@ -10,12 +10,17 @@ const ENTITY_KEYS = [
   "climate",
   "charging",
   "refresh",
+  "refresh_cached",
+  "horn_lights",
   "location",
   "doors",
   "windows",
   "trunk",
   "hood",
   "lights",
+  "trip_distance",
+  "trip_consumption",
+  "trip_duration",
 ] as const satisfies readonly (keyof EntityMap)[];
 
 /**
