@@ -286,8 +286,8 @@ E.elementStyles = [], E.shadowRootOptions = { mode: "open" }, E[T("elementProper
  */
 const Z = globalThis, r1 = (t) => t, B = Z.trustedTypes, c1 = B ? B.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, $1 = "$lit$", b = `lit$${Math.random().toFixed(9).slice(2)}$`, y1 = "?" + b, N1 = `<${y1}>`, k = document, D = () => k.createComment(""), U = (t) => t === null || typeof t != "object" && typeof t != "function", t1 = Array.isArray, R1 = (t) => t1(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Q = `[ 	
 \f\r]`, H = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, l1 = /-->/g, d1 = />/g, y = RegExp(`>|${Q}(?:([^\\s"'>=/]+)(${Q}*=${Q}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), h1 = /'/g, C1 = /"/g, w1 = /^(?:script|style|textarea|title)$/i, V1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = V1(1), P = Symbol.for("lit-noChange"), l = Symbol.for("lit-nothing"), u1 = /* @__PURE__ */ new WeakMap(), A = k.createTreeWalker(k, 129);
-function A1(t, e) {
+\f\r"'\`<>=]|("|')|))|$)`, "g"), h1 = /'/g, C1 = /"/g, w1 = /^(?:script|style|textarea|title)$/i, V1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = V1(1), P = Symbol.for("lit-noChange"), l = Symbol.for("lit-nothing"), u1 = /* @__PURE__ */ new WeakMap(), x = k.createTreeWalker(k, 129);
+function x1(t, e) {
   if (!t1(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return c1 !== void 0 ? c1.createHTML(e) : e;
 }
@@ -301,7 +301,7 @@ const j1 = (t, e) => {
     const _ = n === y && t[r + 1].startsWith("/>") ? " " : "";
     a += n === H ? c + N1 : h >= 0 ? (s.push(C), c.slice(0, h) + $1 + c.slice(h) + b + _) : c + b + (h === -2 ? r : _);
   }
-  return [A1(t, a + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), s];
+  return [x1(t, a + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), s];
 };
 class N {
   constructor({ strings: e, _$litType$: i }, s) {
@@ -309,11 +309,11 @@ class N {
     this.parts = [];
     let a = 0, n = 0;
     const r = e.length - 1, c = this.parts, [C, u] = j1(e, i);
-    if (this.el = N.createElement(C, s), A.currentNode = this.el.content, i === 2 || i === 3) {
+    if (this.el = N.createElement(C, s), x.currentNode = this.el.content, i === 2 || i === 3) {
       const h = this.el.content.firstChild;
       h.replaceWith(...h.childNodes);
     }
-    for (; (o = A.nextNode()) !== null && c.length < r; ) {
+    for (; (o = x.nextNode()) !== null && c.length < r; ) {
       if (o.nodeType === 1) {
         if (o.hasAttributes()) for (const h of o.getAttributeNames()) if (h.endsWith($1)) {
           const g = u[n++], _ = o.getAttribute(h).split(b), V = /([.?@])?(.*)/.exec(g);
@@ -323,7 +323,7 @@ class N {
           const h = o.textContent.split(b), g = h.length - 1;
           if (g > 0) {
             o.textContent = B ? B.emptyScript : "";
-            for (let _ = 0; _ < g; _++) o.append(h[_], D()), A.nextNode(), c.push({ type: 2, index: ++a });
+            for (let _ = 0; _ < g; _++) o.append(h[_], D()), x.nextNode(), c.push({ type: 2, index: ++a });
             o.append(h[g], D());
           }
         }
@@ -359,16 +359,16 @@ class I1 {
   }
   u(e) {
     const { el: { content: i }, parts: s } = this._$AD, o = ((e == null ? void 0 : e.creationScope) ?? k).importNode(i, !0);
-    A.currentNode = o;
-    let a = A.nextNode(), n = 0, r = 0, c = s[0];
+    x.currentNode = o;
+    let a = x.nextNode(), n = 0, r = 0, c = s[0];
     for (; c !== void 0; ) {
       if (n === c.index) {
         let C;
         c.type === 2 ? C = new R(a, a.nextSibling, this, e) : c.type === 1 ? C = new c.ctor(a, c.name, c.strings, this, e) : c.type === 6 && (C = new W1(a, this, e)), this._$AV.push(C), c = s[++r];
       }
-      n !== (c == null ? void 0 : c.index) && (a = A.nextNode(), n++);
+      n !== (c == null ? void 0 : c.index) && (a = x.nextNode(), n++);
     }
-    return A.currentNode = k, o;
+    return x.currentNode = k, o;
   }
   p(e) {
     let i = 0;
@@ -408,7 +408,7 @@ class R {
   }
   $(e) {
     var a;
-    const { values: i, _$litType$: s } = e, o = typeof s == "number" ? this._$AC(e) : (s.el === void 0 && (s.el = N.createElement(A1(s.h, s.h[0]), this.options)), s);
+    const { values: i, _$litType$: s } = e, o = typeof s == "number" ? this._$AC(e) : (s.el === void 0 && (s.el = N.createElement(x1(s.h, s.h[0]), this.options)), s);
     if (((a = this._$AH) == null ? void 0 : a._$AD) === o) this._$AH.p(i);
     else {
       const n = new I1(o, this), r = n.u(this.options);
@@ -520,7 +520,7 @@ const G1 = (t, e, i) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const x = globalThis;
+const A = globalThis;
 class L extends E {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
@@ -547,16 +547,16 @@ class L extends E {
   }
 }
 var v1;
-L._$litElement$ = !0, L.finalized = !0, (v1 = x.litElementHydrateSupport) == null || v1.call(x, { LitElement: L });
-const K = x.litElementPolyfillSupport;
+L._$litElement$ = !0, L.finalized = !0, (v1 = A.litElementHydrateSupport) == null || v1.call(A, { LitElement: L });
+const K = A.litElementPolyfillSupport;
 K == null || K({ LitElement: L });
-(x.litElementVersions ?? (x.litElementVersions = [])).push("4.2.2");
+(A.litElementVersions ?? (A.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const x1 = (t) => (e, i) => {
+const A1 = (t) => (e, i) => {
   i !== void 0 ? i.addInitializer(() => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
@@ -1111,27 +1111,27 @@ let m = class extends L {
   metric(t, e) {
     if (!this.entities[t]) return l;
     const i = {
-      range: { icon: "🛣️", label: this.t("range"), value: e.range },
-      battery: { icon: "🔋", label: this.t("battery"), value: e.battery },
-      odometer: { icon: "◉", label: this.t("odometer"), value: e.odometer },
+      range: { icon: "mdi:map-marker-distance", label: this.t("range"), value: e.range },
+      battery: { icon: "mdi:battery", label: this.t("battery"), value: e.battery },
+      odometer: { icon: "mdi:counter", label: this.t("odometer"), value: e.odometer },
       trip_distance: {
-        icon: "↗",
+        icon: "mdi:map-marker-path",
         label: this.t("trip_distance"),
         value: e.tripDistance
       },
       trip_consumption: {
-        icon: "◫",
+        icon: "mdi:gas-station",
         label: this.t("trip_consumption"),
         value: e.tripConsumption
       },
       trip_duration: {
-        icon: "◷",
+        icon: "mdi:timer-outline",
         label: this.t("trip_duration"),
         value: e.tripDuration
       }
     }[t];
     return d`<div class="metric">
-      <span aria-hidden="true">${i.icon}</span>
+      <ha-icon icon=${i.icon} aria-hidden="true"></ha-icon>
       <div><small>${i.label}</small><strong>${i.value}</strong></div>
     </div>`;
   }
@@ -1352,6 +1352,11 @@ m.styles = b1`
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
     }
+    .metric ha-icon {
+      flex: 0 0 auto;
+      color: var(--secondary-text-color);
+      --mdc-icon-size: 20px;
+    }
     .metric small,
     .metric strong,
     .status small,
@@ -1486,7 +1491,7 @@ M([
   v()
 ], m.prototype, "message", 2);
 m = M([
-  x1(F)
+  A1(F)
 ], m);
 window.customCards ?? (window.customCards = []);
 window.customCards.some((t) => t.type === F) || window.customCards.push({
@@ -1908,7 +1913,7 @@ z([
   v()
 ], f.prototype, "loading", 2);
 f = z([
-  x1(K1)
+  A1(K1)
 ], f);
 const pe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
