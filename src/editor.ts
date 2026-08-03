@@ -176,30 +176,6 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       <section>
         <h3>Apariencia</h3>
         <label
-          >Color de fábrica
-          <select name="color_preset" @change=${this.updateField}>
-            ${Object.entries(PAINT_PRESETS).map(
-              ([key, preset]) =>
-                html`<option value=${key} ?selected=${this.config.color_preset === key}>
-                  ${preset.label}
-                </option>`,
-            )}
-          </select>
-        </label>
-        ${
-          this.config.color_preset === "custom"
-            ? html`<label
-                >Color personalizado
-                <input
-                  name="vehicle_color"
-                  type="color"
-                  .value=${this.config.vehicle_color ?? DEFAULT_CONFIG.vehicle_color}
-                  @change=${this.updateField}
-                />
-              </label>`
-            : nothing
-        }
-        <label
           >Diseño
           <select name="layout" @change=${this.updateField}>
             <option value="full" ?selected=${this.config.layout === "full"}>Completo</option>
@@ -243,25 +219,51 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
         >
         ${
           this.config.vehicle_shadow !== false
-            ? html`<label
-                >Intensidad de la sombra (%)
-                <input
-                  name="shadow_intensity"
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="5"
-                  .value=${String(this.config.shadow_intensity ?? DEFAULT_CONFIG.shadow_intensity)}
-                  @change=${this.updateField}
-                />
-              </label>`
+            ? html`
+                <label
+                  >Color de la sombra
+                  <select name="color_preset" @change=${this.updateField}>
+                    ${Object.entries(PAINT_PRESETS).map(
+                      ([key, preset]) =>
+                        html`<option value=${key} ?selected=${this.config.color_preset === key}>
+                          ${preset.label}
+                        </option>`,
+                    )}
+                  </select>
+                </label>
+                ${
+                  this.config.color_preset === "custom"
+                    ? html`<label
+                        >Color personalizado de la sombra
+                        <input
+                          name="vehicle_color"
+                          type="color"
+                          .value=${this.config.vehicle_color ?? DEFAULT_CONFIG.vehicle_color}
+                          @change=${this.updateField}
+                        />
+                      </label>`
+                    : nothing
+                }
+                <label
+                  >Intensidad de la sombra (%)
+                  <input
+                    name="shadow_intensity"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    .value=${String(this.config.shadow_intensity ?? DEFAULT_CONFIG.shadow_intensity)}
+                    @change=${this.updateField}
+                  />
+                </label>
+              `
             : nothing
         }
         <label
           >Imagen
           <select name="image_mode" @change=${this.updateField}>
             <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>
-              Ilustración recoloreable
+              Ilustración incluida
             </option>
             <option value="custom" ?selected=${this.config.image_mode === "custom"}>
               Imagen personalizada
