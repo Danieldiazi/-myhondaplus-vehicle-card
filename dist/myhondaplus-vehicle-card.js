@@ -296,8 +296,8 @@ const j1 = (t, e) => {
   let s, a = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", n = L;
   for (let r = 0; r < i; r++) {
     const c = t[r];
-    let C, u, d = -1, g = 0;
-    for (; g < c.length && (n.lastIndex = g, u = n.exec(c), u !== null); ) g = n.lastIndex, n === L ? u[1] === "!--" ? n = l1 : u[1] !== void 0 ? n = d1 : u[2] !== void 0 ? (w1.test(u[2]) && (s = RegExp("</" + u[2], "g")), n = y) : u[3] !== void 0 && (n = y) : n === y ? u[0] === ">" ? (n = s ?? L, d = -1) : u[1] === void 0 ? d = -2 : (d = n.lastIndex - u[2].length, C = u[1], n = u[3] === void 0 ? y : u[3] === '"' ? C1 : h1) : n === C1 || n === h1 ? n = y : n === l1 || n === d1 ? n = L : (n = y, s = void 0);
+    let C, u, d = -1, m = 0;
+    for (; m < c.length && (n.lastIndex = m, u = n.exec(c), u !== null); ) m = n.lastIndex, n === L ? u[1] === "!--" ? n = l1 : u[1] !== void 0 ? n = d1 : u[2] !== void 0 ? (w1.test(u[2]) && (s = RegExp("</" + u[2], "g")), n = y) : u[3] !== void 0 && (n = y) : n === y ? u[0] === ">" ? (n = s ?? L, d = -1) : u[1] === void 0 ? d = -2 : (d = n.lastIndex - u[2].length, C = u[1], n = u[3] === void 0 ? y : u[3] === '"' ? C1 : h1) : n === C1 || n === h1 ? n = y : n === l1 || n === d1 ? n = L : (n = y, s = void 0);
     const _ = n === y && t[r + 1].startsWith("/>") ? " " : "";
     a += n === L ? c + N1 : d >= 0 ? (o.push(C), c.slice(0, d) + $1 + c.slice(d) + b + _) : c + b + (d === -2 ? r : _);
   }
@@ -316,15 +316,15 @@ class N {
     for (; (s = x.nextNode()) !== null && c.length < r; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const d of s.getAttributeNames()) if (d.endsWith($1)) {
-          const g = u[n++], _ = s.getAttribute(d).split(b), V = /([.?@])?(.*)/.exec(g);
+          const m = u[n++], _ = s.getAttribute(d).split(b), V = /([.?@])?(.*)/.exec(m);
           c.push({ type: 1, index: a, name: V[2], strings: _, ctor: V[1] === "." ? B1 : V[1] === "?" ? F1 : V[1] === "@" ? q1 : W }), s.removeAttribute(d);
         } else d.startsWith(b) && (c.push({ type: 6, index: a }), s.removeAttribute(d));
         if (w1.test(s.tagName)) {
-          const d = s.textContent.split(b), g = d.length - 1;
-          if (g > 0) {
+          const d = s.textContent.split(b), m = d.length - 1;
+          if (m > 0) {
             s.textContent = B ? B.emptyScript : "";
-            for (let _ = 0; _ < g; _++) s.append(d[_], U()), x.nextNode(), c.push({ type: 2, index: ++a });
-            s.append(d[g], U());
+            for (let _ = 0; _ < m; _++) s.append(d[_], U()), x.nextNode(), c.push({ type: 2, index: ++a });
+            s.append(d[m], U());
           }
         }
       } else if (s.nodeType === 8) if (s.data === y1) c.push({ type: 2, index: a });
@@ -670,7 +670,7 @@ function p1(t, e, i, o) {
     })
   };
 }
-function g1(t) {
+function m1(t) {
   return JSON.stringify(t, null, 2);
 }
 const X1 = {
@@ -709,16 +709,16 @@ const X1 = {
     domains: ["sensor"],
     hints: ["driving_time_this_month", "trip_duration", "driving_time"]
   }
-}, m1 = (t) => [t.entity_id, t.unique_id, t.translation_key, t.original_name].filter(Boolean).join(" ").toLowerCase();
+}, g1 = (t) => [t.entity_id, t.unique_id, t.translation_key, t.original_name].filter(Boolean).join(" ").toLowerCase();
 function S1(t, e = {}) {
   const i = { ...e };
   for (const [o, s] of Object.entries(X1)) {
     if (i[o]) continue;
     const a = t.filter((n) => n.platform === "myhondaplus").filter((n) => !n.disabled_by).filter((n) => s.domains.includes(n.entity_id.split(".")[0] ?? "")).filter((n) => {
-      const r = m1(n);
+      const r = g1(n);
       return !(s.excludes ?? []).some((c) => r.includes(c));
     }).map((n) => {
-      const r = m1(n), c = s.hints.reduce(
+      const r = g1(n), c = s.hints.reduce(
         (C, u, d) => C + (r.includes(u) ? 100 - d : 0),
         0
       );
@@ -975,7 +975,7 @@ var de = Object.defineProperty, he = Object.getOwnPropertyDescriptor, S = (t, e,
     (n = t[a]) && (s = (o ? n(e, i, s) : n(s)) || s);
   return o && s && de(e, i, s), s;
 };
-let m = class extends z {
+let g = class extends z {
   constructor() {
     super(...arguments), this.config = { ...p }, this.entities = {};
   }
@@ -1075,7 +1075,7 @@ let m = class extends z {
     }
   }
   async copyDiagnostics() {
-    const t = g1(
+    const t = m1(
       p1(this.hass, this.entities, this.model(), this.locale())
     );
     try {
@@ -1138,7 +1138,12 @@ let m = class extends z {
     </button>`;
   }
   vehicleVisual() {
-    return this.config.image_mode === "custom" && this.config.vehicle_image ? h`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />` : ae(this.model());
+    return this.config.image_mode === "custom" && this.config.vehicle_image ? h`<img
+        class="vehicle-art custom-vehicle-art"
+        src=${this.config.vehicle_image}
+        alt=${this.t("vehicle")}
+        loading="lazy"
+      />` : ae(this.model());
   }
   visualStyle() {
     const t = Math.min(140, Math.max(70, this.config.vehicle_scale ?? 100)), e = this.config.vehicle_shadow === !1 ? 0 : Math.min(100, Math.max(0, this.config.shadow_intensity ?? 60)), i = Math.round(e / 100 * 255).toString(16).padStart(2, "0");
@@ -1183,13 +1188,18 @@ let m = class extends z {
       ${this.config.device ? h`<section class="metrics">
               ${o.map((n) => this.metric(n, t))}
             </section>` : h`<div class="setup">${this.t("select_vehicle")}</div>`}
-      ${this.config.layout !== "compact" ? h`<section class="statuses">
-              ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), t.doorsOpen, this.t("open"), this.t("closed")) : l}
-              ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), t.windowsOpen, this.t("open"), this.t("closed")) : l}
-              ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), t.trunkOpen, this.t("open"), this.t("closed")) : l}
-              ${this.entities.hood ? this.status("mdi:car", this.t("hood"), t.hoodOpen, this.t("open"), this.t("closed")) : l}
-              ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), t.lightsOn, this.t("on"), this.t("off")) : l}
-              ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), t.charging, this.t("active"), this.t("inactive")) : l}
+      ${this.config.layout !== "compact" || this.entities.climate ? h`<section
+              class="statuses ${this.config.layout === "compact" ? "compact-statuses" : ""}"
+            >
+              ${this.config.layout !== "compact" ? h`
+                      ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), t.doorsOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), t.windowsOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), t.trunkOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.hood ? this.status("mdi:car", this.t("hood"), t.hoodOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), t.lightsOn, this.t("on"), this.t("off")) : l}
+                      ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), t.charging, this.t("active"), this.t("inactive")) : l}
+                    ` : l}
+              ${this.entities.climate ? this.status("mdi:snowflake", this.t("climate"), t.climateActive, this.t("active"), this.t("inactive")) : l}
             </section>` : l}
       ${this.config.show_controls !== !1 ? h`<nav class="controls" aria-label="Vehicle controls">
               ${i.map((n) => {
@@ -1216,12 +1226,12 @@ let m = class extends z {
                 Copy anonymized diagnostics
               </button>
               <pre>
-${g1(p1(this.hass, this.entities, this.model(), this.locale()))}</pre>
+${m1(p1(this.hass, this.entities, this.model(), this.locale()))}</pre>
             </details>` : l}
     </ha-card>`;
   }
 };
-m.styles = b1`
+g.styles = b1`
     :host {
       display: block;
     }
@@ -1310,13 +1320,16 @@ m.styles = b1`
     .vehicle.align-right img {
       transform-origin: right center;
     }
-    .vehicle img.civic-lateral-art {
+    .vehicle img.civic-lateral-art,
+    .vehicle img.custom-vehicle-art {
       filter: drop-shadow(0 8px 6px var(--vehicle-shadow-color));
     }
     .vehicle img.honda-logo-art {
-      width: min(48%, 210px);
-      max-height: 200px;
-      filter: drop-shadow(0 8px 8px var(--vehicle-shadow-color));
+      width: clamp(120px, 34%, 150px);
+      max-height: 150px;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 10px 12px var(--vehicle-shadow-color))
+        drop-shadow(0 0 14px var(--vehicle-shadow-color));
     }
     .freshness {
       position: absolute;
@@ -1366,6 +1379,9 @@ m.styles = b1`
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-top: 13px;
+    }
+    .compact-statuses {
+      grid-template-columns: 1fr;
     }
     .status {
       display: grid;
@@ -1472,25 +1488,25 @@ m.styles = b1`
   `;
 S([
   i1({ attribute: !1 })
-], m.prototype, "hass", 2);
+], g.prototype, "hass", 2);
 S([
   v()
-], m.prototype, "config", 2);
+], g.prototype, "config", 2);
 S([
   v()
-], m.prototype, "entities", 2);
+], g.prototype, "entities", 2);
 S([
   v()
-], m.prototype, "device", 2);
+], g.prototype, "device", 2);
 S([
   v()
-], m.prototype, "busy", 2);
+], g.prototype, "busy", 2);
 S([
   v()
-], m.prototype, "message", 2);
-m = S([
+], g.prototype, "message", 2);
+g = S([
   A1(F)
-], m);
+], g);
 window.customCards ?? (window.customCards = []);
 window.customCards.some((t) => t.type === F) || window.customCards.push({
   type: F,
@@ -1640,25 +1656,6 @@ let f = class extends z {
       <section>
         <h3>Apariencia</h3>
         <label
-          >Color de fábrica
-          <select name="color_preset" @change=${this.updateField}>
-            ${Object.entries(q).map(
-      ([t, e]) => h`<option value=${t} ?selected=${this.config.color_preset === t}>
-                  ${e.label}
-                </option>`
-    )}
-          </select>
-        </label>
-        ${this.config.color_preset === "custom" ? h`<label
-                >Color personalizado
-                <input
-                  name="vehicle_color"
-                  type="color"
-                  .value=${this.config.vehicle_color ?? p.vehicle_color}
-                  @change=${this.updateField}
-                />
-              </label>` : l}
-        <label
           >Diseño
           <select name="layout" @change=${this.updateField}>
             <option value="full" ?selected=${this.config.layout === "full"}>Completo</option>
@@ -1700,23 +1697,44 @@ let f = class extends z {
           />
           Mostrar sombra de color</label
         >
-        ${this.config.vehicle_shadow !== !1 ? h`<label
-                >Intensidad de la sombra (%)
-                <input
-                  name="shadow_intensity"
-                  type="range"
-                  min="0"
-                  max="100"
-                  step="5"
-                  .value=${String(this.config.shadow_intensity ?? p.shadow_intensity)}
-                  @change=${this.updateField}
-                />
-              </label>` : l}
+        ${this.config.vehicle_shadow !== !1 ? h`
+                <label
+                  >Color de la sombra
+                  <select name="color_preset" @change=${this.updateField}>
+                    ${Object.entries(q).map(
+      ([t, e]) => h`<option value=${t} ?selected=${this.config.color_preset === t}>
+                          ${e.label}
+                        </option>`
+    )}
+                  </select>
+                </label>
+                ${this.config.color_preset === "custom" ? h`<label
+                        >Color personalizado de la sombra
+                        <input
+                          name="vehicle_color"
+                          type="color"
+                          .value=${this.config.vehicle_color ?? p.vehicle_color}
+                          @change=${this.updateField}
+                        />
+                      </label>` : l}
+                <label
+                  >Intensidad de la sombra (%)
+                  <input
+                    name="shadow_intensity"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    .value=${String(this.config.shadow_intensity ?? p.shadow_intensity)}
+                    @change=${this.updateField}
+                  />
+                </label>
+              ` : l}
         <label
           >Imagen
           <select name="image_mode" @change=${this.updateField}>
             <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>
-              Ilustración recoloreable
+              Ilustración incluida
             </option>
             <option value="custom" ?selected=${this.config.image_mode === "custom"}>
               Imagen personalizada
