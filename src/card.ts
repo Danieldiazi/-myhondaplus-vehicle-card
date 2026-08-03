@@ -477,9 +477,11 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       filter: drop-shadow(0 8px 6px var(--vehicle-shadow-color));
     }
     .vehicle img.honda-logo-art {
-      width: min(48%, 210px);
-      max-height: 200px;
-      filter: drop-shadow(0 8px 8px var(--vehicle-shadow-color));
+      width: clamp(120px, 34%, 150px);
+      max-height: 150px;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 10px 12px var(--vehicle-shadow-color))
+        drop-shadow(0 0 14px var(--vehicle-shadow-color));
     }
     .freshness {
       position: absolute;
