@@ -219,7 +219,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
       class="status ${active === true ? "warning" : ""} ${active === undefined ? "unavailable" : ""}"
       aria-label=${`${label}: ${text}`}
     >
-      <span class="status-icon" aria-hidden="true">${icon}</span>
+      <ha-icon class="status-icon" icon=${icon} aria-hidden="true"></ha-icon>
       <div><b>${label}</b><small>${text}</small></div>
       <i aria-hidden="true"></i>
     </div>`;
@@ -242,7 +242,8 @@ export class MyHondaPlusVehicleCard extends LitElement {
       ?disabled=${Boolean(this.busy) || unavailable}
       @click=${() => void this.execute(key)}
     >
-      <span aria-hidden="true">${loading ? "…" : icon}</span><small>${label}</small>
+      <span aria-hidden="true"> ${loading ? "…" : html`<ha-icon icon=${icon}></ha-icon>`} </span>
+      <small>${label}</small>
     </button>`;
   }
 
@@ -290,7 +291,17 @@ export class MyHondaPlusVehicleCard extends LitElement {
         ${
           this.entities.lock
             ? html`<span class="badge ${state.locked === false ? "alert" : ""}">
-                ${state.locked === true ? "🔒" : state.locked === false ? "🔓" : "❔"} ${lockedText}
+                <ha-icon
+                  icon=${
+                    state.locked === true
+                      ? "mdi:lock"
+                      : state.locked === false
+                        ? "mdi:lock-open-variant"
+                        : "mdi:lock-question"
+                  }
+                  aria-hidden="true"
+                ></ha-icon>
+                ${lockedText}
               </span>`
             : nothing
         }
@@ -324,12 +335,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
       ${
         this.config.layout !== "compact"
           ? html`<section class="statuses">
-              ${this.entities.doors ? this.status("🚪", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.windows ? this.status("▤", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.trunk ? this.status("▰", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.hood ? this.status("▱", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.lights ? this.status("💡", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
-              ${this.entities.charging ? this.status("⚡", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
+              ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.hood ? this.status("mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
+              ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
+              ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
             </section>`
           : nothing
       }
@@ -339,14 +350,22 @@ export class MyHondaPlusVehicleCard extends LitElement {
               ${controls.map((key) => {
                 const metadata = {
                   lock: {
-                    icon: state.locked ? "🔓" : "🔒",
+                    icon:
+                      state.locked === true
+                        ? "mdi:lock-open-variant"
+                        : state.locked === false
+                          ? "mdi:lock"
+                          : "mdi:lock-question",
                     label: state.locked ? this.t("unlock") : this.t("lock"),
                   },
-                  climate: { icon: "❄️", label: this.t("climate") },
-                  horn_lights: { icon: "📣", label: this.t("horn_lights") },
-                  refresh_cached: { icon: "↺", label: this.t("refresh_cached") },
-                  refresh: { icon: "↻", label: this.t("refresh_from_car") },
-                  location: { icon: "⌖", label: this.t("location") },
+                  climate: { icon: "mdi:snowflake", label: this.t("climate") },
+                  horn_lights: { icon: "mdi:bullhorn", label: this.t("horn_lights") },
+                  refresh_cached: {
+                    icon: "mdi:database-refresh",
+                    label: this.t("refresh_cached"),
+                  },
+                  refresh: { icon: "mdi:car-connected", label: this.t("refresh_from_car") },
+                  location: { icon: "mdi:map-marker", label: this.t("location") },
                 }[key];
                 return this.control(metadata.icon, metadata.label, key);
               })}
@@ -394,11 +413,20 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       font-size: 0.83rem;
     }
     .badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
       padding: 7px 11px;
       border-radius: 999px;
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
       font-size: 0.76rem;
+    }
+    .badge ha-icon,
+    .status-icon {
+      flex: 0 0 auto;
+      color: var(--secondary-text-color);
+      --mdc-icon-size: 18px;
     }
     .alert,
     .message.error {
@@ -548,6 +576,10 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     button:disabled {
       cursor: progress;
       opacity: 0.65;
+    }
+    button ha-icon {
+      color: var(--primary-text-color);
+      --mdc-icon-size: 21px;
     }
     .setup {
       padding: 18px;
