@@ -38,6 +38,7 @@ export interface DeviceRegistryEntry {
 
 export type CardLayout = "full" | "compact";
 export type ImageMode = "rendered" | "custom";
+export type VehicleAlignment = "left" | "center" | "right";
 export type VehicleModelKey =
   "civic" | "hrv" | "crv" | "zrv" | "jazz" | "honda_e" | "eny1" | "generic";
 export type CardLocale = "auto" | "en" | "es" | "gl";
@@ -51,6 +52,10 @@ export interface MyHondaPlusCardConfig {
   image_mode?: ImageMode;
   vehicle_image?: string;
   vehicle_model?: VehicleModelKey | "auto";
+  vehicle_scale?: number;
+  vehicle_alignment?: VehicleAlignment;
+  vehicle_shadow?: boolean;
+  shadow_intensity?: number;
   layout?: CardLayout;
   stale_after?: number;
   show_controls?: boolean;
@@ -59,10 +64,16 @@ export interface MyHondaPlusCardConfig {
   confirm_unlock?: boolean;
   locale?: CardLocale;
   debug?: boolean;
-  controls?: Array<"lock" | "climate" | "refresh" | "location">;
-  metrics?: Array<"range" | "battery" | "odometer">;
+  controls?: ControlKey[];
+  metrics?: MetricKey[];
   entities?: Partial<EntityMap>;
 }
+
+export type ControlKey =
+  "lock" | "climate" | "horn_lights" | "refresh_cached" | "refresh" | "location";
+
+export type MetricKey =
+  "range" | "battery" | "odometer" | "trip_distance" | "trip_consumption" | "trip_duration";
 
 export interface EntityMap {
   lock: string;
@@ -73,12 +84,17 @@ export interface EntityMap {
   climate: string;
   charging: string;
   refresh: string;
+  refresh_cached: string;
+  horn_lights: string;
   location: string;
   doors: string;
   windows: string;
   trunk: string;
   hood: string;
   lights: string;
+  trip_distance: string;
+  trip_consumption: string;
+  trip_duration: string;
 }
 
 export interface VehicleState {
@@ -86,13 +102,16 @@ export interface VehicleState {
   range: string;
   battery: string;
   odometer: string;
-  climateActive: boolean;
-  charging: boolean;
-  doorsOpen: boolean;
-  windowsOpen: boolean;
-  trunkOpen: boolean;
-  hoodOpen: boolean;
-  lightsOn: boolean;
+  tripDistance: string;
+  tripConsumption: string;
+  tripDuration: string;
+  climateActive?: boolean;
+  charging?: boolean;
+  doorsOpen?: boolean;
+  windowsOpen?: boolean;
+  trunkOpen?: boolean;
+  hoodOpen?: boolean;
+  lightsOn?: boolean;
   ageSeconds?: number;
   stale: boolean;
 }

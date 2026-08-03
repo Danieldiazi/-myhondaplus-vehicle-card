@@ -16,12 +16,19 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 - Auditoría de dependencias de producción en CI y releases.
 - Política de seguridad en `SECURITY.md`.
 - Documentación explícita de la dependencia de My Honda+ for Home Assistant y de los límites de responsabilidad entre integración y tarjeta.
+- Detección dinámica de métricas, estados y controles según las entidades reales del vehículo.
+- Métricas mensuales de distancia, consumo y tiempo de conducción.
+- Controles de bocina y luces y actualización de datos almacenados cuando estén disponibles.
+- Escala, alineación y sombra configurables para la ilustración.
+- Licencia MIT incluida en el repositorio.
 
 ### Changed
 
 - GitHub Actions fijadas mediante SHA completos.
 - Flujo de publicación actualizado para Node.js 24.
 - README, guía de usuario y referencia de configuración ampliados con instalación previa de la integración y orientación de soporte.
+- Estados inexistentes ocultos y entidades temporalmente no disponibles identificadas como sin datos.
+- Actualizaciones menores y de parche agrupadas en Dependabot; las mayores permanecen separadas.
 
 ## [0.5.0] - 2026-08-02
 

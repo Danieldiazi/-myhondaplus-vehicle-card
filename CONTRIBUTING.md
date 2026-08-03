@@ -23,15 +23,15 @@ npm run check
 
 ## Comandos
 
-| Comando | Propósito |
-|---|---|
-| `npm run dev` | Recompila el bundle al detectar cambios |
-| `npm run format` | Aplica Prettier |
-| `npm run lint` | Ejecuta ESLint |
-| `npm run typecheck` | Comprueba TypeScript estricto |
-| `npm test` | Ejecuta Vitest |
-| `npm run build` | Genera el bundle HACS |
-| `npm run check` | Ejecuta todas las comprobaciones anteriores |
+| Comando             | Propósito                                   |
+| ------------------- | ------------------------------------------- |
+| `npm run dev`       | Recompila el bundle al detectar cambios     |
+| `npm run format`    | Aplica Prettier                             |
+| `npm run lint`      | Ejecuta ESLint                              |
+| `npm run typecheck` | Comprueba TypeScript estricto               |
+| `npm test`          | Ejecuta Vitest                              |
+| `npm run build`     | Genera el bundle HACS                       |
+| `npm run check`     | Ejecuta todas las comprobaciones anteriores |
 
 ## Buenas prácticas
 
@@ -72,3 +72,16 @@ El pull request debe incluir:
 No incluyas VIN, coordenadas, matrículas, tokens, correos ni otros datos privados en código, tests, logs, capturas o incidencias.
 
 Consulta también [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Nuevas ilustraciones de vehículos
+
+Hasta que exista una ilustración específica, el modelo debe utilizar el vehículo genérico. Para proponer un SVG específico:
+
+- usa una vista lateral y un `viewBox` ajustado al vehículo;
+- conserva ruedas, cristales, luces y líneas separados del efecto de color;
+- evita fuentes, imágenes enlazadas, scripts y recursos externos;
+- optimiza el archivo sin alterar su geometría;
+- documenta la procedencia y confirma que su licencia permite distribuirlo bajo las condiciones del proyecto;
+- adjunta una captura de la tarjeta en tema claro y oscuro.
+
+El SVG debe seguir siendo legible cuando el usuario desactive la sombra de color.

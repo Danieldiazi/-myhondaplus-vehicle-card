@@ -3,8 +3,9 @@ import type { EntityMap, HassEntity, VehicleState } from "./types";
 const ACTIVE_STATES = new Set(["on", "open", "unlocked", "active", "charging", "plugged", "true"]);
 const UNAVAILABLE_STATES = new Set(["unknown", "unavailable", "none"]);
 
-export function isEntityActive(entity?: HassEntity): boolean {
-  return ACTIVE_STATES.has(entity?.state.toLowerCase() ?? "");
+export function isEntityActive(entity?: HassEntity): boolean | undefined {
+  if (!entity || UNAVAILABLE_STATES.has(entity.state.toLowerCase())) return undefined;
+  return ACTIVE_STATES.has(entity.state.toLowerCase());
 }
 
 export function entityDisplayValue(entity?: HassEntity): string {
@@ -37,6 +38,9 @@ export function buildVehicleState(
     range: entityDisplayValue(entities.range),
     battery: entityDisplayValue(entities.battery),
     odometer: entityDisplayValue(entities.odometer),
+    tripDistance: entityDisplayValue(entities.trip_distance),
+    tripConsumption: entityDisplayValue(entities.trip_consumption),
+    tripDuration: entityDisplayValue(entities.trip_duration),
     climateActive: isEntityActive(entities.climate),
     charging: isEntityActive(entities.charging),
     doorsOpen: isEntityActive(entities.doors),

@@ -13,6 +13,10 @@ export const DEFAULT_CONFIG: Required<
     | "color_preset"
     | "image_mode"
     | "vehicle_model"
+    | "vehicle_scale"
+    | "vehicle_alignment"
+    | "vehicle_shadow"
+    | "shadow_intensity"
     | "layout"
     | "stale_after"
     | "show_controls"
@@ -31,6 +35,10 @@ export const DEFAULT_CONFIG: Required<
   color_preset: "rallye_red",
   image_mode: "rendered",
   vehicle_model: "auto",
+  vehicle_scale: 100,
+  vehicle_alignment: "center",
+  vehicle_shadow: true,
+  shadow_intensity: 60,
   layout: "full",
   stale_after: 21_600,
   show_controls: true,
@@ -39,8 +47,8 @@ export const DEFAULT_CONFIG: Required<
   confirm_unlock: true,
   locale: "auto",
   debug: false,
-  controls: ["lock", "climate", "refresh", "location"],
-  metrics: ["range", "battery", "odometer"],
+  controls: ["lock", "climate", "horn_lights", "refresh", "location"],
+  metrics: ["range", "battery", "odometer", "trip_distance", "trip_consumption"],
 };
 
 export const PAINT_PRESETS: Record<string, { label: string; value: string; accent: string }> = {

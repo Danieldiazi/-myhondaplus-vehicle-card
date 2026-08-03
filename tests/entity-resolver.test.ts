@@ -33,4 +33,30 @@ describe("resolveEntities", () => {
     });
     expect(result.range).toBe("sensor.manual_range");
   });
+
+  it("ignores similarly named entities from other integrations", () => {
+    const foreign = entry("sensor.phone_battery", "battery_level");
+    foreign.platform = "mobile_app";
+    expect(resolveEntities([foreign]).battery).toBeUndefined();
+  });
+
+  it("does not treat a generic 12 V battery name as traction battery data", () => {
+    expect(resolveEntities([entry("sensor.civic_battery", "battery")]).battery).toBeUndefined();
+  });
+
+  it("detects trip metrics and separates both refresh buttons", () => {
+    const result = resolveEntities([
+      entry("sensor.civic_month_distance", "distance_this_month"),
+      entry("sensor.civic_consumption", "avg_consumption_this_month"),
+      entry("button.civic_refresh", "refresh"),
+      entry("button.civic_refresh_from_car", "refresh_from_car"),
+      entry("button.civic_horn", "horn_lights"),
+    ]);
+
+    expect(result.trip_distance).toBe("sensor.civic_month_distance");
+    expect(result.trip_consumption).toBe("sensor.civic_consumption");
+    expect(result.refresh_cached).toBe("button.civic_refresh");
+    expect(result.refresh).toBe("button.civic_refresh_from_car");
+    expect(result.horn_lights).toBe("button.civic_horn");
+  });
 });

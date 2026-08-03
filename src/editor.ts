@@ -1,8 +1,10 @@
 import { css, html, LitElement, nothing, type PropertyValues, type TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { DEFAULT_CONFIG, EDITOR_TAG, PAINT_PRESETS } from "./constants";
+import { resolveEntities } from "./entity-resolver";
 import type {
   DeviceRegistryEntry,
+  EntityMap,
   EntityRegistryEntry,
   HomeAssistant,
   MyHondaPlusCardConfig,
@@ -13,6 +15,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private config: MyHondaPlusCardConfig = { ...DEFAULT_CONFIG };
   @state() private devices: DeviceRegistryEntry[] = [];
+  @state() private registryEntries: EntityRegistryEntry[] = [];
   @state() private loading = false;
 
   public setConfig(config: MyHondaPlusCardConfig): void {
@@ -39,6 +42,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       this.devices = devices
         .filter((device) => ids.has(device.id))
         .sort((a, b) => this.deviceName(a).localeCompare(this.deviceName(b)));
+      this.registryEntries = entities;
     } catch (error) {
       console.warn("My Honda+ Vehicle Card: device discovery failed", error);
       this.devices = [];
@@ -55,7 +59,8 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     const target = event.currentTarget as HTMLInputElement | HTMLSelectElement;
     let value: string | boolean | number = target.value;
     if (target instanceof HTMLInputElement && target.type === "checkbox") value = target.checked;
-    if (target.name === "stale_after") value = Number(target.value);
+    if (["stale_after", "vehicle_scale", "shadow_intensity"].includes(target.name))
+      value = Number(target.value);
 
     const config = { ...this.config, [target.name]: value };
     if (target.name === "color_preset" && value !== "custom") {
@@ -93,23 +98,33 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     options: Array<[string, string]>,
   ): TemplateResult {
     const selected = new Set((this.config[field] ?? DEFAULT_CONFIG[field]) as string[]);
+    const detected = this.detectedEntities();
     return html`<fieldset>
       <legend>${title}</legend>
       <div class="checks">
-        ${options.map(
-          ([value, label]) =>
-            html`<label class="check">
-              <input
-                type="checkbox"
-                .value=${value}
-                .checked=${selected.has(value)}
-                @change=${(event: Event) => this.toggleListValue(event, field)}
-              />
-              ${label}
-            </label>`,
-        )}
+        ${options.map(([value, label]) => {
+          const available = !this.config.device || Boolean(detected[value as keyof EntityMap]);
+          return html`<label class="check">
+            <input
+              type="checkbox"
+              .value=${value}
+              .checked=${selected.has(value)}
+              ?disabled=${!available && !selected.has(value)}
+              @change=${(event: Event) => this.toggleListValue(event, field)}
+            />
+            ${label}${available ? "" : " — no disponible"}
+          </label>`;
+        })}
       </div>
     </fieldset>`;
+  }
+
+  private detectedEntities(): Partial<EntityMap> {
+    if (!this.config.device) return {};
+    return resolveEntities(
+      this.registryEntries.filter((entry) => entry.device_id === this.config.device),
+      this.config.entities,
+    );
   }
 
   protected override render(): TemplateResult {
@@ -192,6 +207,57 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           </select>
         </label>
         <label
+          >Escala del vehículo (%)
+          <input
+            name="vehicle_scale"
+            type="number"
+            min="70"
+            max="140"
+            step="5"
+            .value=${String(this.config.vehicle_scale ?? DEFAULT_CONFIG.vehicle_scale)}
+            @change=${this.updateField}
+          />
+        </label>
+        <label
+          >Alineación
+          <select name="vehicle_alignment" @change=${this.updateField}>
+            <option value="left" ?selected=${this.config.vehicle_alignment === "left"}>
+              Izquierda
+            </option>
+            <option value="center" ?selected=${this.config.vehicle_alignment === "center"}>
+              Centro
+            </option>
+            <option value="right" ?selected=${this.config.vehicle_alignment === "right"}>
+              Derecha
+            </option>
+          </select>
+        </label>
+        <label class="check"
+          ><input
+            name="vehicle_shadow"
+            type="checkbox"
+            .checked=${this.config.vehicle_shadow !== false}
+            @change=${this.updateField}
+          />
+          Mostrar sombra de color</label
+        >
+        ${
+          this.config.vehicle_shadow !== false
+            ? html`<label
+                >Intensidad de la sombra (%)
+                <input
+                  name="shadow_intensity"
+                  type="range"
+                  min="0"
+                  max="100"
+                  step="5"
+                  .value=${String(this.config.shadow_intensity ?? DEFAULT_CONFIG.shadow_intensity)}
+                  @change=${this.updateField}
+                />
+              </label>`
+            : nothing
+        }
+        <label
           >Imagen
           <select name="image_mode" @change=${this.updateField}>
             <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>
@@ -223,11 +289,16 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           ["range", "Autonomía"],
           ["battery", "Batería"],
           ["odometer", "Kilometraje"],
+          ["trip_distance", "Distancia este mes"],
+          ["trip_consumption", "Consumo medio"],
+          ["trip_duration", "Tiempo de conducción"],
         ])}
         ${this.checklist("Controles", "controls", [
           ["lock", "Cierre"],
           ["climate", "Climatización"],
-          ["refresh", "Actualizar"],
+          ["horn_lights", "Bocina y luces"],
+          ["refresh_cached", "Actualizar datos guardados"],
+          ["refresh", "Actualizar desde el coche"],
           ["location", "Ubicación"],
         ])}
       </section>
