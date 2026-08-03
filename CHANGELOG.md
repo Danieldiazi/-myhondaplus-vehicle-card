@@ -31,6 +31,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 - Actualizaciones menores y de parche agrupadas en Dependabot; las mayores permanecen separadas.
 - Fondo de la tarjeta integrado con el tema activo de Home Assistant, sin mezclar el color primario.
 - Iconos de métricas unificados con los iconos MDI nativos de Home Assistant.
+- Iconos de cierre, estados y controles unificados con los iconos MDI nativos de Home Assistant.
 
 ## [0.5.0] - 2026-08-02
 
