@@ -337,6 +337,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
               ${this.entities.hood ? this.status("mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
               ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
               ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
+              ${this.entities.climate ? this.status("mdi:snowflake", this.t("climate"), state.climateActive, this.t("active"), this.t("inactive")) : nothing}
             </section>`
           : nothing
       }
