@@ -376,15 +376,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       padding: 20px;
       overflow: hidden;
       color: var(--primary-text-color);
-      background: linear-gradient(
-        145deg,
-        var(--ha-card-background, var(--card-background-color)),
-        color-mix(
-          in srgb,
-          var(--ha-card-background, var(--card-background-color)) 90%,
-          var(--primary-color) 10%
-        )
-      );
+      background: var(--ha-card-background, var(--card-background-color));
     }
     header {
       display: flex;
