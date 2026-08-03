@@ -15,8 +15,6 @@ updates:
         update-types:
           - minor
           - patch
-    labels:
-      - dependencies
     commit-message:
       prefix: chore
       include: scope
@@ -36,8 +34,6 @@ updates:
         update-types:
           - minor
           - patch
-    labels:
-      - dependencies
     commit-message:
       prefix: chore
       include: scope
