@@ -249,7 +249,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
 
   private vehicleVisual(): TemplateResult {
     if (this.config.image_mode === "custom" && this.config.vehicle_image) {
-      return html`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />`;
+      return html`<img
+        class="vehicle-art custom-vehicle-art"
+        src=${this.config.vehicle_image}
+        alt=${this.t("vehicle")}
+        loading="lazy"
+      />`;
     }
     return renderVehicleArt(this.model());
   }
@@ -329,14 +334,22 @@ export class MyHondaPlusVehicleCard extends LitElement {
           : html`<div class="setup">${this.t("select_vehicle")}</div>`
       }
       ${
-        this.config.layout !== "compact"
-          ? html`<section class="statuses">
-              ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.hood ? this.status("mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
-              ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
-              ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
+        this.config.layout !== "compact" || this.entities.climate
+          ? html`<section
+              class="statuses ${this.config.layout === "compact" ? "compact-statuses" : ""}"
+            >
+              ${
+                this.config.layout !== "compact"
+                  ? html`
+                      ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.hood ? this.status("mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
+                      ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
+                    `
+                  : nothing
+              }
               ${this.entities.climate ? this.status("mdi:snowflake", this.t("climate"), state.climateActive, this.t("active"), this.t("inactive")) : nothing}
             </section>`
           : nothing
@@ -473,7 +486,8 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .vehicle.align-right img {
       transform-origin: right center;
     }
-    .vehicle img.civic-lateral-art {
+    .vehicle img.civic-lateral-art,
+    .vehicle img.custom-vehicle-art {
       filter: drop-shadow(0 8px 6px var(--vehicle-shadow-color));
     }
     .vehicle img.honda-logo-art {
@@ -531,6 +545,9 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-top: 13px;
+    }
+    .compact-statuses {
+      grid-template-columns: 1fr;
     }
     .status {
       display: grid;
