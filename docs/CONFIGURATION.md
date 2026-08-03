@@ -16,13 +16,13 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | ------------------- | --------------------------- | -------------: | ------------------------------------------------------------------------------------------------ |
 | `device`            | string                      |              — | ID del dispositivo creado por My Honda+ for Home Assistant. El editor lo selecciona visualmente. |
 | `name`              | string                      |    `My Honda+` | Nombre mostrado.                                                                                 |
-| `color_preset`      | string                      |   `rallye_red` | Color predefinido de la carrocería.                                                              |
-| `vehicle_color`     | string                      |      `#a51d2d` | Color hexadecimal cuando el preset es `custom`.                                                  |
-| `image_mode`        | `rendered` / `custom`       |     `rendered` | Ilustración recoloreable o imagen propia.                                                        |
+| `color_preset`      | string                      |   `rallye_red` | Color predefinido de la sombra de la ilustración.                                                |
+| `vehicle_color`     | string                      |      `#a51d2d` | Color de sombra hexadecimal cuando el preset es `custom`.                                        |
+| `image_mode`        | `rendered` / `custom`       |     `rendered` | Ilustración incluida o imagen propia.                                                            |
 | `vehicle_image`     | string                      |              — | URL de la imagen personalizada.                                                                  |
 | `vehicle_scale`     | number                      |          `100` | Escala de la ilustración, entre 70 y 140 %.                                                      |
 | `vehicle_alignment` | `left` / `center` / `right` |       `center` | Alineación horizontal de la ilustración.                                                         |
-| `vehicle_shadow`    | boolean                     |         `true` | Activa la sombra visual del vehículo.                                                            |
+| `vehicle_shadow`    | boolean                     |         `true` | Activa la sombra de color de la ilustración.                                                     |
 | `shadow_intensity`  | number                      |           `60` | Intensidad de la sombra, entre 0 y 100 %.                                                        |
 | `layout`            | `full` / `compact`          |         `full` | Densidad visual.                                                                                 |
 | `stale_after`       | number                      |        `21600` | Segundos antes de marcar los datos como antiguos.                                                |
