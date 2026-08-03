@@ -10,6 +10,15 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-08-03
+
+### Added
+
+- Documentación completa en inglés y español con selector de idioma sincronizado.
+- Captura de vista previa de la tarjeta con el fallback genérico de Honda.
+- Guía `AGENTS.md` para agentes de desarrollo y revisión.
+- Validación oficial de repositorios HACS con categoría `plugin`.
+
 ## [0.5.2] - 2026-08-03
 
 ### Added
