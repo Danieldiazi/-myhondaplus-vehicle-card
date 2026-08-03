@@ -2,16 +2,7 @@ import { html, type TemplateResult } from "lit";
 import type { VehicleModelKey } from "./types";
 import civicLateralSvg from "../assets/civic-lateral-2.svg?raw";
 
-const ROOFLINES: Record<VehicleModelKey, string> = {
-  civic: "M270 174 L360 94 Q410 62 495 68 L625 82 Q680 90 735 170",
-  hrv: "M250 174 L335 78 Q388 45 486 50 L642 66 Q702 77 758 171",
-  crv: "M235 174 L320 62 Q380 30 500 38 L660 55 Q724 70 775 171",
-  zrv: "M245 174 L332 72 Q392 40 500 47 L648 63 Q710 76 765 171",
-  jazz: "M265 174 L340 82 Q390 53 470 55 L594 65 Q650 75 720 171",
-  honda_e: "M285 174 L350 88 Q392 62 470 62 L575 66 Q627 72 692 171",
-  eny1: "M240 174 L326 70 Q388 36 500 42 L655 58 Q716 72 770 171",
-  generic: "M260 174 L340 82 Q395 50 488 55 L625 68 Q687 78 745 171",
-};
+const GENERIC_ROOFLINE = "M260 174 L340 82 Q395 50 488 55 L625 68 Q687 78 745 171";
 
 export function renderVehicleArt(
   model: VehicleModelKey,
@@ -47,7 +38,7 @@ export function renderVehicleArt(
     <ellipse cx="480" cy="316" rx="350" ry="22" fill="rgba(0,0,0,.22)"></ellipse>
     ${options.climate ? html`<g class="climate-wave" fill="none" stroke="var(--info-color,#42a5f5)" stroke-width="5" opacity=".55"><path d="M390 82q-20-25 0-48"></path><path d="M470 72q-20-25 0-48"></path><path d="M550 82q-20-25 0-48"></path></g>` : null}
     <path
-      d="M95 245 Q120 198 210 182 L270 174 ${ROOFLINES[model]} L840 196 Q894 207 915 254 L899 291 L790 300 Q778 235 705 235 Q632 235 620 300 L350 300 Q338 235 265 235 Q192 235 180 300 L87 284 Z"
+      d="M95 245 Q120 198 210 182 L270 174 ${GENERIC_ROOFLINE} L840 196 Q894 207 915 254 L899 291 L790 300 Q778 235 705 235 Q632 235 620 300 L350 300 Q338 235 265 235 Q192 235 180 300 L87 284 Z"
       fill="url(#paint)"
       stroke="rgba(0,0,0,.45)"
       stroke-width="5"
