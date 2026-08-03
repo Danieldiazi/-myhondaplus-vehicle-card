@@ -247,15 +247,11 @@ export class MyHondaPlusVehicleCard extends LitElement {
     </button>`;
   }
 
-  private vehicleVisual(state: VehicleState): TemplateResult {
+  private vehicleVisual(): TemplateResult {
     if (this.config.image_mode === "custom" && this.config.vehicle_image) {
       return html`<img src=${this.config.vehicle_image} alt=${this.t("vehicle")} loading="lazy" />`;
     }
-    return renderVehicleArt(this.model(), this.paintColor(), {
-      charging: state.charging === true,
-      climate: state.climateActive === true,
-      lights: state.lightsOn === true,
-    });
+    return renderVehicleArt(this.model());
   }
 
   private visualStyle(): string {
@@ -316,7 +312,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
         class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
         style=${this.visualStyle()}
       >
-        ${this.vehicleVisual(state)}
+        ${this.vehicleVisual()}
         <div
           class="freshness ${state.stale ? "stale" : ""}"
           title=${state.stale ? this.t("stale_data") : ""}
@@ -478,6 +474,11 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .vehicle img.civic-lateral-art {
       filter: drop-shadow(0 8px 6px var(--vehicle-shadow-color));
+    }
+    .vehicle img.honda-logo-art {
+      width: min(48%, 210px);
+      max-height: 200px;
+      filter: drop-shadow(0 8px 8px var(--vehicle-shadow-color));
     }
     .freshness {
       position: absolute;

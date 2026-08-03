@@ -20,7 +20,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 ## Lo más destacado
 
 - Configuración visual con descubrimiento automático del vehículo.
-- Ilustración específica para Civic y una ilustración genérica cuidada para el resto de modelos.
+- Ilustración específica para Civic y logotipo genérico de Honda para el resto de modelos.
 - Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
 - Métricas y controles configurables.
 - Español, inglés y gallego con selección automática de idioma.
@@ -34,10 +34,12 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 | Modelo                                  | Ilustración            | Información y controles                  |
 | --------------------------------------- | ---------------------- | ---------------------------------------- |
 | Honda Civic                             | SVG lateral específico | Detectados desde sus entidades My Honda+ |
-| HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1 | Ilustración genérica   | Detectados desde sus entidades My Honda+ |
-| Otros Honda compatibles                 | Ilustración genérica   | Detectados desde sus entidades My Honda+ |
+| HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
+| Otros Honda compatibles                 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
 
 El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
+
+El logotipo de Honda se utiliza únicamente como identificación visual para modelos sin una ilustración específica. Honda es una marca registrada y este proyecto comunitario no está afiliado a Honda Motor Co., Ltd.
 
 ## Instalación rápida
 
