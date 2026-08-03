@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-08-03
+
 ### Added
 
 - Instalaciones reproducibles mediante `package-lock.json` y `npm ci`.
