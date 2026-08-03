@@ -25,6 +25,7 @@ describe("vehicle state", () => {
         lock: entity("locked"),
         range: entity("420", "km"),
         charging: entity("charging"),
+        climate: entity("on"),
         doors: entity("off"),
       },
       300,
@@ -34,6 +35,7 @@ describe("vehicle state", () => {
     expect(state.locked).toBe(true);
     expect(state.range).toBe("420 km");
     expect(state.charging).toBe(true);
+    expect(state.climateActive).toBe(true);
     expect(state.doorsOpen).toBe(false);
     expect(state.stale).toBe(true);
   });
