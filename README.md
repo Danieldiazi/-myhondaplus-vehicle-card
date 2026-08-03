@@ -1,133 +1,135 @@
 # My Honda+ Vehicle Card
 
-Tarjeta Lovelace no oficial para mostrar y controlar vehículos conectados mediante la integración comunitaria [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant).
+**English** | [Español](README.es.md)
 
-> Este repositorio contiene únicamente la tarjeta del panel. **No se conecta directamente a los servicios de Honda.** Para obtener los datos del vehículo es necesario instalar y configurar previamente la integración My Honda+ enlazada arriba.
+Unofficial Lovelace card for displaying and controlling connected vehicles through the community [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant) integration.
+
+> This repository contains only the dashboard card. **It does not connect directly to Honda services.** To obtain vehicle data, you must first install and configure the My Honda+ integration linked above.
 >
-> Proyecto comunitario, no afiliado a Honda Motor Co., Ltd. ni al autor de la integración de Home Assistant.
+> Community project, not affiliated with Honda Motor Co., Ltd. or with the author of the Home Assistant integration.
 
-## Requisitos
+## Requirements
 
-Antes de instalar la tarjeta necesitas:
+Before installing the card, you need:
 
-1. Home Assistant con un panel Lovelace.
-2. La integración [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant) instalada y funcionando.
-3. Al menos un vehículo y sus entidades disponibles en Home Assistant.
-4. HACS, recomendado para instalar y actualizar esta tarjeta.
+1. Home Assistant with a Lovelace dashboard.
+2. The [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant) integration installed and working.
+3. At least one vehicle and its entities available in Home Assistant.
+4. HACS, recommended for installing and updating this card.
 
-La integración obtiene y publica los datos como dispositivos y entidades de Home Assistant. Esta tarjeta se limita a descubrir, representar y accionar esas entidades.
+The integration retrieves and publishes the data as Home Assistant devices and entities. This card only discovers, displays and controls those entities.
 
-## Lo más destacado
+## Highlights
 
-- Configuración visual con descubrimiento automático del vehículo.
-- Ilustración específica para Civic y logotipo genérico de Honda para el resto de modelos.
-- Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
-- Métricas y controles configurables.
-- Español, inglés y gallego con selección automática de idioma.
-- Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
-- Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
-- Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
-- Confirmación antes de desbloquear y bloqueo de acciones duplicadas.
+- Visual configuration with automatic vehicle discovery.
+- A dedicated Civic illustration and a generic Honda logo for all other models.
+- Content automatically adapted to the entities each vehicle publishes in Home Assistant.
+- Configurable metrics and controls.
+- Spanish, English and Galician, selected automatically from the active language.
+- Anonymized diagnostics for requesting support without sharing the VIN, coordinates or complete identifiers.
+- Door, window, trunk, hood, light, charging and climate status.
+- Responsive design, dark mode, keyboard focus and automatic reduced-motion support.
+- Confirmation before unlocking and prevention of duplicate actions.
 
-## Compatibilidad visual y funcional
+## Visual and functional compatibility
 
-| Modelo                                  | Ilustración            | Información y controles                  |
-| --------------------------------------- | ---------------------- | ---------------------------------------- |
-| Honda Civic                             | SVG lateral específico | Detectados desde sus entidades My Honda+ |
-| HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
-| Otros Honda compatibles                 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
+| Model                                   | Illustration             | Information and controls                    |
+| --------------------------------------- | ------------------------ | ------------------------------------------- |
+| Honda Civic                             | Dedicated side-view SVG  | Discovered from its My Honda+ entities      |
+| HR-V, CR-V, ZR-V, Jazz, Honda e and e:Ny1 | Honda logo             | Discovered from their My Honda+ entities    |
+| Other compatible Honda vehicles         | Honda logo               | Discovered from their My Honda+ entities    |
 
-El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
+The model determines only the illustration. Battery, charging, climate, locking and other sections are displayed only when the integration creates the corresponding entity for the device. A temporarily unavailable entity is shown as **No data**; an unsupported capability is hidden.
 
-El logotipo de Honda se utiliza únicamente como identificación visual para modelos sin una ilustración específica. Honda es una marca registrada y este proyecto comunitario no está afiliado a Honda Motor Co., Ltd.
+The Honda logo is used only as a visual identifier for models without a dedicated illustration. Honda is a registered trademark, and this community project is not affiliated with Honda Motor Co., Ltd.
 
-## Instalación rápida
+## Quick installation
 
-### 1. Instala la integración de datos
+### 1. Install the data integration
 
-Instala y configura [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant). Comprueba en **Ajustes → Dispositivos y servicios** que Home Assistant muestra el vehículo y sus entidades.
+Install and configure [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant). Check under **Settings → Devices & services** that Home Assistant displays the vehicle and its entities.
 
-### 2. Añade el repositorio a HACS
+### 2. Add the repository to HACS
 
-1. Abre **HACS** y entra en **Frontend**.
-2. Pulsa el menú de los tres puntos de la esquina superior derecha.
-3. Selecciona **Repositorios personalizados**.
-4. En **Repositorio**, pega:
+1. Open **HACS** and go to **Frontend**.
+2. Open the three-dot menu in the upper-right corner.
+3. Select **Custom repositories**.
+4. Paste the following URL into **Repository**:
 
    ```text
    https://github.com/Danieldiazi/myhondaplus-vehicle-card
    ```
 
-5. En **Tipo**, selecciona **Panel de control**. En algunas versiones o traducciones de HACS puede aparecer como **Dashboard**.
-6. Pulsa **Añadir**.
+5. Under **Type**, select **Dashboard**. The label may vary slightly depending on your HACS version or translation.
+6. Select **Add**.
 
-Añadir el repositorio personalizado solo hace que HACS lo reconozca. **La tarjeta todavía no está instalada en este punto.**
+Adding the custom repository only makes it available to HACS. **The card is not installed yet.**
 
-### 3. Descarga e instala la tarjeta desde HACS
+### 3. Download and install the card from HACS
 
-1. Vuelve a **HACS → Frontend**.
-2. Busca **My Honda+ Vehicle Card** o abre el repositorio que acabas de añadir.
-3. Pulsa **Descargar**.
-4. Confirma la versión propuesta y vuelve a pulsar **Descargar** en la ventana de confirmación.
-5. Espera a que HACS indique que la instalación ha finalizado.
+1. Return to **HACS → Frontend**.
+2. Search for **My Honda+ Vehicle Card** or open the repository you just added.
+3. Select **Download**.
+4. Confirm the suggested version and select **Download** again in the confirmation dialog.
+5. Wait until HACS reports that the installation has completed.
 
-HACS debe crear automáticamente el recurso JavaScript de la tarjeta. Puedes comprobarlo en **Ajustes → Paneles → Recursos**. La URL esperada es:
+HACS should automatically create the card's JavaScript resource. You can check it under **Settings → Dashboards → Resources**. The expected URL is:
 
 ```text
 /hacsfiles/myhondaplus-vehicle-card/myhondaplus-vehicle-card.js
 ```
 
-El tipo del recurso debe ser **Módulo JavaScript**.
+The resource type must be **JavaScript module**.
 
-### 4. Recarga Home Assistant
+### 4. Reload Home Assistant
 
-Después de instalar o actualizar la tarjeta, realiza una recarga completa del navegador:
+After installing or updating the card, perform a full browser reload:
 
-- Windows/Linux: `Ctrl + F5` o `Ctrl + Mayús + R`.
-- macOS: `Cmd + Mayús + R`.
-- Aplicación móvil: cierra completamente la aplicación y vuelve a abrirla.
+- Windows/Linux: `Ctrl + F5` or `Ctrl + Shift + R`.
+- macOS: `Cmd + Shift + R`.
+- Mobile app: close the app completely and open it again.
 
-No suele ser necesario reiniciar todo Home Assistant.
+Restarting Home Assistant itself is usually not necessary.
 
-### 5. Añade la tarjeta al panel
+### 5. Add the card to your dashboard
 
-1. Abre el panel donde quieras mostrar el coche.
-2. Pulsa **Editar panel → Añadir tarjeta**.
-3. Busca y selecciona **My Honda+ Vehicle Card**.
-4. En el editor visual, selecciona el vehículo y configura el nombre, el color y los controles visibles.
-5. Guarda la tarjeta y el panel.
+1. Open the dashboard where you want to display the vehicle.
+2. Select **Edit dashboard → Add card**.
+3. Search for and select **My Honda+ Vehicle Card**.
+4. In the visual editor, select the vehicle and configure the name, color and visible controls.
+5. Save the card and the dashboard.
 
-También puedes añadirla manualmente mediante YAML:
+You can also add it manually using YAML:
 
 ```yaml
 type: custom:myhondaplus-vehicle-card
-device: ID_DEL_DISPOSITIVO
+device: DEVICE_ID
 ```
 
-La mayor parte de la configuración se puede realizar desde el editor visual, por lo que normalmente no necesitas buscar ni copiar el identificador del dispositivo.
+Most settings are available in the visual editor, so you normally do not need to find or copy the device identifier.
 
-## Responsabilidad de cada proyecto
+## Project responsibilities
 
-| Proyecto                     | Responsabilidad                                                                                                             |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| My Honda+ for Home Assistant | Autenticación, comunicación con los servicios de Honda y creación de dispositivos, entidades y servicios en Home Assistant. |
-| My Honda+ Vehicle Card       | Presentación visual, detección de entidades y ejecución de servicios ya disponibles en Home Assistant.                      |
+| Project                      | Responsibility                                                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| My Honda+ for Home Assistant | Authentication, communication with Honda services, and creation of devices, entities and services in Home Assistant. |
+| My Honda+ Vehicle Card       | Visual presentation, entity discovery and execution of services already available in Home Assistant.              |
 
-Los problemas de autenticación, ausencia completa del vehículo o comunicación con Honda deben notificarse en el repositorio de la integración. Los problemas de diseño, detección de una entidad existente o funcionamiento de la tarjeta deben notificarse en este repositorio.
+Authentication problems, a completely missing vehicle or communication problems with Honda should be reported in the integration repository. Layout issues, failure to detect an existing entity or card functionality problems should be reported in this repository.
 
-## Documentación
+## Documentation
 
-- [Guía de usuario](docs/USER_GUIDE.md)
-- [Referencia de configuración](docs/CONFIGURATION.md)
-- [Arquitectura](docs/ARCHITECTURE.md)
-- [Cómo contribuir](CONTRIBUTING.md)
-- [Política de seguridad](SECURITY.md)
-- [Historial de cambios](CHANGELOG.md)
+- [User guide](docs/USER_GUIDE.md)
+- [Configuration reference](docs/CONFIGURATION.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP.md)
 
-## Desarrollo
+## Development
 
-Requiere Node.js 24 o posterior.
+Requires Node.js 24 or later.
 
 ```bash
 npm ci
@@ -135,12 +137,12 @@ npm run check
 npm run dev
 ```
 
-La distribución HACS se genera como un único archivo autocontenido en `dist/myhondaplus-vehicle-card.js`.
+The HACS distribution is generated as a single self-contained file at `dist/myhondaplus-vehicle-card.js`.
 
-## Privacidad y seguridad
+## Privacy and security
 
-La tarjeta no se conecta directamente a Honda ni almacena credenciales. Solo consume entidades y llama a servicios ya creados por Home Assistant. Los comandos sensibles requieren confirmación de forma predeterminada y los diagnósticos ocultan identificadores y datos de localización.
+The card does not connect directly to Honda or store credentials. It only consumes entities and calls services already created by Home Assistant. Sensitive commands require confirmation by default, and diagnostics hide identifiers and location data.
 
-## Licencia
+## License
 
-MIT. Consulta [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
