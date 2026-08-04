@@ -36,6 +36,17 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
   await expect(page.locator(`${card} .metrics .metric`)).toHaveCount(5);
   await expect(page.locator(`${card} .statuses .status`)).toHaveCount(7);
   await expect(page.locator(`${card} nav[aria-label='Vehicle controls']`)).toBeVisible();
+  const [metricBackground, controlBackground] = await Promise.all([
+    page
+      .locator(`${card} .metric`)
+      .first()
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+    page
+      .locator(`${card} .controls button`)
+      .first()
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+  ]);
+  expect(controlBackground).not.toBe(metricBackground);
   await expectArtworkAboveFreshness(page);
   await expectNoHorizontalOverflow(page);
 });
