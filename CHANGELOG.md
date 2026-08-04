@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.5.6] - 2026-08-04
+
 ### Added
 
 - El editor detecta si Home Assistant ha cargado la integración My Honda+, diferencia la ausencia de vehículos configurados y enlaza sus instrucciones de instalación.
