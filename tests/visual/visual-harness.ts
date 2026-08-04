@@ -1,4 +1,5 @@
 import "../../src/index";
+import "../../src/editor";
 import type {
   DeviceRegistryEntry,
   EntityRegistryEntry,
@@ -19,6 +20,8 @@ const model = (params.get("model") ?? "civic") as VehicleModelKey;
 const layout = params.get("layout") === "compact" ? "compact" : "full";
 const locale = params.get("locale") ?? "en";
 const customImageFailure = params.get("customImageFailure") === "true";
+const target = params.get("target") === "editor" ? "editor" : "card";
+const discoveryScenario = params.get("discovery") ?? "ready";
 document.documentElement.dataset.theme = params.get("theme") === "dark" ? "dark" : "light";
 
 const device: DeviceRegistryEntry = {
@@ -36,7 +39,7 @@ const registryEntry = (entity_id: string, translation_key: string): EntityRegist
   disabled_by: null,
 });
 
-const registry: EntityRegistryEntry[] = [
+const completeRegistry: EntityRegistryEntry[] = [
   registryEntry("lock.synthetic_vehicle", "doors"),
   registryEntry("sensor.synthetic_range", "total_range"),
   registryEntry("sensor.synthetic_battery", "battery_level"),
@@ -55,6 +58,15 @@ const registry: EntityRegistryEntry[] = [
   registryEntry("button.synthetic_horn_lights", "horn_lights"),
   registryEntry("device_tracker.synthetic_location", "location"),
 ];
+const registry: EntityRegistryEntry[] =
+  discoveryScenario === "missingIntegration" || discoveryScenario === "noVehicles"
+    ? []
+    : discoveryScenario === "noCompatible"
+      ? [registryEntry("sensor.synthetic_unknown", "unsupported_value")]
+      : completeRegistry;
+const devices =
+  discoveryScenario === "missingIntegration" || discoveryScenario === "noVehicles" ? [] : [device];
+const components = discoveryScenario === "missingIntegration" ? [] : ["myhondaplus"];
 
 const now = new Date().toISOString();
 const entity = (entity_id: string, state: string, unit?: string): HassEntity => ({
@@ -89,10 +101,10 @@ const states = Object.fromEntries(
 const hass: HomeAssistant = {
   states,
   language: locale,
-  config: { version: "2026.8.0" },
+  config: { version: "2026.8.0", components },
   callWS: async <T>(message: Record<string, unknown>): Promise<T> => {
     if (message.type === "config/entity_registry/list") return registry as T;
-    if (message.type === "config/device_registry/list") return [device] as T;
+    if (message.type === "config/device_registry/list") return devices as T;
     throw new Error(`Unexpected websocket request: ${String(message.type)}`);
   },
   callService: async () => undefined,
@@ -104,10 +116,18 @@ type TestCard = HTMLElement & {
   updateComplete: Promise<boolean>;
 };
 
-const card = document.createElement("myhondaplus-vehicle-card") as TestCard;
-card.setConfig({
+type TestEditor = HTMLElement & {
+  hass: HomeAssistant;
+  setConfig(config: MyHondaPlusCardConfig): void;
+  updateComplete: Promise<boolean>;
+};
+
+const config: MyHondaPlusCardConfig = {
   type: "custom:myhondaplus-vehicle-card",
-  device: device.id,
+  device:
+    discoveryScenario === "noVehicles" || discoveryScenario === "missingIntegration"
+      ? undefined
+      : device.id,
   name: "Synthetic Honda",
   vehicle_model: model,
   layout,
@@ -115,11 +135,17 @@ card.setConfig({
   image_mode: customImageFailure ? "custom" : "rendered",
   vehicle_image: customImageFailure ? "/missing-vehicle-image.png" : undefined,
   debug: true,
-});
-card.hass = hass;
-document.querySelector("#root")?.append(card);
+};
 
-await card.updateComplete;
+const component =
+  target === "editor"
+    ? (document.createElement("myhondaplus-vehicle-card-editor") as TestEditor)
+    : (document.createElement("myhondaplus-vehicle-card") as TestCard);
+component.setConfig(config);
+component.hass = hass;
+document.querySelector("#root")?.append(component);
+
+await component.updateComplete;
 await new Promise((resolve) => window.setTimeout(resolve, 50));
-await card.updateComplete;
+await component.updateComplete;
 window.__visualReady = true;

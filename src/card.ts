@@ -2,7 +2,7 @@ import { css, html, LitElement, nothing, type TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { CARD_TAG, DEFAULT_CONFIG, PAINT_PRESETS } from "./constants";
 import { createDiagnostics, diagnosticsText } from "./diagnostics";
-import { resolveEntities } from "./entity-resolver";
+import { discoverIntegration } from "./integration-discovery";
 import { localize, normalizeLocale, type TranslationKey } from "./localize";
 import { resolveVehicleModel, vehicleModelLabel } from "./model-resolver";
 import type {
@@ -29,6 +29,10 @@ export class MyHondaPlusVehicleCard extends LitElement {
   @state() private busy?: keyof EntityMap;
   @state() private message?: { kind: "error" | "success"; text: string };
   @state() private customImageFailed = false;
+  @state() private discoveryComplete = false;
+  @state() private integrationDetected = false;
+  @state() private vehicleCount = 0;
+  @state() private compatibleEntityCount = 0;
   private loadedDevice?: string;
 
   public static async getConfigElement(): Promise<HTMLElement> {
@@ -52,6 +56,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
     this.config = nextConfig;
     this.entities = { ...(config.entities ?? {}) };
     this.loadedDevice = undefined;
+    this.discoveryComplete = false;
   }
 
   public getCardSize(): number {
@@ -73,25 +78,67 @@ export class MyHondaPlusVehicleCard extends LitElement {
   }
 
   private async loadDeviceData(): Promise<void> {
-    if (!this.hass || !this.config.device || this.loadedDevice === this.config.device) return;
-    this.loadedDevice = this.config.device;
+    const requestedDevice = this.config.device ?? "";
+    if (!this.hass || (this.discoveryComplete && this.loadedDevice === requestedDevice)) return;
+    this.loadedDevice = requestedDevice;
 
     try {
       const [registry, devices] = await Promise.all([
         this.hass.callWS<EntityRegistryEntry[]>({ type: "config/entity_registry/list" }),
         this.hass.callWS<DeviceRegistryEntry[]>({ type: "config/device_registry/list" }),
       ]);
-      this.entities = resolveEntities(
-        registry.filter((entry) => entry.device_id === this.config.device),
+      const discovery = discoverIntegration(
+        devices,
+        registry,
+        this.hass.config?.components,
+        this.config.device,
         this.config.entities,
       );
-      this.device = devices.find((device) => device.id === this.config.device);
+      this.integrationDetected = discovery.integrationDetected;
+      this.vehicleCount = discovery.vehicles.length;
+      this.device = discovery.selectedDevice;
+      this.entities = discovery.entities;
+      this.compatibleEntityCount = discovery.compatibleEntityCount;
+      this.discoveryComplete = true;
       this.message = undefined;
     } catch (error) {
       this.loadedDevice = undefined;
+      this.discoveryComplete = false;
       this.message = { kind: "error", text: this.t("discovery_failed") };
       console.warn("My Honda+ Vehicle Card: discovery failed", error);
     }
+  }
+
+  private setupIssue(): TranslationKey | undefined {
+    if (!this.discoveryComplete) return "card_checking_integration";
+    if (!this.integrationDetected) return "card_integration_not_detected";
+    if (!this.config.device && this.vehicleCount === 0) return "card_no_vehicles_configured";
+    if (!this.config.device) return "select_vehicle";
+    if (!this.device) return "card_vehicle_not_found";
+    if (this.compatibleEntityCount === 0) return "card_no_compatible_entities";
+    return undefined;
+  }
+
+  private setupPanel(issue: TranslationKey): TemplateResult {
+    const integrationMissing = issue === "card_integration_not_detected";
+    return html`<div class="setup" role="status">
+      <ha-icon
+        icon=${integrationMissing ? "mdi:puzzle-alert" : "mdi:car-info"}
+        aria-hidden="true"
+      ></ha-icon>
+      <strong>${this.t(issue)}</strong>
+      ${
+        integrationMissing
+          ? html`<span>${this.t("editor_install_or_configure_integration")}</span>
+              <a
+                href="https://github.com/enricobattocchi/myhondaplus-homeassistant"
+                target="_blank"
+                rel="noopener noreferrer"
+                >${this.t("editor_integration_instructions")}</a
+              >`
+          : nothing
+      }
+    </div>`;
   }
 
   private entity(key: keyof EntityMap): HassEntity | undefined {
@@ -288,6 +335,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
 
   protected override render(): TemplateResult {
     const state = this.vehicleState();
+    const setupIssue = this.setupIssue();
     const lockedText =
       state.locked === true
         ? this.t("locked")
@@ -332,29 +380,33 @@ export class MyHondaPlusVehicleCard extends LitElement {
           ? html`<div class="message error" role="alert">${this.t("custom_image_failed")}</div>`
           : nothing
       }
-
-      <section
-        class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
-        style=${this.visualStyle()}
-      >
-        ${this.vehicleVisual()}
-        <div
-          class="freshness ${state.stale ? "stale" : ""}"
-          title=${state.stale ? this.t("stale_data") : ""}
-        >
-          ${this.ageText(state)}
-        </div>
-      </section>
-
       ${
-        this.config.device
-          ? html`<section class="metrics">
-              ${metrics.map((key) => this.metric(key, state))}
+        setupIssue
+          ? this.setupPanel(setupIssue)
+          : html`<section
+              class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
+              style=${this.visualStyle()}
+            >
+              ${this.vehicleVisual()}
+              <div
+                class="freshness ${state.stale ? "stale" : ""}"
+                title=${state.stale ? this.t("stale_data") : ""}
+              >
+                ${this.ageText(state)}
+              </div>
             </section>`
-          : html`<div class="setup">${this.t("select_vehicle")}</div>`
       }
       ${
-        this.config.layout !== "compact" || this.entities.climate
+        setupIssue
+          ? nothing
+          : this.config.device
+            ? html`<section class="metrics">
+                ${metrics.map((key) => this.metric(key, state))}
+              </section>`
+            : html`<div class="setup">${this.t("select_vehicle")}</div>`
+      }
+      ${
+        !setupIssue && (this.config.layout !== "compact" || this.entities.climate)
           ? html`<section
               class="statuses ${this.config.layout === "compact" ? "compact-statuses" : ""}"
             >
@@ -375,7 +427,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
           : nothing
       }
       ${
-        this.config.show_controls !== false
+        !setupIssue && this.config.show_controls !== false
           ? html`<nav class="controls" aria-label=${this.t("vehicle_controls")}>
               ${controls.map((key) => {
                 const metadata = {
@@ -622,11 +674,21 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       --mdc-icon-size: 21px;
     }
     .setup {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      margin-top: 18px;
       padding: 18px;
       border: 1px dashed var(--divider-color);
       border-radius: 12px;
       text-align: center;
       color: var(--secondary-text-color);
+    }
+    .setup ha-icon {
+      --mdc-icon-size: 32px;
+    }
+    .setup a {
+      color: var(--primary-color);
     }
     .diagnostics {
       margin-top: 14px;

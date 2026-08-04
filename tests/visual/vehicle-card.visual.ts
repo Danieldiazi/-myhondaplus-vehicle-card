@@ -1,11 +1,18 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const card = "myhondaplus-vehicle-card";
+const editor = "myhondaplus-vehicle-card-editor";
 
 async function openScenario(page: Page, query: string): Promise<void> {
   await page.goto(`/tests/visual/?${query}`);
   await page.waitForFunction(() => window.__visualReady === true);
   await expect(page.locator(card)).toBeVisible();
+}
+
+async function openEditorScenario(page: Page, query: string): Promise<void> {
+  await page.goto(`/tests/visual/?target=editor&${query}`);
+  await page.waitForFunction(() => window.__visualReady === true);
+  await expect(page.locator(editor)).toBeVisible();
 }
 
 async function expectNoHorizontalOverflow(page: Page): Promise<void> {
@@ -59,4 +66,50 @@ test("a broken custom image shows the localized Honda fallback", async ({ page }
   );
   await expectArtworkAboveFreshness(page);
   await expectNoHorizontalOverflow(page);
+});
+
+test("the editor explains when the integration is missing", async ({ page }) => {
+  await openEditorScenario(page, "discovery=missingIntegration&locale=es");
+
+  await expect(page.locator(editor)).toContainText("Integración My Honda+ no detectada");
+  await expect(page.locator(`${editor} a`)).toHaveAttribute("href", /myhondaplus-homeassistant/);
+  await expect(page.locator(`${editor} ha-button`)).toContainText("Volver a detectar");
+});
+
+test("the editor distinguishes an installed integration with no vehicles", async ({ page }) => {
+  await openEditorScenario(page, "discovery=noVehicles&locale=en");
+
+  await expect(page.locator(editor)).toContainText("My Honda+ integration detected");
+  await expect(page.locator(editor)).toContainText("No configured vehicle was found");
+});
+
+test("the editor reports the selected vehicle capabilities", async ({ page }) => {
+  await openEditorScenario(page, "discovery=ready&locale=gl");
+
+  await expect(page.locator(editor)).toContainText("Capacidades detectadas");
+  await expect(page.locator(`${editor} .capability-chip`)).not.toHaveCount(0);
+});
+
+test("the card shows an actionable diagnostic when the integration is missing", async ({
+  page,
+}) => {
+  await openScenario(page, "discovery=missingIntegration&locale=es");
+
+  await expect(page.locator(`${card} .setup`)).toContainText(
+    "No se detectó la integración My Honda+",
+  );
+  await expect(page.locator(`${card} .setup a`)).toHaveAttribute(
+    "href",
+    /myhondaplus-homeassistant/,
+  );
+  await expect(page.locator(`${card} .vehicle-art`)).toHaveCount(0);
+});
+
+test("the card explains when a vehicle has no compatible entities", async ({ page }) => {
+  await openScenario(page, "discovery=noCompatible&locale=en");
+
+  await expect(page.locator(`${card} .setup`)).toContainText(
+    "No compatible entities were found for this vehicle",
+  );
+  await expect(page.locator(`${card} .vehicle-art`)).toHaveCount(0);
 });

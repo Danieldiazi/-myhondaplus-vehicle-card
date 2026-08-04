@@ -2,6 +2,7 @@ import { css, html, LitElement, nothing, type PropertyValues, type TemplateResul
 import { customElement, property, state } from "lit/decorators.js";
 import { DEFAULT_CONFIG, EDITOR_TAG, PAINT_PRESETS } from "./constants";
 import { resolveEntities } from "./entity-resolver";
+import { discoverIntegration } from "./integration-discovery";
 import { localize, normalizeLocale, type TranslationKey } from "./localize";
 import type {
   DeviceRegistryEntry,
@@ -48,18 +49,11 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
         this.hass.callWS<DeviceRegistryEntry[]>({ type: "config/device_registry/list" }),
         this.hass.callWS<EntityRegistryEntry[]>({ type: "config/entity_registry/list" }),
       ]);
-      const integrationEntities = entities.filter((entity) => entity.platform === "myhondaplus");
-      this.integrationDetected =
-        integrationEntities.length > 0 ||
-        Boolean(this.hass.config?.components?.includes("myhondaplus"));
-      const ids = new Set(
-        integrationEntities
-          .filter((entity) => entity.device_id)
-          .map((entity) => entity.device_id as string),
+      const discovery = discoverIntegration(devices, entities, this.hass.config?.components);
+      this.integrationDetected = discovery.integrationDetected;
+      this.devices = discovery.vehicles.sort((a, b) =>
+        this.deviceName(a).localeCompare(this.deviceName(b)),
       );
-      this.devices = devices
-        .filter((device) => ids.has(device.id))
-        .sort((a, b) => this.deviceName(a).localeCompare(this.deviceName(b)));
       this.registryEntries = entities;
     } catch (error) {
       console.warn("My Honda+ Vehicle Card: device discovery failed", error);

@@ -36,6 +36,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 - Español, inglés y gallego con selección automática de idioma.
 - Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
 - Comprobación de la integración, vehículos configurados y capacidades detectadas desde el editor, con redescubrimiento de entidades.
+- Diagnósticos accionables en la propia tarjeta cuando falta la integración, el vehículo o entidades compatibles.
 - Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
 - Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
 - Confirmación antes de desbloquear y bloqueo de acciones duplicadas.

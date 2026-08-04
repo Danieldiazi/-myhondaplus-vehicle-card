@@ -16,6 +16,7 @@ Este documento explica cómo está organizado el proyecto y dónde debe incorpor
 src/
 ├── card.ts              Componente Lit principal y experiencia de usuario
 ├── editor.ts            Editor visual de configuración
+├── integration-discovery.ts Descubrimiento compartido de integración y vehículos
 ├── entity-resolver.ts   Descubrimiento de entidades del vehículo
 ├── model-resolver.ts    Detección de la familia visual Honda
 ├── vehicle-art.ts       Ilustraciones vectoriales y estados animados
@@ -27,12 +28,13 @@ src/
 ## Flujo de datos
 
 1. Home Assistant entrega el objeto `hass` al componente.
-2. La tarjeta consulta el registro de entidades del dispositivo seleccionado.
-3. `entity-resolver.ts` asigna las entidades conocidas al modelo interno `EntityMap`.
-4. La presencia de esas entidades determina las capacidades visibles; el modelo del coche no activa funciones.
-5. `model-resolver.ts` determina exclusivamente la familia visual usando los datos del dispositivo.
-6. `card.ts` convierte el estado de las entidades en métricas, estados y acciones.
-7. `vehicle-art.ts` renderiza la ilustración sin acceder directamente a Home Assistant.
+2. La tarjeta consulta los registros de dispositivos y entidades.
+3. `integration-discovery.ts` comprueba la integración, los vehículos y el dispositivo seleccionado tanto para la tarjeta como para el editor.
+4. `entity-resolver.ts` asigna las entidades conocidas al modelo interno `EntityMap`.
+5. La presencia de esas entidades determina las capacidades visibles; el modelo del coche no activa funciones.
+6. `model-resolver.ts` determina exclusivamente la familia visual usando los datos del dispositivo.
+7. `card.ts` convierte el estado de las entidades en métricas, estados y acciones.
+8. `vehicle-art.ts` renderiza la ilustración sin acceder directamente a Home Assistant.
 
 ## Responsabilidades
 
@@ -43,6 +45,10 @@ Debe coordinar la interfaz, pero no contener reglas extensas de detección. Las 
 ### `entity-resolver.ts`
 
 Las reglas se basan en la plataforma `myhondaplus`, el dispositivo, el dominio, identificadores estables y claves de traducción. Los nombres visibles solo deben actuar como señal secundaria. Una capacidad inexistente no debe representarse como un estado inactivo.
+
+### `integration-discovery.ts`
+
+Centraliza la detección que comparten la tarjeta y el editor. Debe distinguir entre integración no cargada, ausencia de vehículos, dispositivo seleccionado inexistente y vehículo sin entidades compatibles.
 
 ### `model-resolver.ts`
 
@@ -68,7 +74,7 @@ Cada nueva regla de detección debe incluir al menos:
 - un caso parecido que no deba coincidir antes;
 - el comportamiento de fallback.
 
-Los tests viven en `tests/` y se ejecutan con `npm test`.
+Los tests unitarios viven en `tests/` y se ejecutan con `npm test`. Los escenarios de interfaz viven en `tests/visual/` y se ejecutan con `npm run test:visual`.
 
 ## Distribución
 

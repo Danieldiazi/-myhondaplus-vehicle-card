@@ -20,5 +20,9 @@ describe("localize", () => {
     expect(localize("editor_integration_not_detected", "es")).toContain("no detectada");
     expect(localize("editor_redetect_entities", "gl")).toContain("Volver detectar");
     expect(localize("editor_capabilities", "en")).toBe("Detected capabilities");
+    expect(localize("card_integration_not_detected", "es").toLowerCase()).toContain(
+      "no se detectó",
+    );
+    expect(localize("card_vehicle_not_found", "gl")).toContain("xa non está");
   });
 });
