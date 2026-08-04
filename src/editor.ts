@@ -18,6 +18,8 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   @state() private devices: DeviceRegistryEntry[] = [];
   @state() private registryEntries: EntityRegistryEntry[] = [];
   @state() private loading = false;
+  @state() private integrationDetected = false;
+  @state() private discoveryError = false;
 
   public setConfig(config: MyHondaPlusCardConfig): void {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -40,14 +42,19 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   private async loadDevices(): Promise<void> {
     if (!this.hass || this.loading) return;
     this.loading = true;
+    this.discoveryError = false;
     try {
       const [devices, entities] = await Promise.all([
         this.hass.callWS<DeviceRegistryEntry[]>({ type: "config/device_registry/list" }),
         this.hass.callWS<EntityRegistryEntry[]>({ type: "config/entity_registry/list" }),
       ]);
+      const integrationEntities = entities.filter((entity) => entity.platform === "myhondaplus");
+      this.integrationDetected =
+        integrationEntities.length > 0 ||
+        Boolean(this.hass.config?.components?.includes("myhondaplus"));
       const ids = new Set(
-        entities
-          .filter((entity) => entity.platform === "myhondaplus" && entity.device_id)
+        integrationEntities
+          .filter((entity) => entity.device_id)
           .map((entity) => entity.device_id as string),
       );
       this.devices = devices
@@ -57,6 +64,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     } catch (error) {
       console.warn("My Honda+ Vehicle Card: device discovery failed", error);
       this.devices = [];
+      this.discoveryError = true;
     } finally {
       this.loading = false;
     }
@@ -138,10 +146,108 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     );
   }
 
+  private capabilitySummary(): TemplateResult {
+    if (!this.config.device) return html`${nothing}`;
+    const detected = this.detectedEntities();
+    const groups: Array<[TranslationKey, Array<[keyof EntityMap, TranslationKey]>]> = [
+      [
+        "editor_metrics",
+        [
+          ["range", "range"],
+          ["battery", "battery"],
+          ["odometer", "odometer"],
+          ["trip_distance", "trip_distance"],
+          ["trip_consumption", "trip_consumption"],
+          ["trip_duration", "trip_duration"],
+        ],
+      ],
+      [
+        "editor_states",
+        [
+          ["doors", "doors"],
+          ["windows", "windows"],
+          ["trunk", "trunk"],
+          ["hood", "hood"],
+          ["lights", "lights"],
+          ["charging", "charging"],
+        ],
+      ],
+      [
+        "editor_controls",
+        [
+          ["lock", "editor_locking"],
+          ["climate", "climate"],
+          ["horn_lights", "horn_lights"],
+          ["refresh_cached", "refresh_cached"],
+          ["refresh", "refresh_from_car"],
+          ["location", "location"],
+        ],
+      ],
+    ];
+    const availableCount = groups
+      .flatMap(([, entries]) => entries)
+      .filter(([key]) => detected[key]).length;
+    return html`<div class="capabilities">
+      <strong>${this.t("editor_capabilities")}</strong>
+      ${
+        availableCount === 0
+          ? html`<p class="hint warning">${this.t("editor_no_compatible_entities")}</p>`
+          : groups.map(([title, entries]) => {
+              const available = entries.filter(([key]) => detected[key]);
+              return available.length === 0
+                ? nothing
+                : html`<div class="capability-group">
+                    <span>${this.t(title)}</span>
+                    <div class="chips">
+                      ${available.map(
+                        ([, label]) => html`<span class="chip">${this.t(label)}</span>`,
+                      )}
+                    </div>
+                  </div>`;
+            })
+      }
+    </div>`;
+  }
+
+  private integrationStatus(): TemplateResult {
+    if (this.loading) {
+      return html`<div class="integration-status">${this.t("editor_checking_integration")}</div>`;
+    }
+    if (this.discoveryError) {
+      return html`<div class="integration-status warning">${this.t("discovery_failed")}</div>`;
+    }
+    if (!this.integrationDetected) {
+      return html`<div class="integration-status warning">
+        <strong>${this.t("editor_integration_not_detected")}</strong>
+        <span>${this.t("editor_install_or_configure_integration")}</span>
+        <a
+          href="https://github.com/enricobattocchi/myhondaplus-homeassistant"
+          target="_blank"
+          rel="noopener noreferrer"
+          >${this.t("editor_integration_instructions")}</a
+        >
+      </div>`;
+    }
+    if (this.devices.length === 0) {
+      return html`<div class="integration-status warning">
+        <strong>${this.t("editor_integration_detected")}</strong>
+        <span>${this.t("editor_no_vehicles_configured")}</span>
+      </div>`;
+    }
+    return html`<div class="integration-status success">
+      <strong>${this.t("editor_integration_detected")}</strong>
+      <span>${this.t("editor_vehicles_found", { count: this.devices.length })}</span>
+    </div>`;
+  }
+
   protected override render(): TemplateResult {
     return html`<div class="grid">
       <section>
         <h3>${this.t("editor_vehicle")}</h3>
+        ${this.integrationStatus()}
+        <button type="button" ?disabled=${this.loading} @click=${() => this.loadDevices()}>
+          ${this.t("editor_redetect_entities")}
+        </button>
         <label
           >${this.t("connected_vehicle")}
           <select name="device" @change=${this.updateField}>
@@ -161,6 +267,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             }</span
           >
         </label>
+        ${this.capabilitySummary()}
         <label
           >${this.t("editor_name")}
           <input name="name" .value=${this.config.name ?? ""} @change=${this.updateField} />
@@ -420,7 +527,8 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       font-size: 0.9rem;
     }
     input,
-    select {
+    select,
+    button {
       box-sizing: border-box;
       width: 100%;
       padding: 10px;
@@ -430,7 +538,9 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       color: var(--primary-text-color);
     }
     input:focus-visible,
-    select:focus-visible {
+    select:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
@@ -460,6 +570,49 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     .hint {
       font-size: 0.8rem;
       color: var(--secondary-text-color);
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+    .integration-status,
+    .capabilities {
+      display: grid;
+      gap: 7px;
+      padding: 11px;
+      border: 1px solid var(--divider-color);
+      border-radius: 9px;
+      background: var(--secondary-background-color);
+      font-size: 0.85rem;
+    }
+    .integration-status.success {
+      border-inline-start: 4px solid var(--success-color, #43a047);
+    }
+    .integration-status.warning {
+      border-inline-start: 4px solid var(--warning-color, #f9a825);
+    }
+    .integration-status a {
+      color: var(--primary-color);
+    }
+    .capability-group {
+      display: grid;
+      gap: 5px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .chip {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--card-background-color);
+      border: 1px solid var(--divider-color);
+      font-size: 0.75rem;
     }
     @media (max-width: 520px) {
       .checks {

@@ -5,6 +5,7 @@ export interface HomeAssistant {
   language?: string;
   config?: {
     version?: string;
+    components?: string[];
   };
 }
 

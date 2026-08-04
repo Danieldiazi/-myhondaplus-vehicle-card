@@ -91,6 +91,17 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirm before unlocking",
     editor_show_diagnostics: "Show anonymized diagnostics",
     editor_not_available: "not available",
+    editor_checking_integration: "Checking the My Honda+ integration…",
+    editor_integration_detected: "My Honda+ integration detected",
+    editor_integration_not_detected: "My Honda+ integration not detected",
+    editor_install_or_configure_integration:
+      "Install or configure My Honda+ for Home Assistant before using this card.",
+    editor_integration_instructions: "Open integration instructions",
+    editor_no_vehicles_configured: "No configured vehicle with My Honda+ entities was found.",
+    editor_redetect_entities: "Detect integration and entities again",
+    editor_capabilities: "Detected capabilities",
+    editor_states: "States",
+    editor_no_compatible_entities: "No compatible entities were detected for this vehicle.",
   },
   es: {
     required_config: "La configuración es obligatoria",
@@ -180,6 +191,18 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_show_diagnostics: "Mostrar diagnóstico anonimizado",
     editor_not_available: "no disponible",
+    editor_checking_integration: "Comprobando la integración My Honda+…",
+    editor_integration_detected: "Integración My Honda+ detectada",
+    editor_integration_not_detected: "Integración My Honda+ no detectada",
+    editor_install_or_configure_integration:
+      "Instala o configura My Honda+ for Home Assistant antes de utilizar esta tarjeta.",
+    editor_integration_instructions: "Abrir instrucciones de la integración",
+    editor_no_vehicles_configured:
+      "No se encontró ningún vehículo configurado con entidades de My Honda+.",
+    editor_redetect_entities: "Volver a detectar integración y entidades",
+    editor_capabilities: "Capacidades detectadas",
+    editor_states: "Estados",
+    editor_no_compatible_entities: "No se detectaron entidades compatibles para este vehículo.",
   },
   gl: {
     required_config: "A configuración é obrigatoria",
@@ -269,6 +292,18 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_show_diagnostics: "Mostrar diagnóstico anonimizado",
     editor_not_available: "non dispoñible",
+    editor_checking_integration: "Comprobando a integración My Honda+…",
+    editor_integration_detected: "Integración My Honda+ detectada",
+    editor_integration_not_detected: "Integración My Honda+ non detectada",
+    editor_install_or_configure_integration:
+      "Instala ou configura My Honda+ for Home Assistant antes de utilizar esta tarxeta.",
+    editor_integration_instructions: "Abrir instrucións da integración",
+    editor_no_vehicles_configured:
+      "Non se atopou ningún vehículo configurado con entidades de My Honda+.",
+    editor_redetect_entities: "Volver detectar a integración e as entidades",
+    editor_capabilities: "Capacidades detectadas",
+    editor_states: "Estados",
+    editor_no_compatible_entities: "Non se detectaron entidades compatibles para este vehículo.",
   },
 } as const;
 

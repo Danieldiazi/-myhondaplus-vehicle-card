@@ -45,6 +45,8 @@ device: ID_DEL_DISPOSITIVO_CREADO_POR_LA_INTEGRACION
 
 El editor visual obtiene la lista desde el registro de dispositivos de Home Assistant, por lo que normalmente no necesitas copiar el identificador manualmente.
 
+El editor también indica si Home Assistant ha cargado la integración, cuántos vehículos encuentra y qué métricas, estados y controles reconoce para el vehículo seleccionado. **Volver a detectar integración y entidades** actualiza esa información cuando la integración cambie sus entidades. Por seguridad, una tarjeta del navegador no inspecciona directamente el directorio `custom_components`: «integración no detectada» significa que Home Assistant no la ha cargado ni publica entidades `myhondaplus`.
+
 ## Sobrescritura de entidades
 
 ```yaml
