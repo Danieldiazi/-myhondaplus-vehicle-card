@@ -45,7 +45,7 @@ const De = (t) => new be(typeof t == "string" ? t : t + "", void 0, ee), $e = (t
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Pe, defineProperty: Oe, getOwnPropertyDescriptor: Le, getOwnPropertyNames: Ne, getOwnPropertySymbols: Te, getPrototypeOf: Ie } = Object, y = globalThis, re = y.trustedTypes, Ue = re ? re.emptyScript : "", G = y.reactiveElementPolyfillSupport, L = (t, e) => t, j = { toAttribute(t, e) {
+const { is: Pe, defineProperty: Oe, getOwnPropertyDescriptor: Le, getOwnPropertyNames: Ne, getOwnPropertySymbols: Ie, getPrototypeOf: Te } = Object, y = globalThis, re = y.trustedTypes, Ue = re ? re.emptyScript : "", G = y.reactiveElementPolyfillSupport, L = (t, e) => t, j = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
       t = t ? Ue : null;
@@ -104,13 +104,13 @@ let z = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(L("elementProperties"))) return;
-    const e = Ie(this);
+    const e = Te(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
     if (this.hasOwnProperty(L("finalized"))) return;
     if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(L("properties"))) {
-      const i = this.properties, o = [...Ne(i), ...Te(i)];
+      const i = this.properties, o = [...Ne(i), ...Ie(i)];
       for (const s of o) this.createProperty(s, i[s]);
     }
     const e = this[Symbol.metadata];
@@ -284,7 +284,7 @@ z.elementStyles = [], z.shadowRootOptions = { mode: "open" }, z[L("elementProper
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const N = globalThis, le = (t) => t, F = N.trustedTypes, de = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, ye = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, we = "?" + $, Ze = `<${we}>`, S = document, T = () => S.createComment(""), I = (t) => t === null || typeof t != "object" && typeof t != "function", ie = Array.isArray, Re = (t) => ie(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
+const N = globalThis, le = (t) => t, F = N.trustedTypes, de = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, ye = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, we = "?" + $, Ze = `<${we}>`, S = document, I = () => S.createComment(""), T = (t) => t === null || typeof t != "object" && typeof t != "function", ie = Array.isArray, Re = (t) => ie(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
 \f\r]`, O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, he = /-->/g, ue = />/g, x = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), pe = /'/g, Ce = /"/g, xe = /^(?:script|style|textarea|title)$/i, Ve = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = Ve(1), H = Symbol.for("lit-noChange"), l = Symbol.for("lit-nothing"), ge = /* @__PURE__ */ new WeakMap(), k = S.createTreeWalker(S, 129);
 function Ae(t, e) {
@@ -323,8 +323,8 @@ class U {
           const p = s.textContent.split($), v = p.length - 1;
           if (v > 0) {
             s.textContent = F ? F.emptyScript : "";
-            for (let b = 0; b < v; b++) s.append(p[b], T()), k.nextNode(), r.push({ type: 2, index: ++a });
-            s.append(p[v], T());
+            for (let b = 0; b < v; b++) s.append(p[b], I()), k.nextNode(), r.push({ type: 2, index: ++a });
+            s.append(p[v], I());
           }
         }
       } else if (s.nodeType === 8) if (s.data === we) r.push({ type: 2, index: a });
@@ -344,7 +344,7 @@ function P(t, e, i = t, o) {
   var n, c;
   if (e === H) return e;
   let s = o !== void 0 ? (n = i._$Co) == null ? void 0 : n[o] : i._$Cl;
-  const a = I(e) ? void 0 : e._$litDirective$;
+  const a = T(e) ? void 0 : e._$litDirective$;
   return (s == null ? void 0 : s.constructor) !== a && ((c = s == null ? void 0 : s._$AO) == null || c.call(s, !1), a === void 0 ? s = void 0 : (s = new a(t), s._$AT(t, i, o)), o !== void 0 ? (i._$Co ?? (i._$Co = []))[o] = s : i._$Cl = s), s !== void 0 && (e = P(t, s._$AS(t, e.values), s, o)), e;
 }
 class Fe {
@@ -395,7 +395,7 @@ class Z {
     return this._$AB;
   }
   _$AI(e, i = this) {
-    e = P(this, e, i), I(e) ? e === l || e == null || e === "" ? (this._$AH !== l && this._$AR(), this._$AH = l) : e !== this._$AH && e !== H && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Re(e) ? this.k(e) : this._(e);
+    e = P(this, e, i), T(e) ? e === l || e == null || e === "" ? (this._$AH !== l && this._$AR(), this._$AH = l) : e !== this._$AH && e !== H && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Re(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -404,7 +404,7 @@ class Z {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== l && I(this._$AH) ? this._$AA.nextSibling.data = e : this.T(S.createTextNode(e)), this._$AH = e;
+    this._$AH !== l && T(this._$AH) ? this._$AA.nextSibling.data = e : this.T(S.createTextNode(e)), this._$AH = e;
   }
   $(e) {
     var a;
@@ -423,7 +423,7 @@ class Z {
     ie(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
     let o, s = 0;
-    for (const a of e) s === i.length ? i.push(o = new Z(this.O(T()), this.O(T()), this, this.options)) : o = i[s], o._$AI(a), s++;
+    for (const a of e) s === i.length ? i.push(o = new Z(this.O(I()), this.O(I()), this, this.options)) : o = i[s], o._$AI(a), s++;
     s < i.length && (this._$AR(o && o._$AB.nextSibling, s), i.length = s);
   }
   _$AR(e = this._$AA.nextSibling, i) {
@@ -451,11 +451,11 @@ class W {
   _$AI(e, i = this, o, s) {
     const a = this.strings;
     let n = !1;
-    if (a === void 0) e = P(this, e, i, 0), n = !I(e) || e !== this._$AH && e !== H, n && (this._$AH = e);
+    if (a === void 0) e = P(this, e, i, 0), n = !T(e) || e !== this._$AH && e !== H, n && (this._$AH = e);
     else {
       const c = e;
       let r, u;
-      for (e = a[0], r = 0; r < a.length - 1; r++) u = P(this, c[o + r], i, r), u === H && (u = this._$AH[r]), n || (n = !I(u) || u !== this._$AH[r]), u === l ? e = l : e !== l && (e += (u ?? "") + a[r + 1]), this._$AH[r] = u;
+      for (e = a[0], r = 0; r < a.length - 1; r++) u = P(this, c[o + r], i, r), u === H && (u = this._$AH[r]), n || (n = !T(u) || u !== this._$AH[r]), u === l ? e = l : e !== l && (e += (u ?? "") + a[r + 1]), this._$AH[r] = u;
     }
     n && !s && this.j(e);
   }
@@ -511,7 +511,7 @@ const Ye = (t, e, i) => {
   let s = o._$litPart$;
   if (s === void 0) {
     const a = (i == null ? void 0 : i.renderBefore) ?? null;
-    o._$litPart$ = s = new Z(e.insertBefore(T(), a), a, void 0, i ?? {});
+    o._$litPart$ = s = new Z(e.insertBefore(I(), a), a, void 0, i ?? {});
   }
   return s._$AI(t), s;
 };
@@ -620,7 +620,7 @@ const B = "myhondaplus-vehicle-card", Qe = "myhondaplus-vehicle-card-editor", Me
   confirm_unlock: !0,
   locale: "auto",
   debug: !1,
-  controls: ["lock", "climate", "horn_lights", "refresh", "location"],
+  controls: ["lock", "climate", "horn_lights", "refresh"],
   metrics: ["range", "battery", "odometer", "trip_distance", "trip_consumption"]
 }, q = {
   rallye_red: { label: "Rallye Red", value: "#a51d2d", accent: "#ef8a92" },
@@ -1343,21 +1343,49 @@ let _ = class extends D {
       <div><small>${i.label}</small><strong>${i.value}</strong></div>
     </button>`;
   }
-  status(t, e, i, o, s) {
-    const a = i === void 0 ? this.t("unavailable") : i ? o : s;
-    return d`<div
-      class="status ${i === !0 ? "warning" : ""} ${i === void 0 ? "unavailable" : ""}"
-      aria-label=${`${e}: ${a}`}
+  freshness(t) {
+    const e = `freshness ${t.stale ? "stale" : ""}`, i = t.stale ? this.t("stale_data") : "", o = this.ageText(t);
+    return this.entities.updated ? d`<button
+          class=${e}
+          type="button"
+          title=${i}
+          @click=${() => this.showMoreInfo("updated")}
+        >
+          ${o}
+        </button>` : d`<div class=${e} title=${i}>${o}</div>`;
+  }
+  status(t, e, i, o, s, a) {
+    const n = o === void 0 ? this.t("unavailable") : o ? s : a;
+    return d`<button
+      type="button"
+      class="status ${o === !0 ? "warning" : ""} ${o === void 0 ? "unavailable" : ""}"
+      aria-label=${`${i}: ${n}`}
+      @click=${() => this.showMoreInfo(t)}
     >
-      <ha-icon class="status-icon" icon=${t} aria-hidden="true"></ha-icon>
-      <div><b>${e}</b><small>${a}</small></div>
+      <ha-icon class="status-icon" icon=${e} aria-hidden="true"></ha-icon>
+      <div><b>${i}</b><small>${n}</small></div>
       <i aria-hidden="true"></i>
-    </div>`;
+    </button>`;
+  }
+  locationStatus() {
+    const t = this.entity("location");
+    if (!t) return l;
+    const e = ["unknown", "unavailable"].includes(t.state.toLowerCase()), i = e ? this.t("unavailable") : t.state.replaceAll("_", " ").replace(/^./, (o) => o.toUpperCase());
+    return d`<button
+      type="button"
+      class="status info-status ${e ? "unavailable" : ""}"
+      aria-label=${`${this.t("location")}: ${i}`}
+      @click=${() => this.showMoreInfo("location")}
+    >
+      <ha-icon class="status-icon" icon="mdi:map-marker" aria-hidden="true"></ha-icon>
+      <div><b>${this.t("location")}</b><small>${i}</small></div>
+      <ha-icon class="status-detail" icon="mdi:chevron-right" aria-hidden="true"></ha-icon>
+    </button>`;
   }
   control(t, e, i) {
     var r;
-    if (!this.entities[i]) return l;
-    const o = this.busy === i, s = this.entity(i), a = (r = this.entities[i]) == null ? void 0 : r.split(".")[0], n = s == null ? void 0 : s.state.toLowerCase(), c = !s || n === "unavailable" || n === "unknown" && a !== "button" && i !== "location";
+    if (i === "location" || !this.entities[i]) return l;
+    const o = this.busy === i, s = this.entity(i), a = (r = this.entities[i]) == null ? void 0 : r.split(".")[0], n = s == null ? void 0 : s.state.toLowerCase(), c = !s || n === "unavailable" || n === "unknown" && a !== "button";
     return d`<button
       type="button"
       aria-label=${e}
@@ -1393,13 +1421,18 @@ let _ = class extends D {
           <h2>${this.config.name}</h2>
           ${this.config.show_model !== !1 ? d`<p>${st(this.model())}</p>` : l}
         </div>
-        ${this.entities.lock ? d`<span class="badge ${t.locked === !1 ? "alert" : ""}">
+        ${this.entities.lock ? d`<button
+                type="button"
+                class="badge ${t.locked === !1 ? "alert" : ""}"
+                aria-label=${i}
+                @click=${() => this.showMoreInfo("lock")}
+              >
                 <ha-icon
                   icon=${t.locked === !0 ? "mdi:lock" : t.locked === !1 ? "mdi:lock-open-variant" : "mdi:lock-question"}
                   aria-hidden="true"
                 ></ha-icon>
                 ${i}
-              </span>` : l}
+              </button>` : l}
       </header>
 
       <div class="announcer" aria-live="polite">
@@ -1411,29 +1444,24 @@ let _ = class extends D {
               class="vehicle align-${a} ${t.charging === !0 ? "is-charging" : ""}"
               style=${this.visualStyle()}
             >
-              ${this.vehicleVisual()}
-              <div
-                class="freshness ${t.stale ? "stale" : ""}"
-                title=${t.stale ? this.t("stale_data") : ""}
-              >
-                ${this.ageText(t)}
-              </div>
+              ${this.vehicleVisual()} ${this.freshness(t)}
             </section>`}
       ${e ? l : this.config.device ? d`<section class="metrics">
                 ${s.map((c) => this.metric(c, t))}
               </section>` : d`<div class="setup">${this.t("select_vehicle")}</div>`}
-      ${!e && (this.config.layout !== "compact" || this.entities.climate) ? d`<section
+      ${!e && (this.config.layout !== "compact" || this.entities.climate || this.entities.location) ? d`<section
               class="statuses ${this.config.layout === "compact" ? "compact-statuses" : ""}"
             >
               ${this.config.layout !== "compact" ? d`
-                      ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), t.doorsOpen, this.t("open"), this.t("closed")) : l}
-                      ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), t.windowsOpen, this.t("open"), this.t("closed")) : l}
-                      ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), t.trunkOpen, this.t("open"), this.t("closed")) : l}
-                      ${this.entities.hood ? this.status("mdi:car", this.t("hood"), t.hoodOpen, this.t("open"), this.t("closed")) : l}
-                      ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), t.lightsOn, this.t("on"), this.t("off")) : l}
-                      ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), t.charging, this.t("active"), this.t("inactive")) : l}
+                      ${this.entities.doors ? this.status("doors", "mdi:car-door", this.t("doors"), t.doorsOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.windows ? this.status("windows", "mdi:window-closed-variant", this.t("windows"), t.windowsOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.trunk ? this.status("trunk", "mdi:car-back", this.t("trunk"), t.trunkOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.hood ? this.status("hood", "mdi:car", this.t("hood"), t.hoodOpen, this.t("open"), this.t("closed")) : l}
+                      ${this.entities.lights ? this.status("lights", "mdi:car-light-high", this.t("lights"), t.lightsOn, this.t("on"), this.t("off")) : l}
+                      ${this.entities.charging ? this.status("charging", "mdi:battery-charging", this.t("charging"), t.charging, this.t("active"), this.t("inactive")) : l}
                     ` : l}
-              ${this.entities.climate ? this.status("mdi:snowflake", this.t("climate"), t.climateActive, this.t("active"), this.t("inactive")) : l}
+              ${this.entities.climate ? this.status("climate", "mdi:snowflake", this.t("climate"), t.climateActive, this.t("active"), this.t("inactive")) : l}
+              ${this.locationStatus()}
             </section>` : l}
       ${!e && this.config.show_controls !== !1 ? d`<nav class="controls" aria-label=${this.t("vehicle_controls")}>
               ${o.map((c) => {
@@ -1501,7 +1529,10 @@ _.styles = $e`
       border-radius: 999px;
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
+      color: var(--primary-text-color);
+      font: inherit;
       font-size: var(--ha-font-size-m, 0.875rem);
+      cursor: pointer;
     }
     .badge ha-icon,
     .status-icon {
@@ -1572,9 +1603,19 @@ _.styles = $e`
     }
     .freshness {
       justify-self: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-family: inherit;
       font-size: var(--ha-font-size-s, 0.75rem);
       color: var(--secondary-text-color);
       white-space: nowrap;
+    }
+    button.freshness {
+      cursor: pointer;
+    }
+    button.freshness:hover {
+      text-decoration: underline;
     }
     .freshness.stale {
       color: var(--warning-color, #f9a825);
@@ -1646,7 +1687,22 @@ _.styles = $e`
       padding: 9px 10px;
       border: 1px solid var(--divider-color);
       border-radius: 12px;
+      background: transparent;
+      color: var(--primary-text-color);
+      font: inherit;
       font-size: var(--ha-font-size-m, 0.875rem);
+      text-align: left;
+      cursor: pointer;
+    }
+    .badge:hover,
+    .status:hover {
+      border-color: var(--primary-color);
+    }
+    .badge:focus-visible,
+    .status:focus-visible,
+    .freshness:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
     .status i {
       width: 9px;
@@ -1659,6 +1715,10 @@ _.styles = $e`
     }
     .status.unavailable i {
       background: var(--disabled-text-color, var(--secondary-text-color));
+    }
+    .status-detail {
+      color: var(--secondary-text-color);
+      --mdc-icon-size: 20px;
     }
     .controls {
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1933,7 +1993,8 @@ let f = class extends D {
           ["trunk", "trunk"],
           ["hood", "hood"],
           ["lights", "lights"],
-          ["charging", "charging"]
+          ["charging", "charging"],
+          ["location", "location"]
         ]
       ],
       [
@@ -1943,8 +2004,7 @@ let f = class extends D {
           ["climate", "climate"],
           ["horn_lights", "horn_lights"],
           ["refresh_cached", "refresh_cached"],
-          ["refresh", "refresh_from_car"],
-          ["location", "location"]
+          ["refresh", "refresh_from_car"]
         ]
       ]
     ], i = e.flatMap(([, o]) => o).filter(([o]) => t[o]).length;
@@ -2148,8 +2208,7 @@ let f = class extends D {
       ["climate", this.t("climate")],
       ["horn_lights", this.t("horn_lights")],
       ["refresh_cached", this.t("refresh_cached")],
-      ["refresh", this.t("refresh_from_car")],
-      ["location", this.t("location")]
+      ["refresh", this.t("refresh_from_car")]
     ])}
       </section>
 
