@@ -21,6 +21,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   @state() private loading = false;
   @state() private integrationDetected = false;
   @state() private discoveryError = false;
+  private automaticDiscoveryStarted = false;
 
   public setConfig(config: MyHondaPlusCardConfig): void {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -37,7 +38,10 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   }
 
   protected override updated(changed: PropertyValues): void {
-    if (changed.has("hass") && this.hass) void this.loadDevices();
+    if (changed.has("hass") && this.hass && !this.automaticDiscoveryStarted) {
+      this.automaticDiscoveryStarted = true;
+      void this.loadDevices();
+    }
   }
 
   private async loadDevices(): Promise<void> {
