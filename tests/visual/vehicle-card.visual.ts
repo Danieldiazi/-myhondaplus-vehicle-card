@@ -47,6 +47,28 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
       .evaluate((element) => getComputedStyle(element).backgroundColor),
   ]);
   expect(controlBackground).not.toBe(metricBackground);
+  const [cardTypography, statusTypography, controlTypography] = await Promise.all([
+    page.locator(card).evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { family: style.fontFamily, size: style.fontSize };
+    }),
+    page
+      .locator(`${card} .status`)
+      .first()
+      .evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { family: style.fontFamily, size: style.fontSize };
+      }),
+    page
+      .locator(`${card} .controls button`)
+      .first()
+      .evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { family: style.fontFamily, size: style.fontSize };
+      }),
+  ]);
+  expect(statusTypography).toEqual(cardTypography);
+  expect(controlTypography).toEqual(cardTypography);
   await expectArtworkAboveFreshness(page);
   await expectNoHorizontalOverflow(page);
 });
