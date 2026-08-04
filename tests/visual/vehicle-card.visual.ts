@@ -73,21 +73,23 @@ test("the editor explains when the integration is missing", async ({ page }) => 
 
   await expect(page.locator(editor)).toContainText("Integración My Honda+ no detectada");
   await expect(page.locator(`${editor} a`)).toHaveAttribute("href", /myhondaplus-homeassistant/);
-  await expect(page.locator(`${editor} ha-button`)).toContainText("Volver a detectar");
+  await expect(page.locator(`${editor} button`)).toContainText("Volver a detectar");
 });
 
 test("the editor distinguishes an installed integration with no vehicles", async ({ page }) => {
   await openEditorScenario(page, "discovery=noVehicles&locale=en");
 
   await expect(page.locator(editor)).toContainText("My Honda+ integration detected");
-  await expect(page.locator(editor)).toContainText("No configured vehicle was found");
+  await expect(page.locator(editor)).toContainText(
+    "No configured vehicle with My Honda+ entities was found",
+  );
 });
 
 test("the editor reports the selected vehicle capabilities", async ({ page }) => {
   await openEditorScenario(page, "discovery=ready&locale=gl");
 
   await expect(page.locator(editor)).toContainText("Capacidades detectadas");
-  await expect(page.locator(`${editor} .capability-chip`)).not.toHaveCount(0);
+  await expect(page.locator(`${editor} .chip`)).not.toHaveCount(0);
 });
 
 test("the card shows an actionable diagnostic when the integration is missing", async ({
