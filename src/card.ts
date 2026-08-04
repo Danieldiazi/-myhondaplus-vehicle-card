@@ -479,13 +479,16 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .vehicle {
       position: relative;
       min-height: 235px;
-      display: flex;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      gap: 8px;
       align-items: center;
-      justify-content: center;
+      justify-items: center;
     }
     .vehicle svg,
     .vehicle img {
       width: 100%;
+      height: 100%;
       max-height: 250px;
       object-fit: contain;
       transform: scale(var(--vehicle-scale, 1));
@@ -493,14 +496,14 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       transform-origin: center;
     }
     .vehicle.align-left {
-      justify-content: flex-start;
+      justify-items: start;
     }
     .vehicle.align-left svg,
     .vehicle.align-left img {
       transform-origin: left center;
     }
     .vehicle.align-right {
-      justify-content: flex-end;
+      justify-items: end;
     }
     .vehicle.align-right svg,
     .vehicle.align-right img {
@@ -513,15 +516,11 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .vehicle img.honda-logo-art {
       width: clamp(120px, 34%, 150px);
       max-height: 150px;
-      margin-bottom: 28px;
       filter: drop-shadow(0 10px 12px var(--vehicle-shadow-color))
         drop-shadow(0 0 14px var(--vehicle-shadow-color));
     }
     .freshness {
-      position: absolute;
-      bottom: 7px;
-      left: 50%;
-      transform: translateX(-50%);
+      justify-self: center;
       font-size: 0.72rem;
       color: var(--secondary-text-color);
       white-space: nowrap;
