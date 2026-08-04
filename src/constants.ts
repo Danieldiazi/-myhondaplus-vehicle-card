@@ -47,7 +47,7 @@ export const DEFAULT_CONFIG: Required<
   confirm_unlock: true,
   locale: "auto",
   debug: false,
-  controls: ["lock", "climate", "horn_lights", "refresh", "location"],
+  controls: ["lock", "climate", "horn_lights", "refresh"],
   metrics: ["range", "battery", "odometer", "trip_distance", "trip_consumption"],
 };
 
