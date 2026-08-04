@@ -28,6 +28,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
   @state() private device?: DeviceRegistryEntry;
   @state() private busy?: keyof EntityMap;
   @state() private message?: { kind: "error" | "success"; text: string };
+  @state() private customImageFailed = false;
   private loadedDevice?: string;
 
   public static async getConfigElement(): Promise<HTMLElement> {
@@ -41,7 +42,14 @@ export class MyHondaPlusVehicleCard extends LitElement {
 
   public setConfig(config: MyHondaPlusCardConfig): void {
     if (!config) throw new Error(localize("required_config", "es"));
-    this.config = { ...DEFAULT_CONFIG, ...config };
+    const nextConfig = { ...DEFAULT_CONFIG, ...config };
+    if (
+      this.config.vehicle_image !== nextConfig.vehicle_image ||
+      this.config.image_mode !== nextConfig.image_mode
+    ) {
+      this.customImageFailed = false;
+    }
+    this.config = nextConfig;
     this.entities = { ...(config.entities ?? {}) };
     this.loadedDevice = undefined;
   }
@@ -172,7 +180,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
     );
     try {
       await navigator.clipboard.writeText(text);
-      this.message = { kind: "success", text: "Diagnostics copied" };
+      this.message = { kind: "success", text: this.t("diagnostics_copied") };
     } catch {
       this.message = { kind: "error", text };
     }
@@ -248,15 +256,22 @@ export class MyHondaPlusVehicleCard extends LitElement {
   }
 
   private vehicleVisual(): TemplateResult {
-    if (this.config.image_mode === "custom" && this.config.vehicle_image) {
+    if (
+      this.config.image_mode === "custom" &&
+      this.config.vehicle_image &&
+      !this.customImageFailed
+    ) {
       return html`<img
         class="vehicle-art custom-vehicle-art"
         src=${this.config.vehicle_image}
         alt=${this.t("vehicle")}
         loading="lazy"
+        @error=${() => {
+          this.customImageFailed = true;
+        }}
       />`;
     }
-    return renderVehicleArt(this.model());
+    return renderVehicleArt(this.customImageFailed ? "generic" : this.model());
   }
 
   private visualStyle(): string {
@@ -312,6 +327,11 @@ export class MyHondaPlusVehicleCard extends LitElement {
         ${this.busy ? this.t("action_in_progress") : (this.message?.text ?? "")}
       </div>
       ${this.message ? html`<div class="message ${this.message.kind}">${this.message.text}</div>` : nothing}
+      ${
+        this.customImageFailed
+          ? html`<div class="message error" role="alert">${this.t("custom_image_failed")}</div>`
+          : nothing
+      }
 
       <section
         class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
@@ -356,7 +376,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
       }
       ${
         this.config.show_controls !== false
-          ? html`<nav class="controls" aria-label="Vehicle controls">
+          ? html`<nav class="controls" aria-label=${this.t("vehicle_controls")}>
               ${controls.map((key) => {
                 const metadata = {
                   lock: {
@@ -385,9 +405,9 @@ export class MyHondaPlusVehicleCard extends LitElement {
       ${
         this.config.debug
           ? html`<details class="diagnostics">
-              <summary>Diagnostics</summary>
+              <summary>${this.t("diagnostics")}</summary>
               <button type="button" @click=${() => void this.copyDiagnostics()}>
-                Copy anonymized diagnostics
+                ${this.t("copy_diagnostics")}
               </button>
               <pre>
 ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this.locale()))}</pre>

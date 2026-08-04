@@ -41,13 +41,15 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 
 ## Visual and functional compatibility
 
-| Model                                   | Illustration             | Information and controls                    |
-| --------------------------------------- | ------------------------ | ------------------------------------------- |
-| Honda Civic                             | Dedicated side-view SVG  | Discovered from its My Honda+ entities      |
-| HR-V, CR-V, ZR-V, Jazz, Honda e and e:Ny1 | Honda logo             | Discovered from their My Honda+ entities    |
-| Other compatible Honda vehicles         | Honda logo               | Discovered from their My Honda+ entities    |
+| Model                                     | Illustration            | Information and controls                 |
+| ----------------------------------------- | ----------------------- | ---------------------------------------- |
+| Honda Civic                               | Dedicated side-view SVG | Discovered from its My Honda+ entities   |
+| HR-V, CR-V, ZR-V, Jazz, Honda e and e:Ny1 | Honda logo              | Discovered from their My Honda+ entities |
+| Other compatible Honda vehicles           | Honda logo              | Discovered from their My Honda+ entities |
 
 The model determines only the illustration. Battery, charging, climate, locking and other sections are displayed only when the integration creates the corresponding entity for the device. A temporarily unavailable entity is shown as **No data**; an unsupported capability is hidden.
+
+If a configured custom image cannot be loaded, the card displays the generic Honda logo and a localized warning instead of leaving an empty vehicle area.
 
 The Honda logo is used only as a visual identifier for models without a dedicated illustration. Honda is a registered trademark, and this community project is not affiliated with Honda Motor Co., Ltd.
 
@@ -118,10 +120,10 @@ Most settings are available in the visual editor, so you normally do not need to
 
 ## Project responsibilities
 
-| Project                      | Responsibility                                                                                                     |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Project                      | Responsibility                                                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | My Honda+ for Home Assistant | Authentication, communication with Honda services, and creation of devices, entities and services in Home Assistant. |
-| My Honda+ Vehicle Card       | Visual presentation, entity discovery and execution of services already available in Home Assistant.              |
+| My Honda+ Vehicle Card       | Visual presentation, entity discovery and execution of services already available in Home Assistant.                 |
 
 Authentication problems, a completely missing vehicle or communication problems with Honda should be reported in the integration repository. Layout issues, failure to detect an existing entity or card functionality problems should be reported in this repository.
 

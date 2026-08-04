@@ -7,8 +7,10 @@ Gracias por mejorar My Honda+ Vehicle Card. Este documento resume el flujo de tr
 Requiere Node.js 24 o posterior.
 
 ```bash
-npm install
+npm ci
+npx playwright install chromium
 npm run check
+npm run test:visual
 ```
 
 ## Flujo recomendado
@@ -17,21 +19,22 @@ npm run check
 2. Mantén el cambio pequeño y centrado en un único objetivo.
 3. Añade o actualiza tests cuando cambie el comportamiento.
 4. Actualiza la documentación pública si cambia la configuración.
-5. Ejecuta `npm run check`.
-6. Incluye el archivo generado de `dist/` cuando el bundle cambie.
+5. Ejecuta `npm run check` y, si afecta a la interfaz, `npm run test:visual`.
+6. Comprueba que el bundle se genera correctamente; el workflow `Build distribution` actualizará `dist/` al integrar el cambio en `main`.
 7. Abre un pull request explicando el problema, la solución y la validación realizada.
 
 ## Comandos
 
-| Comando             | Propósito                                   |
-| ------------------- | ------------------------------------------- |
-| `npm run dev`       | Recompila el bundle al detectar cambios     |
-| `npm run format`    | Aplica Prettier                             |
-| `npm run lint`      | Ejecuta ESLint                              |
-| `npm run typecheck` | Comprueba TypeScript estricto               |
-| `npm test`          | Ejecuta Vitest                              |
-| `npm run build`     | Genera el bundle HACS                       |
-| `npm run check`     | Ejecuta todas las comprobaciones anteriores |
+| Comando               | Propósito                                   |
+| --------------------- | ------------------------------------------- |
+| `npm run dev`         | Recompila el bundle al detectar cambios     |
+| `npm run format`      | Aplica Prettier                             |
+| `npm run lint`        | Ejecuta ESLint                              |
+| `npm run typecheck`   | Comprueba TypeScript estricto               |
+| `npm test`            | Ejecuta Vitest                              |
+| `npm run test:visual` | Ejecuta las pruebas visuales con Playwright |
+| `npm run build`       | Genera el bundle HACS                       |
+| `npm run check`       | Ejecuta todas las comprobaciones anteriores |
 
 ## Buenas prácticas
 
@@ -47,7 +50,7 @@ npm run check
 
 ## Tests
 
-Cada corrección de un bug debería añadir un test que falle antes del cambio y pase después. Las reglas de detección deben probar coincidencias específicas, casos parecidos y fallback.
+Cada corrección de un bug debería añadir un test que falle antes del cambio y pase después. Las reglas de detección deben probar coincidencias específicas, casos parecidos y fallback. Los cambios de interfaz deben cubrir, cuando proceda, tema claro y oscuro, anchura móvil y escritorio, y ausencia de solapamientos o desbordamiento horizontal.
 
 ## Commits y pull requests
 

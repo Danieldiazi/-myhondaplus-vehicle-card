@@ -2,6 +2,7 @@ import { css, html, LitElement, nothing, type PropertyValues, type TemplateResul
 import { customElement, property, state } from "lit/decorators.js";
 import { DEFAULT_CONFIG, EDITOR_TAG, PAINT_PRESETS } from "./constants";
 import { resolveEntities } from "./entity-resolver";
+import { localize, normalizeLocale, type TranslationKey } from "./localize";
 import type {
   DeviceRegistryEntry,
   EntityMap,
@@ -20,6 +21,16 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
 
   public setConfig(config: MyHondaPlusCardConfig): void {
     this.config = { ...DEFAULT_CONFIG, ...config };
+  }
+
+  private locale(): string {
+    return this.config.locale && this.config.locale !== "auto"
+      ? this.config.locale
+      : normalizeLocale(this.hass?.language);
+  }
+
+  private t(key: TranslationKey, replacements: Record<string, string | number> = {}): string {
+    return localize(key, this.locale(), replacements);
   }
 
   protected override updated(changed: PropertyValues): void {
@@ -112,7 +123,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
               ?disabled=${!available && !selected.has(value)}
               @change=${(event: Event) => this.toggleListValue(event, field)}
             />
-            ${label}${available ? "" : " — no disponible"}
+            ${label}${available ? "" : ` — ${this.t("editor_not_available")}`}
           </label>`;
         })}
       </div>
@@ -130,11 +141,11 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   protected override render(): TemplateResult {
     return html`<div class="grid">
       <section>
-        <h3>Vehículo</h3>
+        <h3>${this.t("editor_vehicle")}</h3>
         <label
-          >Vehículo conectado
+          >${this.t("connected_vehicle")}
           <select name="device" @change=${this.updateField}>
-            <option value="">Selecciona un vehículo My Honda+</option>
+            <option value="">${this.t("editor_select_vehicle")}</option>
             ${this.devices.map(
               (device) =>
                 html`<option value=${device.id} ?selected=${this.config.device === device.id}>
@@ -143,18 +154,22 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             )}
           </select>
           <span class="hint"
-            >${this.loading ? "Buscando vehículos…" : `${this.devices.length} vehículo(s) encontrado(s)`}</span
+            >${
+              this.loading
+                ? this.t("editor_searching_vehicles")
+                : this.t("editor_vehicles_found", { count: this.devices.length })
+            }</span
           >
         </label>
         <label
-          >Nombre
+          >${this.t("editor_name")}
           <input name="name" .value=${this.config.name ?? ""} @change=${this.updateField} />
         </label>
         <label
-          >Modelo visual
+          >${this.t("editor_visual_model")}
           <select name="vehicle_model" @change=${this.updateField}>
             ${[
-              ["auto", "Automático"],
+              ["auto", this.t("editor_automatic")],
               ["civic", "Honda Civic"],
               ["hrv", "Honda HR-V"],
               ["crv", "Honda CR-V"],
@@ -162,7 +177,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
               ["jazz", "Honda Jazz"],
               ["honda_e", "Honda e"],
               ["eny1", "Honda e:Ny1"],
-              ["generic", "Honda genérico"],
+              ["generic", this.t("editor_generic_honda")],
             ].map(
               ([value, label]) =>
                 html`<option value=${value} ?selected=${this.config.vehicle_model === value}>
@@ -174,16 +189,20 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       </section>
 
       <section>
-        <h3>Apariencia</h3>
+        <h3>${this.t("editor_appearance")}</h3>
         <label
-          >Diseño
+          >${this.t("editor_layout")}
           <select name="layout" @change=${this.updateField}>
-            <option value="full" ?selected=${this.config.layout === "full"}>Completo</option>
-            <option value="compact" ?selected=${this.config.layout === "compact"}>Compacto</option>
+            <option value="full" ?selected=${this.config.layout === "full"}>
+              ${this.t("editor_full")}
+            </option>
+            <option value="compact" ?selected=${this.config.layout === "compact"}>
+              ${this.t("editor_compact")}
+            </option>
           </select>
         </label>
         <label
-          >Escala del vehículo (%)
+          >${this.t("editor_vehicle_scale")}
           <input
             name="vehicle_scale"
             type="number"
@@ -195,16 +214,16 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           />
         </label>
         <label
-          >Alineación
+          >${this.t("editor_alignment")}
           <select name="vehicle_alignment" @change=${this.updateField}>
             <option value="left" ?selected=${this.config.vehicle_alignment === "left"}>
-              Izquierda
+              ${this.t("editor_left")}
             </option>
             <option value="center" ?selected=${this.config.vehicle_alignment === "center"}>
-              Centro
+              ${this.t("editor_center")}
             </option>
             <option value="right" ?selected=${this.config.vehicle_alignment === "right"}>
-              Derecha
+              ${this.t("editor_right")}
             </option>
           </select>
         </label>
@@ -215,18 +234,18 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.vehicle_shadow !== false}
             @change=${this.updateField}
           />
-          Mostrar sombra de color</label
+          ${this.t("editor_show_shadow")}</label
         >
         ${
           this.config.vehicle_shadow !== false
             ? html`
                 <label
-                  >Color de la sombra
+                  >${this.t("editor_shadow_color")}
                   <select name="color_preset" @change=${this.updateField}>
                     ${Object.entries(PAINT_PRESETS).map(
                       ([key, preset]) =>
                         html`<option value=${key} ?selected=${this.config.color_preset === key}>
-                          ${preset.label}
+                          ${key === "custom" ? this.t("editor_custom") : preset.label}
                         </option>`,
                     )}
                   </select>
@@ -234,7 +253,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
                 ${
                   this.config.color_preset === "custom"
                     ? html`<label
-                        >Color personalizado de la sombra
+                        >${this.t("editor_custom_shadow_color")}
                         <input
                           name="vehicle_color"
                           type="color"
@@ -245,7 +264,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
                     : nothing
                 }
                 <label
-                  >Intensidad de la sombra (%)
+                  >${this.t("editor_shadow_intensity")}
                   <input
                     name="shadow_intensity"
                     type="range"
@@ -260,20 +279,20 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             : nothing
         }
         <label
-          >Imagen
+          >${this.t("editor_image")}
           <select name="image_mode" @change=${this.updateField}>
             <option value="rendered" ?selected=${this.config.image_mode === "rendered"}>
-              Ilustración incluida
+              ${this.t("editor_included_art")}
             </option>
             <option value="custom" ?selected=${this.config.image_mode === "custom"}>
-              Imagen personalizada
+              ${this.t("editor_custom_image")}
             </option>
           </select>
         </label>
         ${
           this.config.image_mode === "custom"
             ? html`<label
-                >URL de imagen
+                >${this.t("editor_image_url")}
                 <input
                   name="vehicle_image"
                   .value=${this.config.vehicle_image ?? ""}
@@ -286,38 +305,40 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       </section>
 
       <section>
-        <h3>Contenido</h3>
-        ${this.checklist("Métricas", "metrics", [
-          ["range", "Autonomía"],
-          ["battery", "Batería"],
-          ["odometer", "Kilometraje"],
-          ["trip_distance", "Distancia este mes"],
-          ["trip_consumption", "Consumo medio"],
-          ["trip_duration", "Tiempo de conducción"],
+        <h3>${this.t("editor_content")}</h3>
+        ${this.checklist(this.t("editor_metrics"), "metrics", [
+          ["range", this.t("range")],
+          ["battery", this.t("battery")],
+          ["odometer", this.t("odometer")],
+          ["trip_distance", this.t("trip_distance")],
+          ["trip_consumption", this.t("trip_consumption")],
+          ["trip_duration", this.t("trip_duration")],
         ])}
-        ${this.checklist("Controles", "controls", [
-          ["lock", "Cierre"],
-          ["climate", "Climatización"],
-          ["horn_lights", "Bocina y luces"],
-          ["refresh_cached", "Actualizar datos guardados"],
-          ["refresh", "Actualizar desde el coche"],
-          ["location", "Ubicación"],
+        ${this.checklist(this.t("editor_controls"), "controls", [
+          ["lock", this.t("editor_locking")],
+          ["climate", this.t("climate")],
+          ["horn_lights", this.t("horn_lights")],
+          ["refresh_cached", this.t("refresh_cached")],
+          ["refresh", this.t("refresh_from_car")],
+          ["location", this.t("location")],
         ])}
       </section>
 
       <section>
-        <h3>Comportamiento</h3>
+        <h3>${this.t("editor_behavior")}</h3>
         <label
-          >Idioma
+          >${this.t("editor_language")}
           <select name="locale" @change=${this.updateField}>
-            <option value="auto" ?selected=${this.config.locale === "auto"}>Automático</option>
+            <option value="auto" ?selected=${this.config.locale === "auto"}>
+              ${this.t("editor_automatic")}
+            </option>
             <option value="es" ?selected=${this.config.locale === "es"}>Español</option>
             <option value="en" ?selected=${this.config.locale === "en"}>English</option>
             <option value="gl" ?selected=${this.config.locale === "gl"}>Galego</option>
           </select>
         </label>
         <label
-          >Datos antiguos después de (segundos)
+          >${this.t("editor_stale_after")}
           <input
             name="stale_after"
             type="number"
@@ -334,7 +355,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.show_controls !== false}
             @change=${this.updateField}
           />
-          Mostrar controles</label
+          ${this.t("editor_show_controls")}</label
         >
         <label class="check"
           ><input
@@ -343,7 +364,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.show_model !== false}
             @change=${this.updateField}
           />
-          Mostrar modelo</label
+          ${this.t("editor_show_model")}</label
         >
         <label class="check"
           ><input
@@ -352,7 +373,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.animate !== false}
             @change=${this.updateField}
           />
-          Permitir animaciones</label
+          ${this.t("editor_allow_animations")}</label
         >
         <label class="check"
           ><input
@@ -361,7 +382,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.confirm_unlock !== false}
             @change=${this.updateField}
           />
-          Confirmar antes de abrir</label
+          ${this.t("editor_confirm_unlock")}</label
         >
         <label class="check"
           ><input
@@ -370,7 +391,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
             .checked=${this.config.debug === true}
             @change=${this.updateField}
           />
-          Mostrar diagnóstico anonimizado</label
+          ${this.t("editor_show_diagnostics")}</label
         >
       </section>
     </div>`;

@@ -78,9 +78,11 @@ Use Node.js 24 or later.
 ```bash
 npm ci
 npm run check
+npx playwright install chromium
+npm run test:visual
 ```
 
-`npm run check` runs Prettier verification, ESLint, strict TypeScript, Vitest and the production Vite build. CI and Validate must both pass before merge. Add or update tests for behavioral changes and attach light/dark screenshots for meaningful visual changes.
+`npm run check` runs Prettier verification, ESLint, strict TypeScript, Vitest and the production Vite build. Playwright covers responsive visual regressions separately; install Chromium once in a local checkout and run `npm run test:visual` for UI changes. CI and Validate must both pass before merge. Add or update tests for behavioral changes and attach light/dark screenshots for meaningful visual changes.
 
 The HACS artifact is `dist/myhondaplus-vehicle-card.js`. Never edit it by hand. The `Build distribution` workflow regenerates and commits it on `main` after relevant source or build changes; still run the local production build to catch failures before opening a pull request.
 

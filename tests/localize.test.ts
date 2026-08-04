@@ -10,5 +10,12 @@ describe("localize", () => {
 
   it("replaces interpolation tokens", () => {
     expect(localize("updated_minutes", "en", { count: 8 })).toBe("Updated 8 min ago");
+    expect(localize("editor_vehicles_found", "gl", { count: 2 })).toBe("Vehículos atopados: 2");
+  });
+
+  it("localizes editor, diagnostics and image fallback messages", () => {
+    expect(localize("editor_appearance", "en")).toBe("Appearance");
+    expect(localize("copy_diagnostics", "es")).toBe("Copiar diagnóstico anonimizado");
+    expect(localize("custom_image_failed", "gl")).toContain("logo de Honda");
   });
 });

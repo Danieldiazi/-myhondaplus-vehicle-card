@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Honda+ Vehicle Card visual harness</title>
+    <style>
+      :root {
+        font-family: Arial, sans-serif;
+        --primary-color: #03a9f4;
+        --success-color: #43a047;
+        --error-color: #db4437;
+        --warning-color: #f9a825;
+      }
+      :root[data-theme="light"] {
+        --primary-text-color: #111827;
+        --secondary-text-color: #5f6368;
+        --card-background-color: #ffffff;
+        --ha-card-background: #ffffff;
+        --secondary-background-color: #f1f3f4;
+        --divider-color: #d6d9dc;
+      }
+      :root[data-theme="dark"] {
+        --primary-text-color: #f3f4f6;
+        --secondary-text-color: #b4b8bf;
+        --card-background-color: #202124;
+        --ha-card-background: #202124;
+        --secondary-background-color: #303236;
+        --divider-color: #555960;
+      }
+      body {
+        margin: 0;
+        padding: 20px;
+        color: var(--primary-text-color);
+        background: var(--secondary-background-color);
+      }
+      main {
+        width: min(100%, 640px);
+        margin: 0 auto;
+      }
+      ha-card {
+        display: block;
+        border: 1px solid var(--divider-color);
+        border-radius: 16px;
+      }
+      ha-icon {
+        display: inline-block;
+        width: var(--mdc-icon-size, 24px);
+        height: var(--mdc-icon-size, 24px);
+      }
+    </style>
+  </head>
+  <body>
+    <main id="root"></main>
+    <script type="module" src="./visual-harness.ts"></script>
+  </body>
+</html>
