@@ -10,6 +10,12 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-08-04
+
+### Changed
+
+- Republicación limpia del parche `0.7.1` para garantizar que HACS reciba el bundle generado y adjuntado por el workflow automático de release.
+
 ## [0.7.1] - 2026-08-04
 
 ### Fixed
