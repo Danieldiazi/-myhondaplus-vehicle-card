@@ -1,0 +1,125 @@
+import "../../src/index";
+import type {
+  DeviceRegistryEntry,
+  EntityRegistryEntry,
+  HassEntity,
+  HomeAssistant,
+  MyHondaPlusCardConfig,
+  VehicleModelKey,
+} from "../../src/types";
+
+declare global {
+  interface Window {
+    __visualReady?: boolean;
+  }
+}
+
+const params = new URLSearchParams(window.location.search);
+const model = (params.get("model") ?? "civic") as VehicleModelKey;
+const layout = params.get("layout") === "compact" ? "compact" : "full";
+const locale = params.get("locale") ?? "en";
+const customImageFailure = params.get("customImageFailure") === "true";
+document.documentElement.dataset.theme = params.get("theme") === "dark" ? "dark" : "light";
+
+const device: DeviceRegistryEntry = {
+  id: "synthetic-vehicle",
+  name: "Synthetic Honda",
+  model: model === "civic" ? "Honda Civic" : "Honda HR-V",
+  manufacturer: "Honda",
+};
+
+const registryEntry = (entity_id: string, translation_key: string): EntityRegistryEntry => ({
+  entity_id,
+  device_id: device.id,
+  platform: "myhondaplus",
+  translation_key,
+  disabled_by: null,
+});
+
+const registry: EntityRegistryEntry[] = [
+  registryEntry("lock.synthetic_vehicle", "doors"),
+  registryEntry("sensor.synthetic_range", "total_range"),
+  registryEntry("sensor.synthetic_battery", "battery_level"),
+  registryEntry("sensor.synthetic_odometer", "odometer"),
+  registryEntry("sensor.synthetic_updated", "last_updated"),
+  registryEntry("switch.synthetic_climate", "climate"),
+  registryEntry("binary_sensor.synthetic_charging", "charging"),
+  registryEntry("binary_sensor.synthetic_doors", "doors"),
+  registryEntry("binary_sensor.synthetic_windows", "windows"),
+  registryEntry("binary_sensor.synthetic_trunk", "trunk"),
+  registryEntry("binary_sensor.synthetic_hood", "hood"),
+  registryEntry("binary_sensor.synthetic_lights", "lights"),
+  registryEntry("sensor.synthetic_trip_distance", "distance_this_month"),
+  registryEntry("sensor.synthetic_trip_consumption", "avg_consumption_this_month"),
+  registryEntry("button.synthetic_refresh", "refresh_from_car"),
+  registryEntry("button.synthetic_horn_lights", "horn_lights"),
+  registryEntry("device_tracker.synthetic_location", "location"),
+];
+
+const now = new Date().toISOString();
+const entity = (entity_id: string, state: string, unit?: string): HassEntity => ({
+  entity_id,
+  state,
+  attributes: unit ? { unit_of_measurement: unit } : {},
+  last_updated: now,
+});
+
+const states = Object.fromEntries(
+  [
+    entity("lock.synthetic_vehicle", "locked"),
+    entity("sensor.synthetic_range", "420", "km"),
+    entity("sensor.synthetic_battery", "72", "%"),
+    entity("sensor.synthetic_odometer", "17505", "km"),
+    entity("sensor.synthetic_updated", now),
+    entity("switch.synthetic_climate", "on"),
+    entity("binary_sensor.synthetic_charging", "off"),
+    entity("binary_sensor.synthetic_doors", "off"),
+    entity("binary_sensor.synthetic_windows", "off"),
+    entity("binary_sensor.synthetic_trunk", "off"),
+    entity("binary_sensor.synthetic_hood", "off"),
+    entity("binary_sensor.synthetic_lights", "off"),
+    entity("sensor.synthetic_trip_distance", "371", "km"),
+    entity("sensor.synthetic_trip_consumption", "5.4", "L/100km"),
+    entity("button.synthetic_refresh", "unknown"),
+    entity("button.synthetic_horn_lights", "unknown"),
+    entity("device_tracker.synthetic_location", "home"),
+  ].map((item) => [item.entity_id, item]),
+);
+
+const hass: HomeAssistant = {
+  states,
+  language: locale,
+  config: { version: "2026.8.0" },
+  callWS: async <T>(message: Record<string, unknown>): Promise<T> => {
+    if (message.type === "config/entity_registry/list") return registry as T;
+    if (message.type === "config/device_registry/list") return [device] as T;
+    throw new Error(`Unexpected websocket request: ${String(message.type)}`);
+  },
+  callService: async () => undefined,
+};
+
+type TestCard = HTMLElement & {
+  hass: HomeAssistant;
+  setConfig(config: MyHondaPlusCardConfig): void;
+  updateComplete: Promise<boolean>;
+};
+
+const card = document.createElement("myhondaplus-vehicle-card") as TestCard;
+card.setConfig({
+  type: "custom:myhondaplus-vehicle-card",
+  device: device.id,
+  name: "Synthetic Honda",
+  vehicle_model: model,
+  layout,
+  locale: locale === "es" || locale === "gl" ? locale : "en",
+  image_mode: customImageFailure ? "custom" : "rendered",
+  vehicle_image: customImageFailure ? "/missing-vehicle-image.png" : undefined,
+  debug: true,
+});
+card.hass = hass;
+document.querySelector("#root")?.append(card);
+
+await card.updateComplete;
+await new Promise((resolve) => window.setTimeout(resolve, 50));
+await card.updateComplete;
+window.__visualReady = true;

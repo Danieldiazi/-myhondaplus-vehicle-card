@@ -34,6 +34,8 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | `metrics`           | array                       |    compatibles | Métricas preferidas y su orden. Las que no tengan entidad se ocultan.                            |
 | `entities`          | object                      |     automático | Sobrescritura avanzada de entidades detectadas.                                                  |
 
+Cuando `image_mode` es `custom` y `vehicle_image` no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado. La URL se mantiene en la configuración para que pueda corregirse desde el editor.
+
 ## Configuración mínima
 
 ```yaml

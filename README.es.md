@@ -49,6 +49,8 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 
 El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
 
+Si una imagen personalizada configurada no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado en lugar de dejar vacío el espacio del vehículo.
+
 El logotipo de Honda se utiliza únicamente como identificación visual para modelos sin una ilustración específica. Honda es una marca registrada y este proyecto comunitario no está afiliado a Honda Motor Co., Ltd.
 
 ## Instalación rápida
