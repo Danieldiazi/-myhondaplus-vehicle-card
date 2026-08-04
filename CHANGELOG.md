@@ -10,6 +10,12 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-08-04
+
+### Changed
+
+- Se reclasifica como versión menor el conjunto de funciones publicado inicialmente en `0.5.6` —detección de la integración, resumen de capacidades y redescubrimiento de entidades— para cumplir la política de versionado semántico del proyecto. No introduce cambios de comportamiento adicionales.
+
 ## [0.5.6] - 2026-08-04
 
 ### Added
