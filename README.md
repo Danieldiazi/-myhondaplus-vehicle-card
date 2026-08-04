@@ -35,6 +35,7 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 - Configurable metrics and controls.
 - Spanish, English and Galician, selected automatically from the active language.
 - Anonymized diagnostics for requesting support without sharing the VIN, coordinates or complete identifiers.
+- Visual-editor checks for the required integration, configured vehicles and detected capabilities, with one-click entity rediscovery.
 - Door, window, trunk, hood, light, charging and climate status.
 - Responsive design, dark mode, keyboard focus and automatic reduced-motion support.
 - Confirmation before unlocking and prevention of duplicate actions.

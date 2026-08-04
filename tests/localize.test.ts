@@ -17,5 +17,8 @@ describe("localize", () => {
     expect(localize("editor_appearance", "en")).toBe("Appearance");
     expect(localize("copy_diagnostics", "es")).toBe("Copiar diagnóstico anonimizado");
     expect(localize("custom_image_failed", "gl")).toContain("logo de Honda");
+    expect(localize("editor_integration_not_detected", "es")).toContain("no detectada");
+    expect(localize("editor_redetect_entities", "gl")).toContain("Volver detectar");
+    expect(localize("editor_capabilities", "en")).toBe("Detected capabilities");
   });
 });
