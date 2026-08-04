@@ -14,6 +14,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 - El editor deja de repetir el descubrimiento de integración y entidades en cada actualización de estados de Home Assistant, evitando el parpadeo periódico de la configuración.
 - Los controles utilizan un fondo y borde teñidos con el color principal del tema para distinguirlos claramente de métricas y estados informativos.
+- La tarjeta hereda la familia tipográfica y la escala de tamaños de Home Assistant para integrarse visualmente con el resto del dashboard.
 
 ## [0.7.0] - 2026-08-04
 
