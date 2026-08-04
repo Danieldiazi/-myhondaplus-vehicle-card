@@ -10,6 +10,10 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Fixed
+
+- El editor deja de repetir el descubrimiento de integración y entidades en cada actualización de estados de Home Assistant, evitando el parpadeo periódico de la configuración.
+
 ## [0.7.0] - 2026-08-04
 
 ### Added
