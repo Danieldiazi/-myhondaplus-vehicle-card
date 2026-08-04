@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.5.5] - 2026-08-04
+
 ### Added
 
 - Pruebas visuales en Chromium para diseños completos y compactos, vistas móvil y escritorio, temas claro y oscuro, Civic, fallback genérico y errores de imagen personalizada.
@@ -23,6 +25,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 - La versión incluida en el registro y los diagnósticos ahora se obtiene automáticamente de `package.json`.
 - Una imagen personalizada que no pueda cargarse muestra el logo genérico de Honda y un aviso localizado.
+- La ilustración y la fecha de actualización mantienen espacios independientes para evitar solapamientos en diseños responsive.
 
 ## [0.5.4] - 2026-08-03
 
