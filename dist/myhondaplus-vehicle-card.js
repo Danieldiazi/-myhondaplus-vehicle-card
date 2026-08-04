@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const V = globalThis, X = V.ShadowRoot && (V.ShadyCSS === void 0 || V.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, e1 = Symbol(), a1 = /* @__PURE__ */ new WeakMap();
-let $1 = class {
+let b1 = class {
   constructor(e, i, o) {
     if (this._$cssResult$ = !0, o !== e1) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = i;
@@ -22,14 +22,14 @@ let $1 = class {
     return this.cssText;
   }
 };
-const z1 = (t) => new $1(typeof t == "string" ? t : t + "", void 0, e1), b1 = (t, ...e) => {
+const z1 = (t) => new b1(typeof t == "string" ? t : t + "", void 0, e1), $1 = (t, ...e) => {
   const i = t.length === 1 ? t[0] : e.reduce((o, s, n) => o + ((a) => {
     if (a._$cssResult$ === !0) return a.cssText;
     if (typeof a == "number") return a;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + a + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(s) + t[n + 1], t[0]);
-  return new $1(i, t, e1);
-}, P1 = (t, e) => {
+  return new b1(i, t, e1);
+}, D1 = (t, e) => {
   if (X) t.adoptedStyleSheets = e.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
   else for (const i of e) {
     const o = document.createElement("style"), s = V.litNonce;
@@ -45,10 +45,10 @@ const z1 = (t) => new $1(typeof t == "string" ? t : t + "", void 0, e1), b1 = (t
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: D1, defineProperty: H1, getOwnPropertyDescriptor: L1, getOwnPropertyNames: O1, getOwnPropertySymbols: T1, getPrototypeOf: U1 } = Object, b = globalThis, r1 = b.trustedTypes, Z1 = r1 ? r1.emptyScript : "", G = b.reactiveElementPolyfillSupport, O = (t, e) => t, j = { toAttribute(t, e) {
+const { is: H1, defineProperty: P1, getOwnPropertyDescriptor: L1, getOwnPropertyNames: O1, getOwnPropertySymbols: T1, getPrototypeOf: N1 } = Object, $ = globalThis, r1 = $.trustedTypes, U1 = r1 ? r1.emptyScript : "", G = $.reactiveElementPolyfillSupport, O = (t, e) => t, j = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
-      t = t ? Z1 : null;
+      t = t ? U1 : null;
       break;
     case Object:
     case Array:
@@ -73,9 +73,9 @@ const { is: D1, defineProperty: H1, getOwnPropertyDescriptor: L1, getOwnProperty
       }
   }
   return i;
-} }, t1 = (t, e) => !D1(t, e), c1 = { attribute: !0, type: String, converter: j, reflect: !1, useDefault: !1, hasChanged: t1 };
-Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), b.litPropertyMetadata ?? (b.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
-let E = class extends HTMLElement {
+} }, t1 = (t, e) => !H1(t, e), c1 = { attribute: !0, type: String, converter: j, reflect: !1, useDefault: !1, hasChanged: t1 };
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), $.litPropertyMetadata ?? ($.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
+let z = class extends HTMLElement {
   static addInitializer(e) {
     this._$Ei(), (this.l ?? (this.l = [])).push(e);
   }
@@ -85,7 +85,7 @@ let E = class extends HTMLElement {
   static createProperty(e, i = c1) {
     if (i.state && (i.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((i = Object.create(i)).wrapped = !0), this.elementProperties.set(e, i), !i.noAccessor) {
       const o = Symbol(), s = this.getPropertyDescriptor(e, o, i);
-      s !== void 0 && H1(this.prototype, e, s);
+      s !== void 0 && P1(this.prototype, e, s);
     }
   }
   static getPropertyDescriptor(e, i, o) {
@@ -104,7 +104,7 @@ let E = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(O("elementProperties"))) return;
-    const e = U1(this);
+    const e = N1(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
@@ -159,7 +159,7 @@ let E = class extends HTMLElement {
   }
   createRenderRoot() {
     const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return P1(e, this.constructor.elementStyles), e;
+    return D1(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
     var e;
@@ -278,15 +278,15 @@ let E = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-E.elementStyles = [], E.shadowRootOptions = { mode: "open" }, E[O("elementProperties")] = /* @__PURE__ */ new Map(), E[O("finalized")] = /* @__PURE__ */ new Map(), G == null || G({ ReactiveElement: E }), (b.reactiveElementVersions ?? (b.reactiveElementVersions = [])).push("2.1.2");
+z.elementStyles = [], z.shadowRootOptions = { mode: "open" }, z[O("elementProperties")] = /* @__PURE__ */ new Map(), z[O("finalized")] = /* @__PURE__ */ new Map(), G == null || G({ ReactiveElement: z }), ($.reactiveElementVersions ?? ($.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const T = globalThis, l1 = (t) => t, F = T.trustedTypes, d1 = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, y1 = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, w1 = "?" + $, N1 = `<${w1}>`, S = document, U = () => S.createComment(""), Z = (t) => t === null || typeof t != "object" && typeof t != "function", i1 = Array.isArray, R1 = (t) => i1(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
-\f\r]`, L = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, h1 = /-->/g, u1 = />/g, w = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), C1 = /'/g, p1 = /"/g, x1 = /^(?:script|style|textarea|title)$/i, I1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = I1(1), P = Symbol.for("lit-noChange"), l = Symbol.for("lit-nothing"), m1 = /* @__PURE__ */ new WeakMap(), A = S.createTreeWalker(S, 129);
+const T = globalThis, l1 = (t) => t, F = T.trustedTypes, d1 = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, y1 = "$lit$", b = `lit$${Math.random().toFixed(9).slice(2)}$`, w1 = "?" + b, Z1 = `<${w1}>`, S = document, N = () => S.createComment(""), U = (t) => t === null || typeof t != "object" && typeof t != "function", i1 = Array.isArray, I1 = (t) => i1(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
+\f\r]`, L = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, h1 = /-->/g, u1 = />/g, x = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), C1 = /'/g, p1 = /"/g, x1 = /^(?:script|style|textarea|title)$/i, R1 = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = R1(1), H = Symbol.for("lit-noChange"), l = Symbol.for("lit-nothing"), g1 = /* @__PURE__ */ new WeakMap(), k = S.createTreeWalker(S, 129);
 function A1(t, e) {
   if (!i1(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return d1 !== void 0 ? d1.createHTML(e) : e;
@@ -296,41 +296,41 @@ const V1 = (t, e) => {
   let s, n = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", a = L;
   for (let r = 0; r < i; r++) {
     const c = t[r];
-    let u, C, h = -1, _ = 0;
-    for (; _ < c.length && (a.lastIndex = _, C = a.exec(c), C !== null); ) _ = a.lastIndex, a === L ? C[1] === "!--" ? a = h1 : C[1] !== void 0 ? a = u1 : C[2] !== void 0 ? (x1.test(C[2]) && (s = RegExp("</" + C[2], "g")), a = w) : C[3] !== void 0 && (a = w) : a === w ? C[0] === ">" ? (a = s ?? L, h = -1) : C[1] === void 0 ? h = -2 : (h = a.lastIndex - C[2].length, u = C[1], a = C[3] === void 0 ? w : C[3] === '"' ? p1 : C1) : a === p1 || a === C1 ? a = w : a === h1 || a === u1 ? a = L : (a = w, s = void 0);
-    const v = a === w && t[r + 1].startsWith("/>") ? " " : "";
-    n += a === L ? c + N1 : h >= 0 ? (o.push(u), c.slice(0, h) + y1 + c.slice(h) + $ + v) : c + $ + (h === -2 ? r : v);
+    let u, C, h = -1, f = 0;
+    for (; f < c.length && (a.lastIndex = f, C = a.exec(c), C !== null); ) f = a.lastIndex, a === L ? C[1] === "!--" ? a = h1 : C[1] !== void 0 ? a = u1 : C[2] !== void 0 ? (x1.test(C[2]) && (s = RegExp("</" + C[2], "g")), a = x) : C[3] !== void 0 && (a = x) : a === x ? C[0] === ">" ? (a = s ?? L, h = -1) : C[1] === void 0 ? h = -2 : (h = a.lastIndex - C[2].length, u = C[1], a = C[3] === void 0 ? x : C[3] === '"' ? p1 : C1) : a === p1 || a === C1 ? a = x : a === h1 || a === u1 ? a = L : (a = x, s = void 0);
+    const v = a === x && t[r + 1].startsWith("/>") ? " " : "";
+    n += a === L ? c + Z1 : h >= 0 ? (o.push(u), c.slice(0, h) + y1 + c.slice(h) + b + v) : c + b + (h === -2 ? r : v);
   }
   return [A1(t, n + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
-class N {
+class Z {
   constructor({ strings: e, _$litType$: i }, o) {
     let s;
     this.parts = [];
     let n = 0, a = 0;
     const r = e.length - 1, c = this.parts, [u, C] = V1(e, i);
-    if (this.el = N.createElement(u, o), A.currentNode = this.el.content, i === 2 || i === 3) {
+    if (this.el = Z.createElement(u, o), k.currentNode = this.el.content, i === 2 || i === 3) {
       const h = this.el.content.firstChild;
       h.replaceWith(...h.childNodes);
     }
-    for (; (s = A.nextNode()) !== null && c.length < r; ) {
+    for (; (s = k.nextNode()) !== null && c.length < r; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const h of s.getAttributeNames()) if (h.endsWith(y1)) {
-          const _ = C[a++], v = s.getAttribute(h).split($), I = /([.?@])?(.*)/.exec(_);
-          c.push({ type: 1, index: n, name: I[2], strings: v, ctor: I[1] === "." ? F1 : I[1] === "?" ? B1 : I[1] === "@" ? q1 : W }), s.removeAttribute(h);
-        } else h.startsWith($) && (c.push({ type: 6, index: n }), s.removeAttribute(h));
+          const f = C[a++], v = s.getAttribute(h).split(b), R = /([.?@])?(.*)/.exec(f);
+          c.push({ type: 1, index: n, name: R[2], strings: v, ctor: R[1] === "." ? F1 : R[1] === "?" ? B1 : R[1] === "@" ? q1 : W }), s.removeAttribute(h);
+        } else h.startsWith(b) && (c.push({ type: 6, index: n }), s.removeAttribute(h));
         if (x1.test(s.tagName)) {
-          const h = s.textContent.split($), _ = h.length - 1;
-          if (_ > 0) {
+          const h = s.textContent.split(b), f = h.length - 1;
+          if (f > 0) {
             s.textContent = F ? F.emptyScript : "";
-            for (let v = 0; v < _; v++) s.append(h[v], U()), A.nextNode(), c.push({ type: 2, index: ++n });
-            s.append(h[_], U());
+            for (let v = 0; v < f; v++) s.append(h[v], N()), k.nextNode(), c.push({ type: 2, index: ++n });
+            s.append(h[f], N());
           }
         }
       } else if (s.nodeType === 8) if (s.data === w1) c.push({ type: 2, index: n });
       else {
         let h = -1;
-        for (; (h = s.data.indexOf($, h + 1)) !== -1; ) c.push({ type: 7, index: n }), h += $.length - 1;
+        for (; (h = s.data.indexOf(b, h + 1)) !== -1; ) c.push({ type: 7, index: n }), h += b.length - 1;
       }
       n++;
     }
@@ -340,12 +340,12 @@ class N {
     return o.innerHTML = e, o;
   }
 }
-function D(t, e, i = t, o) {
+function P(t, e, i = t, o) {
   var a, r;
-  if (e === P) return e;
+  if (e === H) return e;
   let s = o !== void 0 ? (a = i._$Co) == null ? void 0 : a[o] : i._$Cl;
-  const n = Z(e) ? void 0 : e._$litDirective$;
-  return (s == null ? void 0 : s.constructor) !== n && ((r = s == null ? void 0 : s._$AO) == null || r.call(s, !1), n === void 0 ? s = void 0 : (s = new n(t), s._$AT(t, i, o)), o !== void 0 ? (i._$Co ?? (i._$Co = []))[o] = s : i._$Cl = s), s !== void 0 && (e = D(t, s._$AS(t, e.values), s, o)), e;
+  const n = U(e) ? void 0 : e._$litDirective$;
+  return (s == null ? void 0 : s.constructor) !== n && ((r = s == null ? void 0 : s._$AO) == null || r.call(s, !1), n === void 0 ? s = void 0 : (s = new n(t), s._$AT(t, i, o)), o !== void 0 ? (i._$Co ?? (i._$Co = []))[o] = s : i._$Cl = s), s !== void 0 && (e = P(t, s._$AS(t, e.values), s, o)), e;
 }
 class j1 {
   constructor(e, i) {
@@ -359,23 +359,23 @@ class j1 {
   }
   u(e) {
     const { el: { content: i }, parts: o } = this._$AD, s = ((e == null ? void 0 : e.creationScope) ?? S).importNode(i, !0);
-    A.currentNode = s;
-    let n = A.nextNode(), a = 0, r = 0, c = o[0];
+    k.currentNode = s;
+    let n = k.nextNode(), a = 0, r = 0, c = o[0];
     for (; c !== void 0; ) {
       if (a === c.index) {
         let u;
-        c.type === 2 ? u = new R(n, n.nextSibling, this, e) : c.type === 1 ? u = new c.ctor(n, c.name, c.strings, this, e) : c.type === 6 && (u = new W1(n, this, e)), this._$AV.push(u), c = o[++r];
+        c.type === 2 ? u = new I(n, n.nextSibling, this, e) : c.type === 1 ? u = new c.ctor(n, c.name, c.strings, this, e) : c.type === 6 && (u = new W1(n, this, e)), this._$AV.push(u), c = o[++r];
       }
-      a !== (c == null ? void 0 : c.index) && (n = A.nextNode(), a++);
+      a !== (c == null ? void 0 : c.index) && (n = k.nextNode(), a++);
     }
-    return A.currentNode = S, s;
+    return k.currentNode = S, s;
   }
   p(e) {
     let i = 0;
     for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(e, o, i), i += o.strings.length - 2) : o._$AI(e[i])), i++;
   }
 }
-class R {
+class I {
   get _$AU() {
     var e;
     return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
@@ -395,7 +395,7 @@ class R {
     return this._$AB;
   }
   _$AI(e, i = this) {
-    e = D(this, e, i), Z(e) ? e === l || e == null || e === "" ? (this._$AH !== l && this._$AR(), this._$AH = l) : e !== this._$AH && e !== P && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : R1(e) ? this.k(e) : this._(e);
+    e = P(this, e, i), U(e) ? e === l || e == null || e === "" ? (this._$AH !== l && this._$AR(), this._$AH = l) : e !== this._$AH && e !== H && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : I1(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -404,11 +404,11 @@ class R {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== l && Z(this._$AH) ? this._$AA.nextSibling.data = e : this.T(S.createTextNode(e)), this._$AH = e;
+    this._$AH !== l && U(this._$AH) ? this._$AA.nextSibling.data = e : this.T(S.createTextNode(e)), this._$AH = e;
   }
   $(e) {
     var n;
-    const { values: i, _$litType$: o } = e, s = typeof o == "number" ? this._$AC(e) : (o.el === void 0 && (o.el = N.createElement(A1(o.h, o.h[0]), this.options)), o);
+    const { values: i, _$litType$: o } = e, s = typeof o == "number" ? this._$AC(e) : (o.el === void 0 && (o.el = Z.createElement(A1(o.h, o.h[0]), this.options)), o);
     if (((n = this._$AH) == null ? void 0 : n._$AD) === s) this._$AH.p(i);
     else {
       const a = new j1(s, this), r = a.u(this.options);
@@ -416,14 +416,14 @@ class R {
     }
   }
   _$AC(e) {
-    let i = m1.get(e.strings);
-    return i === void 0 && m1.set(e.strings, i = new N(e)), i;
+    let i = g1.get(e.strings);
+    return i === void 0 && g1.set(e.strings, i = new Z(e)), i;
   }
   k(e) {
     i1(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
     let o, s = 0;
-    for (const n of e) s === i.length ? i.push(o = new R(this.O(U()), this.O(U()), this, this.options)) : o = i[s], o._$AI(n), s++;
+    for (const n of e) s === i.length ? i.push(o = new I(this.O(N()), this.O(N()), this, this.options)) : o = i[s], o._$AI(n), s++;
     s < i.length && (this._$AR(o && o._$AB.nextSibling, s), i.length = s);
   }
   _$AR(e = this._$AA.nextSibling, i) {
@@ -451,11 +451,11 @@ class W {
   _$AI(e, i = this, o, s) {
     const n = this.strings;
     let a = !1;
-    if (n === void 0) e = D(this, e, i, 0), a = !Z(e) || e !== this._$AH && e !== P, a && (this._$AH = e);
+    if (n === void 0) e = P(this, e, i, 0), a = !U(e) || e !== this._$AH && e !== H, a && (this._$AH = e);
     else {
       const r = e;
       let c, u;
-      for (e = n[0], c = 0; c < n.length - 1; c++) u = D(this, r[o + c], i, c), u === P && (u = this._$AH[c]), a || (a = !Z(u) || u !== this._$AH[c]), u === l ? e = l : e !== l && (e += (u ?? "") + n[c + 1]), this._$AH[c] = u;
+      for (e = n[0], c = 0; c < n.length - 1; c++) u = P(this, r[o + c], i, c), u === H && (u = this._$AH[c]), a || (a = !U(u) || u !== this._$AH[c]), u === l ? e = l : e !== l && (e += (u ?? "") + n[c + 1]), this._$AH[c] = u;
     }
     a && !s && this.j(e);
   }
@@ -484,7 +484,7 @@ class q1 extends W {
     super(e, i, o, s, n), this.type = 5;
   }
   _$AI(e, i = this) {
-    if ((e = D(this, e, i, 0) ?? l) === P) return;
+    if ((e = P(this, e, i, 0) ?? l) === H) return;
     const o = this._$AH, s = e === l && o !== l || e.capture !== o.capture || e.once !== o.once || e.passive !== o.passive, n = e !== l && (o === l || s);
     s && this.element.removeEventListener(this.name, this, o), n && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
@@ -501,17 +501,17 @@ class W1 {
     return this._$AM._$AU;
   }
   _$AI(e) {
-    D(this, e);
+    P(this, e);
   }
 }
 const J = T.litHtmlPolyfillSupport;
-J == null || J(N, R), (T.litHtmlVersions ?? (T.litHtmlVersions = [])).push("3.3.3");
+J == null || J(Z, I), (T.litHtmlVersions ?? (T.litHtmlVersions = [])).push("3.3.3");
 const G1 = (t, e, i) => {
   const o = (i == null ? void 0 : i.renderBefore) ?? e;
   let s = o._$litPart$;
   if (s === void 0) {
     const n = (i == null ? void 0 : i.renderBefore) ?? null;
-    o._$litPart$ = s = new R(e.insertBefore(U(), n), n, void 0, i ?? {});
+    o._$litPart$ = s = new I(e.insertBefore(N(), n), n, void 0, i ?? {});
   }
   return s._$AI(t), s;
 };
@@ -520,8 +520,8 @@ const G1 = (t, e, i) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const k = globalThis;
-class z extends E {
+const M = globalThis;
+class D extends z {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -543,14 +543,14 @@ class z extends E {
     super.disconnectedCallback(), (e = this._$Do) == null || e.setConnected(!1);
   }
   render() {
-    return P;
+    return H;
   }
 }
 var v1;
-z._$litElement$ = !0, z.finalized = !0, (v1 = k.litElementHydrateSupport) == null || v1.call(k, { LitElement: z });
-const K = k.litElementPolyfillSupport;
-K == null || K({ LitElement: z });
-(k.litElementVersions ?? (k.litElementVersions = [])).push("4.2.2");
+D._$litElement$ = !0, D.finalized = !0, (v1 = M.litElementHydrateSupport) == null || v1.call(M, { LitElement: D });
+const K = M.litElementPolyfillSupport;
+K == null || K({ LitElement: D });
+(M.litElementVersions ?? (M.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -601,7 +601,7 @@ function o1(t) {
 function g(t) {
   return o1({ ...t, state: !0, attribute: !1 });
 }
-const B = "myhondaplus-vehicle-card", K1 = "myhondaplus-vehicle-card-editor", S1 = "0.5.5", p = {
+const B = "myhondaplus-vehicle-card", K1 = "myhondaplus-vehicle-card-editor", M1 = "0.5.5", p = {
   type: `custom:${B}`,
   name: "My Honda+",
   vehicle_color: "#a51d2d",
@@ -653,10 +653,10 @@ const B = "myhondaplus-vehicle-card", K1 = "myhondaplus-vehicle-card-editor", S1
   "trip_consumption",
   "trip_duration"
 ];
-function g1(t, e, i, o) {
+function _1(t, e, i, o) {
   var s;
   return {
-    cardVersion: S1,
+    cardVersion: M1,
     homeAssistantVersion: (s = t == null ? void 0 : t.config) == null ? void 0 : s.version,
     model: i,
     locale: o,
@@ -670,7 +670,7 @@ function g1(t, e, i, o) {
     })
   };
 }
-function _1(t) {
+function m1(t) {
   return JSON.stringify(t, null, 2);
 }
 const X1 = {
@@ -710,7 +710,7 @@ const X1 = {
     hints: ["driving_time_this_month", "trip_duration", "driving_time"]
   }
 }, f1 = (t) => [t.entity_id, t.unique_id, t.translation_key, t.original_name].filter(Boolean).join(" ").toLowerCase();
-function M1(t, e = {}) {
+function S1(t, e = {}) {
   const i = { ...e };
   for (const [o, s] of Object.entries(X1)) {
     if (i[o]) continue;
@@ -816,7 +816,17 @@ const ee = {
     editor_allow_animations: "Allow animations",
     editor_confirm_unlock: "Confirm before unlocking",
     editor_show_diagnostics: "Show anonymized diagnostics",
-    editor_not_available: "not available"
+    editor_not_available: "not available",
+    editor_checking_integration: "Checking the My Honda+ integration…",
+    editor_integration_detected: "My Honda+ integration detected",
+    editor_integration_not_detected: "My Honda+ integration not detected",
+    editor_install_or_configure_integration: "Install or configure My Honda+ for Home Assistant before using this card.",
+    editor_integration_instructions: "Open integration instructions",
+    editor_no_vehicles_configured: "No configured vehicle with My Honda+ entities was found.",
+    editor_redetect_entities: "Detect integration and entities again",
+    editor_capabilities: "Detected capabilities",
+    editor_states: "States",
+    editor_no_compatible_entities: "No compatible entities were detected for this vehicle."
   },
   es: {
     required_config: "La configuración es obligatoria",
@@ -905,7 +915,17 @@ const ee = {
     editor_allow_animations: "Permitir animaciones",
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_show_diagnostics: "Mostrar diagnóstico anonimizado",
-    editor_not_available: "no disponible"
+    editor_not_available: "no disponible",
+    editor_checking_integration: "Comprobando la integración My Honda+…",
+    editor_integration_detected: "Integración My Honda+ detectada",
+    editor_integration_not_detected: "Integración My Honda+ no detectada",
+    editor_install_or_configure_integration: "Instala o configura My Honda+ for Home Assistant antes de utilizar esta tarjeta.",
+    editor_integration_instructions: "Abrir instrucciones de la integración",
+    editor_no_vehicles_configured: "No se encontró ningún vehículo configurado con entidades de My Honda+.",
+    editor_redetect_entities: "Volver a detectar integración y entidades",
+    editor_capabilities: "Capacidades detectadas",
+    editor_states: "Estados",
+    editor_no_compatible_entities: "No se detectaron entidades compatibles para este vehículo."
   },
   gl: {
     required_config: "A configuración é obrigatoria",
@@ -994,7 +1014,17 @@ const ee = {
     editor_allow_animations: "Permitir animacións",
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_show_diagnostics: "Mostrar diagnóstico anonimizado",
-    editor_not_available: "non dispoñible"
+    editor_not_available: "non dispoñible",
+    editor_checking_integration: "Comprobando a integración My Honda+…",
+    editor_integration_detected: "Integración My Honda+ detectada",
+    editor_integration_not_detected: "Integración My Honda+ non detectada",
+    editor_install_or_configure_integration: "Instala ou configura My Honda+ for Home Assistant antes de utilizar esta tarxeta.",
+    editor_integration_instructions: "Abrir instrucións da integración",
+    editor_no_vehicles_configured: "Non se atopou ningún vehículo configurado con entidades de My Honda+.",
+    editor_redetect_entities: "Volver detectar a integración e as entidades",
+    editor_capabilities: "Capacidades detectadas",
+    editor_states: "Estados",
+    editor_no_compatible_entities: "Non se detectaron entidades compatibles para este vehículo."
   }
 };
 function s1(t) {
@@ -1067,11 +1097,11 @@ function ne(t) {
   return d`<img class="vehicle-art honda-logo-art" src=${e} alt="Honda" />`;
 }
 const re = /* @__PURE__ */ new Set(["on", "open", "unlocked", "active", "charging", "plugged", "true"]), E1 = /* @__PURE__ */ new Set(["unknown", "unavailable", "none"]);
-function x(t) {
+function A(t) {
   if (!(!t || E1.has(t.state.toLowerCase())))
     return re.has(t.state.toLowerCase());
 }
-function M(t) {
+function E(t) {
   if (!t || E1.has(t.state.toLowerCase())) return "—";
   const e = t.attributes.unit_of_measurement;
   return `${t.state}${e ? ` ${String(e)}` : ""}`;
@@ -1085,19 +1115,19 @@ function le(t, e, i = Date.now()) {
   const o = t.updated ?? t.range ?? t.odometer, s = ce(o, i);
   return {
     locked: t.lock ? t.lock.state === "locked" : void 0,
-    range: M(t.range),
-    battery: M(t.battery),
-    odometer: M(t.odometer),
-    tripDistance: M(t.trip_distance),
-    tripConsumption: M(t.trip_consumption),
-    tripDuration: M(t.trip_duration),
-    climateActive: x(t.climate),
-    charging: x(t.charging),
-    doorsOpen: x(t.doors),
-    windowsOpen: x(t.windows),
-    trunkOpen: x(t.trunk),
-    hoodOpen: x(t.hood),
-    lightsOn: x(t.lights),
+    range: E(t.range),
+    battery: E(t.battery),
+    odometer: E(t.odometer),
+    tripDistance: E(t.trip_distance),
+    tripConsumption: E(t.trip_consumption),
+    tripDuration: E(t.trip_duration),
+    climateActive: A(t.climate),
+    charging: A(t.charging),
+    doorsOpen: A(t.doors),
+    windowsOpen: A(t.windows),
+    trunkOpen: A(t.trunk),
+    hoodOpen: A(t.hood),
+    lightsOn: A(t.lights),
     ageSeconds: s,
     stale: s !== void 0 && s > e
   };
@@ -1107,7 +1137,7 @@ var de = Object.defineProperty, he = Object.getOwnPropertyDescriptor, y = (t, e,
     (a = t[n]) && (s = (o ? a(e, i, s) : a(s)) || s);
   return o && s && de(e, i, s), s;
 };
-let m = class extends z {
+let m = class extends D {
   constructor() {
     super(...arguments), this.config = { ...p }, this.entities = {}, this.customImageFailed = !1;
   }
@@ -1143,7 +1173,7 @@ let m = class extends z {
           this.hass.callWS({ type: "config/entity_registry/list" }),
           this.hass.callWS({ type: "config/device_registry/list" })
         ]);
-        this.entities = M1(
+        this.entities = S1(
           t.filter((i) => i.device_id === this.config.device),
           this.config.entities
         ), this.device = e.find((i) => i.id === this.config.device), this.message = void 0;
@@ -1208,8 +1238,8 @@ let m = class extends z {
     }
   }
   async copyDiagnostics() {
-    const t = _1(
-      g1(this.hass, this.entities, this.model(), this.locale())
+    const t = m1(
+      _1(this.hass, this.entities, this.model(), this.locale())
     );
     try {
       await navigator.clipboard.writeText(t), this.message = { kind: "success", text: this.t("diagnostics_copied") };
@@ -1363,12 +1393,12 @@ let m = class extends z {
                 ${this.t("copy_diagnostics")}
               </button>
               <pre>
-${_1(g1(this.hass, this.entities, this.model(), this.locale()))}</pre>
+${m1(_1(this.hass, this.entities, this.model(), this.locale()))}</pre>
             </details>` : l}
     </ha-card>`;
   }
 };
-m.styles = b1`
+m.styles = $1`
     :host {
       display: block;
     }
@@ -1655,18 +1685,18 @@ window.customCards.some((t) => t.type === B) || window.customCards.push({
   documentationURL: "https://github.com/Danieldiazi/myhondaplus-vehicle-card"
 });
 console.info(
-  `%c MYHONDAPLUS-VEHICLE-CARD %c ${S1} `,
+  `%c MYHONDAPLUS-VEHICLE-CARD %c ${M1} `,
   "color:white;background:#a51d2d;font-weight:700",
   "color:#a51d2d;background:white;font-weight:700"
 );
-var ue = Object.defineProperty, Ce = Object.getOwnPropertyDescriptor, H = (t, e, i, o) => {
+var ue = Object.defineProperty, Ce = Object.getOwnPropertyDescriptor, w = (t, e, i, o) => {
   for (var s = o > 1 ? void 0 : o ? Ce(e, i) : e, n = t.length - 1, a; n >= 0; n--)
     (a = t[n]) && (s = (o ? a(e, i, s) : a(s)) || s);
   return o && s && ue(e, i, s), s;
 };
-let f = class extends z {
+let _ = class extends D {
   constructor() {
-    super(...arguments), this.config = { ...p }, this.devices = [], this.registryEntries = [], this.loading = !1;
+    super(...arguments), this.config = { ...p }, this.devices = [], this.registryEntries = [], this.loading = !1, this.integrationDetected = !1, this.discoveryError = !1;
   }
   setConfig(t) {
     this.config = { ...p, ...t };
@@ -1682,18 +1712,21 @@ let f = class extends z {
     t.has("hass") && this.hass && this.loadDevices();
   }
   async loadDevices() {
+    var t, e;
     if (!(!this.hass || this.loading)) {
-      this.loading = !0;
+      this.loading = !0, this.discoveryError = !1;
       try {
-        const [t, e] = await Promise.all([
+        const [i, o] = await Promise.all([
           this.hass.callWS({ type: "config/device_registry/list" }),
           this.hass.callWS({ type: "config/entity_registry/list" })
-        ]), i = new Set(
-          e.filter((o) => o.platform === "myhondaplus" && o.device_id).map((o) => o.device_id)
+        ]), s = o.filter((a) => a.platform === "myhondaplus");
+        this.integrationDetected = s.length > 0 || !!((e = (t = this.hass.config) == null ? void 0 : t.components) != null && e.includes("myhondaplus"));
+        const n = new Set(
+          s.filter((a) => a.device_id).map((a) => a.device_id)
         );
-        this.devices = t.filter((o) => i.has(o.id)).sort((o, s) => this.deviceName(o).localeCompare(this.deviceName(s))), this.registryEntries = e;
-      } catch (t) {
-        console.warn("My Honda+ Vehicle Card: device discovery failed", t), this.devices = [];
+        this.devices = i.filter((a) => n.has(a.id)).sort((a, r) => this.deviceName(a).localeCompare(this.deviceName(r))), this.registryEntries = o;
+      } catch (i) {
+        console.warn("My Honda+ Vehicle Card: device discovery failed", i), this.devices = [], this.discoveryError = !0;
       } finally {
         this.loading = !1;
       }
@@ -1750,15 +1783,89 @@ let f = class extends z {
     </fieldset>`;
   }
   detectedEntities() {
-    return this.config.device ? M1(
+    return this.config.device ? S1(
       this.registryEntries.filter((t) => t.device_id === this.config.device),
       this.config.entities
     ) : {};
+  }
+  capabilitySummary() {
+    if (!this.config.device) return d`${l}`;
+    const t = this.detectedEntities(), e = [
+      [
+        "editor_metrics",
+        [
+          ["range", "range"],
+          ["battery", "battery"],
+          ["odometer", "odometer"],
+          ["trip_distance", "trip_distance"],
+          ["trip_consumption", "trip_consumption"],
+          ["trip_duration", "trip_duration"]
+        ]
+      ],
+      [
+        "editor_states",
+        [
+          ["doors", "doors"],
+          ["windows", "windows"],
+          ["trunk", "trunk"],
+          ["hood", "hood"],
+          ["lights", "lights"],
+          ["charging", "charging"]
+        ]
+      ],
+      [
+        "editor_controls",
+        [
+          ["lock", "editor_locking"],
+          ["climate", "climate"],
+          ["horn_lights", "horn_lights"],
+          ["refresh_cached", "refresh_cached"],
+          ["refresh", "refresh_from_car"],
+          ["location", "location"]
+        ]
+      ]
+    ], i = e.flatMap(([, o]) => o).filter(([o]) => t[o]).length;
+    return d`<div class="capabilities">
+      <strong>${this.t("editor_capabilities")}</strong>
+      ${i === 0 ? d`<p class="hint warning">${this.t("editor_no_compatible_entities")}</p>` : e.map(([o, s]) => {
+      const n = s.filter(([a]) => t[a]);
+      return n.length === 0 ? l : d`<div class="capability-group">
+                    <span>${this.t(o)}</span>
+                    <div class="chips">
+                      ${n.map(
+        ([, a]) => d`<span class="chip">${this.t(a)}</span>`
+      )}
+                    </div>
+                  </div>`;
+    })}
+    </div>`;
+  }
+  integrationStatus() {
+    return this.loading ? d`<div class="integration-status">${this.t("editor_checking_integration")}</div>` : this.discoveryError ? d`<div class="integration-status warning">${this.t("discovery_failed")}</div>` : this.integrationDetected ? this.devices.length === 0 ? d`<div class="integration-status warning">
+        <strong>${this.t("editor_integration_detected")}</strong>
+        <span>${this.t("editor_no_vehicles_configured")}</span>
+      </div>` : d`<div class="integration-status success">
+      <strong>${this.t("editor_integration_detected")}</strong>
+      <span>${this.t("editor_vehicles_found", { count: this.devices.length })}</span>
+    </div>` : d`<div class="integration-status warning">
+        <strong>${this.t("editor_integration_not_detected")}</strong>
+        <span>${this.t("editor_install_or_configure_integration")}</span>
+        <a
+          href="https://github.com/enricobattocchi/myhondaplus-homeassistant"
+          target="_blank"
+          rel="noopener noreferrer"
+          >${this.t("editor_integration_instructions")}</a
+        >
+      </div>`;
   }
   render() {
     return d`<div class="grid">
       <section>
         <h3>${this.t("editor_vehicle")}</h3>
+        ${this.integrationStatus()}
+        <button type="button" ?disabled=${this.loading} @click=${() => this.loadDevices()}>
+          ${this.t("editor_redetect_entities")}
+        </button>
         <label
           >${this.t("connected_vehicle")}
           <select name="device" @change=${this.updateField}>
@@ -1773,6 +1880,7 @@ let f = class extends z {
             >${this.loading ? this.t("editor_searching_vehicles") : this.t("editor_vehicles_found", { count: this.devices.length })}</span
           >
         </label>
+        ${this.capabilitySummary()}
         <label
           >${this.t("editor_name")}
           <input name="name" .value=${this.config.name ?? ""} @change=${this.updateField} />
@@ -1995,7 +2103,7 @@ let f = class extends z {
     </div>`;
   }
 };
-f.styles = b1`
+_.styles = $1`
     .grid {
       display: grid;
       gap: 16px;
@@ -2018,7 +2126,8 @@ f.styles = b1`
       font-size: 0.9rem;
     }
     input,
-    select {
+    select,
+    button {
       box-sizing: border-box;
       width: 100%;
       padding: 10px;
@@ -2028,7 +2137,9 @@ f.styles = b1`
       color: var(--primary-text-color);
     }
     input:focus-visible,
-    select:focus-visible {
+    select:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
@@ -2059,33 +2170,82 @@ f.styles = b1`
       font-size: 0.8rem;
       color: var(--secondary-text-color);
     }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:disabled {
+      cursor: wait;
+      opacity: 0.65;
+    }
+    .integration-status,
+    .capabilities {
+      display: grid;
+      gap: 7px;
+      padding: 11px;
+      border: 1px solid var(--divider-color);
+      border-radius: 9px;
+      background: var(--secondary-background-color);
+      font-size: 0.85rem;
+    }
+    .integration-status.success {
+      border-inline-start: 4px solid var(--success-color, #43a047);
+    }
+    .integration-status.warning {
+      border-inline-start: 4px solid var(--warning-color, #f9a825);
+    }
+    .integration-status a {
+      color: var(--primary-color);
+    }
+    .capability-group {
+      display: grid;
+      gap: 5px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .chip {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: var(--card-background-color);
+      border: 1px solid var(--divider-color);
+      font-size: 0.75rem;
+    }
     @media (max-width: 520px) {
       .checks {
         grid-template-columns: 1fr;
       }
     }
   `;
-H([
+w([
   o1({ attribute: !1 })
-], f.prototype, "hass", 2);
-H([
+], _.prototype, "hass", 2);
+w([
   g()
-], f.prototype, "config", 2);
-H([
+], _.prototype, "config", 2);
+w([
   g()
-], f.prototype, "devices", 2);
-H([
+], _.prototype, "devices", 2);
+w([
   g()
-], f.prototype, "registryEntries", 2);
-H([
+], _.prototype, "registryEntries", 2);
+w([
   g()
-], f.prototype, "loading", 2);
-f = H([
+], _.prototype, "loading", 2);
+w([
+  g()
+], _.prototype, "integrationDetected", 2);
+w([
+  g()
+], _.prototype, "discoveryError", 2);
+_ = w([
   k1(K1)
-], f);
+], _);
 const pe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   get MyHondaPlusVehicleCardEditor() {
-    return f;
+    return _;
   }
 }, Symbol.toStringTag, { value: "Module" }));
