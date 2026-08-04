@@ -10,6 +10,14 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Added
+
+- El diálogo nativo `more-info` también se abre desde el cierre, los estados de puertas, ventanas, maletero, capó, luces, climatización y carga, y la fecha de actualización cuando tienen una entidad asociada.
+
+### Changed
+
+- La ubicación pasa del grupo de acciones al grupo de estados informativos, donde muestra su valor y abre `more-info` sin sugerir que envía una orden al vehículo.
+
 ## [0.8.0] - 2026-08-04
 
 ### Added

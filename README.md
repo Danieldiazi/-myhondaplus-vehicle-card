@@ -32,7 +32,7 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 - Visual configuration with automatic vehicle discovery.
 - A dedicated Civic illustration and a generic Honda logo for all other models.
 - Content automatically adapted to the entities each vehicle publishes in Home Assistant.
-- Configurable metrics and controls; selecting a metric opens its native Home Assistant history.
+- Configurable metrics and controls; selecting a metric, vehicle status, lock state, or update time opens its native Home Assistant history.
 - Spanish, English and Galician, selected automatically from the active language.
 - Anonymized diagnostics for requesting support without sharing the VIN, coordinates or complete identifiers.
 - Visual-editor checks for the required integration, configured vehicles and detected capabilities, with one-click entity rediscovery.

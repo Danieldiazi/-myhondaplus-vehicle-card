@@ -168,6 +168,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           ["hood", "hood"],
           ["lights", "lights"],
           ["charging", "charging"],
+          ["location", "location"],
         ],
       ],
       [
@@ -178,7 +179,6 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           ["horn_lights", "horn_lights"],
           ["refresh_cached", "refresh_cached"],
           ["refresh", "refresh_from_car"],
-          ["location", "location"],
         ],
       ],
     ];
@@ -425,7 +425,6 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           ["horn_lights", this.t("horn_lights")],
           ["refresh_cached", this.t("refresh_cached")],
           ["refresh", this.t("refresh_from_car")],
-          ["location", this.t("location")],
         ])}
       </section>
 

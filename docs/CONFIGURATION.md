@@ -69,7 +69,7 @@ La tarjeta no asigna funciones por modelo. El modelo visual solo selecciona la i
 - Si existe y tiene un estado válido, se muestra y puede utilizarse.
 - La batería solo se reconoce mediante claves específicas de batería de tracción; un nombre genérico no basta.
 
-Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia mensual, consumo medio y tiempo de conducción. Los controles incluyen cierre, climatización, bocina y luces, actualización almacenada, actualización desde el coche y ubicación, siempre que la integración publique la entidad correspondiente.
+Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia mensual, consumo medio y tiempo de conducción. Los estados informativos incluyen puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación. Los controles incluyen cierre, climatización, bocina y luces, actualización almacenada y actualización desde el coche, siempre que la integración publique la entidad correspondiente.
 
 ## Límites de responsabilidad
 

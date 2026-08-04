@@ -273,7 +273,24 @@ export class MyHondaPlusVehicleCard extends LitElement {
     </button>`;
   }
 
+  private freshness(state: VehicleState): TemplateResult {
+    const className = `freshness ${state.stale ? "stale" : ""}`;
+    const title = state.stale ? this.t("stale_data") : "";
+    const text = this.ageText(state);
+    return this.entities.updated
+      ? html`<button
+          class=${className}
+          type="button"
+          title=${title}
+          @click=${() => this.showMoreInfo("updated")}
+        >
+          ${text}
+        </button>`
+      : html`<div class=${className} title=${title}>${text}</div>`;
+  }
+
   private status(
+    key: keyof EntityMap,
     icon: string,
     label: string,
     active: boolean | undefined,
@@ -281,26 +298,46 @@ export class MyHondaPlusVehicleCard extends LitElement {
     inactiveText: string,
   ): TemplateResult {
     const text = active === undefined ? this.t("unavailable") : active ? activeText : inactiveText;
-    return html`<div
+    return html`<button
+      type="button"
       class="status ${active === true ? "warning" : ""} ${active === undefined ? "unavailable" : ""}"
       aria-label=${`${label}: ${text}`}
+      @click=${() => this.showMoreInfo(key)}
     >
       <ha-icon class="status-icon" icon=${icon} aria-hidden="true"></ha-icon>
       <div><b>${label}</b><small>${text}</small></div>
       <i aria-hidden="true"></i>
-    </div>`;
+    </button>`;
+  }
+
+  private locationStatus(): TemplateResult | typeof nothing {
+    const entity = this.entity("location");
+    if (!entity) return nothing;
+    const unavailable = ["unknown", "unavailable"].includes(entity.state.toLowerCase());
+    const value = unavailable
+      ? this.t("unavailable")
+      : entity.state.replaceAll("_", " ").replace(/^./, (character) => character.toUpperCase());
+    return html`<button
+      type="button"
+      class="status info-status ${unavailable ? "unavailable" : ""}"
+      aria-label=${`${this.t("location")}: ${value}`}
+      @click=${() => this.showMoreInfo("location")}
+    >
+      <ha-icon class="status-icon" icon="mdi:map-marker" aria-hidden="true"></ha-icon>
+      <div><b>${this.t("location")}</b><small>${value}</small></div>
+      <ha-icon class="status-detail" icon="mdi:chevron-right" aria-hidden="true"></ha-icon>
+    </button>`;
   }
 
   private control(icon: string, label: string, key: ControlKey): TemplateResult | typeof nothing {
+    if (key === "location") return nothing;
     if (!this.entities[key]) return nothing;
     const loading = this.busy === key;
     const entity = this.entity(key);
     const domain = this.entities[key]?.split(".")[0];
     const state = entity?.state.toLowerCase();
     const unavailable =
-      !entity ||
-      state === "unavailable" ||
-      (state === "unknown" && domain !== "button" && key !== "location");
+      !entity || state === "unavailable" || (state === "unknown" && domain !== "button");
     return html`<button
       type="button"
       aria-label=${label}
@@ -365,7 +402,12 @@ export class MyHondaPlusVehicleCard extends LitElement {
         </div>
         ${
           this.entities.lock
-            ? html`<span class="badge ${state.locked === false ? "alert" : ""}">
+            ? html`<button
+                type="button"
+                class="badge ${state.locked === false ? "alert" : ""}"
+                aria-label=${lockedText}
+                @click=${() => this.showMoreInfo("lock")}
+              >
                 <ha-icon
                   icon=${
                     state.locked === true
@@ -377,7 +419,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
                   aria-hidden="true"
                 ></ha-icon>
                 ${lockedText}
-              </span>`
+              </button>`
             : nothing
         }
       </header>
@@ -398,13 +440,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
               class="vehicle align-${alignment} ${state.charging === true ? "is-charging" : ""}"
               style=${this.visualStyle()}
             >
-              ${this.vehicleVisual()}
-              <div
-                class="freshness ${state.stale ? "stale" : ""}"
-                title=${state.stale ? this.t("stale_data") : ""}
-              >
-                ${this.ageText(state)}
-              </div>
+              ${this.vehicleVisual()} ${this.freshness(state)}
             </section>`
       }
       ${
@@ -417,23 +453,25 @@ export class MyHondaPlusVehicleCard extends LitElement {
             : html`<div class="setup">${this.t("select_vehicle")}</div>`
       }
       ${
-        !setupIssue && (this.config.layout !== "compact" || this.entities.climate)
+        !setupIssue &&
+        (this.config.layout !== "compact" || this.entities.climate || this.entities.location)
           ? html`<section
               class="statuses ${this.config.layout === "compact" ? "compact-statuses" : ""}"
             >
               ${
                 this.config.layout !== "compact"
                   ? html`
-                      ${this.entities.doors ? this.status("mdi:car-door", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
-                      ${this.entities.windows ? this.status("mdi:window-closed-variant", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
-                      ${this.entities.trunk ? this.status("mdi:car-back", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
-                      ${this.entities.hood ? this.status("mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
-                      ${this.entities.lights ? this.status("mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
-                      ${this.entities.charging ? this.status("mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
+                      ${this.entities.doors ? this.status("doors", "mdi:car-door", this.t("doors"), state.doorsOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.windows ? this.status("windows", "mdi:window-closed-variant", this.t("windows"), state.windowsOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.trunk ? this.status("trunk", "mdi:car-back", this.t("trunk"), state.trunkOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.hood ? this.status("hood", "mdi:car", this.t("hood"), state.hoodOpen, this.t("open"), this.t("closed")) : nothing}
+                      ${this.entities.lights ? this.status("lights", "mdi:car-light-high", this.t("lights"), state.lightsOn, this.t("on"), this.t("off")) : nothing}
+                      ${this.entities.charging ? this.status("charging", "mdi:battery-charging", this.t("charging"), state.charging, this.t("active"), this.t("inactive")) : nothing}
                     `
                   : nothing
               }
-              ${this.entities.climate ? this.status("mdi:snowflake", this.t("climate"), state.climateActive, this.t("active"), this.t("inactive")) : nothing}
+              ${this.entities.climate ? this.status("climate", "mdi:snowflake", this.t("climate"), state.climateActive, this.t("active"), this.t("inactive")) : nothing}
+              ${this.locationStatus()}
             </section>`
           : nothing
       }
@@ -516,7 +554,10 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       border-radius: 999px;
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
+      color: var(--primary-text-color);
+      font: inherit;
       font-size: var(--ha-font-size-m, 0.875rem);
+      cursor: pointer;
     }
     .badge ha-icon,
     .status-icon {
@@ -587,9 +628,19 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .freshness {
       justify-self: center;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-family: inherit;
       font-size: var(--ha-font-size-s, 0.75rem);
       color: var(--secondary-text-color);
       white-space: nowrap;
+    }
+    button.freshness {
+      cursor: pointer;
+    }
+    button.freshness:hover {
+      text-decoration: underline;
     }
     .freshness.stale {
       color: var(--warning-color, #f9a825);
@@ -661,7 +712,22 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       padding: 9px 10px;
       border: 1px solid var(--divider-color);
       border-radius: 12px;
+      background: transparent;
+      color: var(--primary-text-color);
+      font: inherit;
       font-size: var(--ha-font-size-m, 0.875rem);
+      text-align: left;
+      cursor: pointer;
+    }
+    .badge:hover,
+    .status:hover {
+      border-color: var(--primary-color);
+    }
+    .badge:focus-visible,
+    .status:focus-visible,
+    .freshness:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
     .status i {
       width: 9px;
@@ -674,6 +740,10 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .status.unavailable i {
       background: var(--disabled-text-color, var(--secondary-text-color));
+    }
+    .status-detail {
+      color: var(--secondary-text-color);
+      --mdc-icon-size: 20px;
     }
     .controls {
       grid-template-columns: repeat(4, minmax(0, 1fr));
