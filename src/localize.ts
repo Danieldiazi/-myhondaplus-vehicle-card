@@ -102,6 +102,11 @@ const TRANSLATIONS = {
     editor_capabilities: "Detected capabilities",
     editor_states: "States",
     editor_no_compatible_entities: "No compatible entities were detected for this vehicle.",
+    card_checking_integration: "Checking the My Honda+ integration…",
+    card_integration_not_detected: "My Honda+ integration was not detected",
+    card_no_vehicles_configured: "No configured My Honda+ vehicle was found",
+    card_vehicle_not_found: "The configured vehicle is no longer available",
+    card_no_compatible_entities: "No compatible entities were found for this vehicle",
   },
   es: {
     required_config: "La configuración es obligatoria",
@@ -203,6 +208,11 @@ const TRANSLATIONS = {
     editor_capabilities: "Capacidades detectadas",
     editor_states: "Estados",
     editor_no_compatible_entities: "No se detectaron entidades compatibles para este vehículo.",
+    card_checking_integration: "Comprobando la integración My Honda+…",
+    card_integration_not_detected: "No se detectó la integración My Honda+",
+    card_no_vehicles_configured: "No se encontró ningún vehículo My Honda+ configurado",
+    card_vehicle_not_found: "El vehículo configurado ya no está disponible",
+    card_no_compatible_entities: "No se encontraron entidades compatibles para este vehículo",
   },
   gl: {
     required_config: "A configuración é obrigatoria",
@@ -304,6 +314,11 @@ const TRANSLATIONS = {
     editor_capabilities: "Capacidades detectadas",
     editor_states: "Estados",
     editor_no_compatible_entities: "Non se detectaron entidades compatibles para este vehículo.",
+    card_checking_integration: "Comprobando a integración My Honda+…",
+    card_integration_not_detected: "Non se detectou a integración My Honda+",
+    card_no_vehicles_configured: "Non se atopou ningún vehículo My Honda+ configurado",
+    card_vehicle_not_found: "O vehículo configurado xa non está dispoñible",
+    card_no_compatible_entities: "Non se atoparon entidades compatibles para este vehículo",
   },
 } as const;
 

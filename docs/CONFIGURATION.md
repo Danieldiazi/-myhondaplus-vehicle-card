@@ -47,6 +47,8 @@ El editor visual obtiene la lista desde el registro de dispositivos de Home Assi
 
 El editor también indica si Home Assistant ha cargado la integración, cuántos vehículos encuentra y qué métricas, estados y controles reconoce para el vehículo seleccionado. **Volver a detectar integración y entidades** actualiza esa información cuando la integración cambie sus entidades. Por seguridad, una tarjeta del navegador no inspecciona directamente el directorio `custom_components`: «integración no detectada» significa que Home Assistant no la ha cargado ni publica entidades `myhondaplus`.
 
+La propia tarjeta muestra un diagnóstico localizado en lugar de una tarjeta vacía cuando no puede completarse la configuración: integración no detectada, ningún vehículo configurado, vehículo seleccionado inexistente o ausencia de entidades compatibles. Cuando falta la integración, incluye un enlace a sus instrucciones de instalación.
+
 ## Sobrescritura de entidades
 
 ```yaml
