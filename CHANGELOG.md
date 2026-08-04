@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-04
+
 ### Added
 
 - Las métricas vinculadas a entidades abren el diálogo nativo de Home Assistant con su historial, atributos y controles al pulsarlas.
