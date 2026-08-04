@@ -10,6 +10,14 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Added
+
+- Las métricas vinculadas a entidades abren el diálogo nativo de Home Assistant con su historial, atributos y controles al pulsarlas.
+
+### Changed
+
+- El fondo de las métricas se obtiene explícitamente de `--secondary-background-color` para respetar el tema activo.
+
 ## [0.7.2] - 2026-08-04
 
 ### Changed
