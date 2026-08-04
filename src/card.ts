@@ -472,6 +472,9 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
   public static override styles = css`
     :host {
       display: block;
+      font-family: var(--ha-font-family-body, inherit);
+      font-size: var(--ha-font-size-m, 0.875rem);
+      line-height: 1.4;
     }
     ha-card {
       padding: 20px;
@@ -487,12 +490,12 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     h2 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: var(--ha-font-size-xl, 1.25rem);
     }
     p {
       margin: 4px 0 0;
       color: var(--secondary-text-color);
-      font-size: 0.83rem;
+      font-size: var(--ha-font-size-m, 0.875rem);
     }
     .badge {
       display: flex;
@@ -502,7 +505,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       border-radius: 999px;
       background: var(--secondary-background-color);
       border: 1px solid var(--divider-color);
-      font-size: 0.76rem;
+      font-size: var(--ha-font-size-m, 0.875rem);
     }
     .badge ha-icon,
     .status-icon {
@@ -526,7 +529,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       padding: 9px 11px;
       border-radius: 10px;
       background: var(--secondary-background-color);
-      font-size: 0.8rem;
+      font-size: var(--ha-font-size-m, 0.875rem);
     }
     .vehicle {
       position: relative;
@@ -573,7 +576,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .freshness {
       justify-self: center;
-      font-size: 0.72rem;
+      font-size: var(--ha-font-size-s, 0.75rem);
       color: var(--secondary-text-color);
       white-space: nowrap;
     }
@@ -610,6 +613,10 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .metric small,
     .status small {
       color: var(--secondary-text-color);
+      font-size: var(--ha-font-size-s, 0.75rem);
+    }
+    .metric strong {
+      font-size: var(--ha-font-size-l, 1rem);
     }
     .statuses {
       display: grid;
@@ -628,7 +635,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       padding: 9px 10px;
       border: 1px solid var(--divider-color);
       border-radius: 12px;
-      font-size: 0.78rem;
+      font-size: var(--ha-font-size-m, 0.875rem);
     }
     .status i {
       width: 9px;
@@ -650,16 +657,25 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       display: grid;
       place-items: center;
       gap: 4px;
-      border: 1px solid var(--divider-color);
+      border: 1px solid var(--primary-color);
+      border-color: color-mix(in srgb, var(--primary-color) 35%, var(--divider-color));
       border-radius: 14px;
       padding: 10px 5px;
       background: var(--secondary-background-color);
+      background: color-mix(in srgb, var(--primary-color) 12%, var(--card-background-color));
       color: var(--primary-text-color);
+      font: inherit;
+      font-size: var(--ha-font-size-m, 0.875rem);
       cursor: pointer;
-      transition: transform 0.18s ease;
+      transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease;
     }
     button:hover:not(:disabled) {
       transform: translateY(-2px);
+      background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
+      border-color: var(--primary-color);
     }
     button:focus-visible {
       outline: 3px solid var(--primary-color);
@@ -670,7 +686,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       opacity: 0.65;
     }
     button ha-icon {
-      color: var(--primary-text-color);
+      color: var(--primary-color);
       --mdc-icon-size: 21px;
     }
     .setup {
@@ -692,7 +708,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     }
     .diagnostics {
       margin-top: 14px;
-      font-size: 0.8rem;
+      font-size: var(--ha-font-size-s, 0.75rem);
     }
     .diagnostics pre {
       overflow: auto;

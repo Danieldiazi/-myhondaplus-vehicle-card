@@ -36,6 +36,39 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
   await expect(page.locator(`${card} .metrics .metric`)).toHaveCount(5);
   await expect(page.locator(`${card} .statuses .status`)).toHaveCount(7);
   await expect(page.locator(`${card} nav[aria-label='Vehicle controls']`)).toBeVisible();
+  const [metricBackground, controlBackground] = await Promise.all([
+    page
+      .locator(`${card} .metric`)
+      .first()
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+    page
+      .locator(`${card} .controls button`)
+      .first()
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+  ]);
+  expect(controlBackground).not.toBe(metricBackground);
+  const [cardTypography, statusTypography, controlTypography] = await Promise.all([
+    page.locator(card).evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { family: style.fontFamily, size: style.fontSize };
+    }),
+    page
+      .locator(`${card} .status`)
+      .first()
+      .evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { family: style.fontFamily, size: style.fontSize };
+      }),
+    page
+      .locator(`${card} .controls button`)
+      .first()
+      .evaluate((element) => {
+        const style = getComputedStyle(element);
+        return { family: style.fontFamily, size: style.fontSize };
+      }),
+  ]);
+  expect(statusTypography).toEqual(cardTypography);
+  expect(controlTypography).toEqual(cardTypography);
   await expectArtworkAboveFreshness(page);
   await expectNoHorizontalOverflow(page);
 });
@@ -90,6 +123,22 @@ test("the editor reports the selected vehicle capabilities", async ({ page }) =>
 
   await expect(page.locator(editor)).toContainText("Capacidades detectadas");
   await expect(page.locator(`${editor} .chip`)).not.toHaveCount(0);
+});
+
+test("Home Assistant state updates do not restart editor discovery", async ({ page }) => {
+  await openEditorScenario(page, "discovery=ready&discoveryDelay=true&locale=es");
+  const status = page.locator(`${editor} .integration-status`);
+
+  await expect(status).toContainText("Integración My Honda+ detectada");
+  await page.locator(editor).evaluate((element) => {
+    const component = element as HTMLElement & { hass: Record<string, unknown> };
+    component.hass = { ...component.hass };
+  });
+  await page.waitForTimeout(75);
+
+  await expect(status).toContainText("Integración My Honda+ detectada");
+  await expect(status).not.toContainText("Comprobando");
+  await expect(page.locator(`${editor} .hint`)).toContainText("Vehículos encontrados: 1");
 });
 
 test("the card shows an actionable diagnostic when the integration is missing", async ({
