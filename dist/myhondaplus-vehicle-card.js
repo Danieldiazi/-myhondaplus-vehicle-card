@@ -601,7 +601,7 @@ function oe(t) {
 function g(t) {
   return oe({ ...t, state: !0, attribute: !1 });
 }
-const B = "myhondaplus-vehicle-card", Qe = "myhondaplus-vehicle-card-editor", Me = "0.7.0", C = {
+const B = "myhondaplus-vehicle-card", Qe = "myhondaplus-vehicle-card-editor", Me = "0.7.1", C = {
   type: `custom:${B}`,
   name: "My Honda+",
   vehicle_color: "#a51d2d",
