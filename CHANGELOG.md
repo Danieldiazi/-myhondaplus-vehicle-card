@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-08-04
+
 ### Added
 
 - Diagnósticos accionables dentro de la tarjeta cuando falta la integración, no hay vehículos configurados, el vehículo seleccionado ya no existe o no publica entidades compatibles.
