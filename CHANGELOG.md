@@ -13,6 +13,7 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 ### Fixed
 
 - El editor deja de repetir el descubrimiento de integración y entidades en cada actualización de estados de Home Assistant, evitando el parpadeo periódico de la configuración.
+- Los controles utilizan un fondo y borde teñidos con el color principal del tema para distinguirlos claramente de métricas y estados informativos.
 
 ## [0.7.0] - 2026-08-04
 
