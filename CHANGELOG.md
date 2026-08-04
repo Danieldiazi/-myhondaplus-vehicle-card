@@ -10,6 +10,10 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Fixed
+
+- La versión incluida en el registro y los diagnósticos ahora se obtiene automáticamente de `package.json`.
+
 ## [0.5.4] - 2026-08-03
 
 ### Changed
