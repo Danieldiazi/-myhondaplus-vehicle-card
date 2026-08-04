@@ -32,7 +32,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 - Configuración visual con descubrimiento automático del vehículo.
 - Ilustración específica para Civic y logotipo genérico de Honda para el resto de modelos.
 - Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
-- Métricas y controles configurables; al pulsar una métrica se abre su historial nativo de Home Assistant.
+- Métricas y controles configurables; al pulsar una métrica, estado del vehículo, cierre o fecha de actualización se abre su historial nativo de Home Assistant.
 - Español, inglés y gallego con selección automática de idioma.
 - Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
 - Comprobación de la integración, vehículos configurados y capacidades detectadas desde el editor, con redescubrimiento de entidades.
