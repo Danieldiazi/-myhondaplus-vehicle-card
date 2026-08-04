@@ -92,6 +92,22 @@ test("the editor reports the selected vehicle capabilities", async ({ page }) =>
   await expect(page.locator(`${editor} .chip`)).not.toHaveCount(0);
 });
 
+test("Home Assistant state updates do not restart editor discovery", async ({ page }) => {
+  await openEditorScenario(page, "discovery=ready&discoveryDelay=true&locale=es");
+  const status = page.locator(`${editor} .integration-status`);
+
+  await expect(status).toContainText("Integración My Honda+ detectada");
+  await page.locator(editor).evaluate((element) => {
+    const component = element as HTMLElement & { hass: Record<string, unknown> };
+    component.hass = { ...component.hass };
+  });
+  await page.waitForTimeout(75);
+
+  await expect(status).toContainText("Integración My Honda+ detectada");
+  await expect(status).not.toContainText("Comprobando");
+  await expect(page.locator(`${editor} .hint`)).toContainText("Vehículos encontrados: 1");
+});
+
 test("the card shows an actionable diagnostic when the integration is missing", async ({
   page,
 }) => {
