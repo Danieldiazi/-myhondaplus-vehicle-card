@@ -22,7 +22,7 @@ export function discoverIntegration(
   );
   const vehicles = devices.filter((device) => deviceIds.has(device.id));
   const selectedDevice = selectedDeviceId
-    ? vehicles.find((device) => device.id === selectedDeviceId)
+    ? devices.find((device) => device.id === selectedDeviceId)
     : undefined;
   const entities = selectedDevice
     ? resolveEntities(
