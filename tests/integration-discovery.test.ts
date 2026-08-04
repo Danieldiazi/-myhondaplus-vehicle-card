@@ -40,6 +40,15 @@ describe("integration discovery", () => {
     expect(discovery.compatibleEntityCount).toBe(0);
   });
 
+  it("preserves manual entity overrides for an existing device without registry matches", () => {
+    const discovery = discoverIntegration([vehicle], [], ["myhondaplus"], vehicle.id, {
+      range: "sensor.manually_configured_range",
+    });
+    expect(discovery.selectedDevice?.id).toBe(vehicle.id);
+    expect(discovery.entities.range).toBe("sensor.manually_configured_range");
+    expect(discovery.compatibleEntityCount).toBe(1);
+  });
+
   it("resolves compatible entities only for the selected vehicle", () => {
     const otherVehicle = { id: "vehicle-2", model: "Honda HR-V" };
     const discovery = discoverIntegration(
