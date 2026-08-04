@@ -650,16 +650,23 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       display: grid;
       place-items: center;
       gap: 4px;
-      border: 1px solid var(--divider-color);
+      border: 1px solid var(--primary-color);
+      border-color: color-mix(in srgb, var(--primary-color) 35%, var(--divider-color));
       border-radius: 14px;
       padding: 10px 5px;
       background: var(--secondary-background-color);
+      background: color-mix(in srgb, var(--primary-color) 12%, var(--card-background-color));
       color: var(--primary-text-color);
       cursor: pointer;
-      transition: transform 0.18s ease;
+      transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        border-color 0.18s ease;
     }
     button:hover:not(:disabled) {
       transform: translateY(-2px);
+      background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
+      border-color: var(--primary-color);
     }
     button:focus-visible {
       outline: 3px solid var(--primary-color);
@@ -670,7 +677,7 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       opacity: 0.65;
     }
     button ha-icon {
-      color: var(--primary-text-color);
+      color: var(--primary-color);
       --mdc-icon-size: 21px;
     }
     .setup {
