@@ -28,13 +28,29 @@ async function expectArtworkAboveFreshness(page: Page): Promise<void> {
   expect(artwork!.y + artwork!.height).toBeLessThanOrEqual(freshness!.y + 1);
 }
 
+async function expectMoreInfo(page: Page, selector: string, entityId: string): Promise<void> {
+  await page.locator(card).evaluate((element) => {
+    element.addEventListener(
+      "hass-more-info",
+      (event) => {
+        document.body.dataset.moreInfoEntityId = (
+          event as CustomEvent<{ entityId: string }>
+        ).detail.entityId;
+      },
+      { once: true },
+    );
+  });
+  await page.locator(`${card} ${selector}`).click();
+  await expect(page.locator("body")).toHaveAttribute("data-more-info-entity-id", entityId);
+}
+
 test("Civic full layout remains readable on a light desktop", async ({ page }) => {
   await page.setViewportSize({ width: 900, height: 1100 });
   await openScenario(page, "model=civic&layout=full&theme=light&locale=en");
 
   await expect(page.locator(`${card} .civic-lateral-art`)).toBeVisible();
   await expect(page.locator(`${card} .metrics .metric`)).toHaveCount(5);
-  await expect(page.locator(`${card} .statuses .status`)).toHaveCount(7);
+  await expect(page.locator(`${card} .statuses .status`)).toHaveCount(8);
   await expect(page.locator(`${card} nav[aria-label='Vehicle controls']`)).toBeVisible();
   const [metricBackground, controlBackground] = await Promise.all([
     page
@@ -57,22 +73,20 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
   });
   expect(metricBackground).toBe(themedSecondaryBackground);
 
-  await page.locator(card).evaluate((element) => {
-    element.addEventListener(
-      "hass-more-info",
-      (event) => {
-        document.body.dataset.moreInfoEntityId = (
-          event as CustomEvent<{ entityId: string }>
-        ).detail.entityId;
-      },
-      { once: true },
-    );
-  });
-  await page.getByRole("button", { name: "Odometer: 17505 km" }).click();
-  await expect(page.locator("body")).toHaveAttribute(
-    "data-more-info-entity-id",
+  await expectMoreInfo(
+    page,
+    ".metric[aria-label='Odometer: 17505 km']",
     "sensor.synthetic_odometer",
   );
+  await expectMoreInfo(
+    page,
+    ".status[aria-label='Doors: Closed']",
+    "binary_sensor.synthetic_doors",
+  );
+  await expectMoreInfo(page, ".badge", "lock.synthetic_vehicle");
+  await expectMoreInfo(page, ".freshness", "sensor.synthetic_updated");
+  await expectMoreInfo(page, ".info-status", "device_tracker.synthetic_location");
+  await expect(page.locator(`${card} .controls button[aria-label='Location']`)).toHaveCount(0);
   const [cardTypography, statusTypography, controlTypography] = await Promise.all([
     page.locator(card).evaluate((element) => {
       const style = getComputedStyle(element);
@@ -104,7 +118,7 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   await openScenario(page, "model=hrv&layout=compact&theme=dark&locale=gl");
 
   await expect(page.locator(`${card} .honda-logo-art`)).toBeVisible();
-  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(1);
+  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(2);
   await expect(page.locator(`${card} .compact-statuses`)).toContainText("Clima");
   const metricColumns = await page
     .locator(`${card} .metrics`)
