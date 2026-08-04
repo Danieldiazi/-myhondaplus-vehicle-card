@@ -15,6 +15,10 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 - Diagnósticos accionables dentro de la tarjeta cuando falta la integración, no hay vehículos configurados, el vehículo seleccionado ya no existe o no publica entidades compatibles.
 - Pruebas unitarias y visuales para los estados de descubrimiento de la integración, el editor y la tarjeta.
 
+### Fixed
+
+- Se conservan las sobrescrituras manuales de entidades en configuraciones YAML aunque el dispositivo no tenga entradas `myhondaplus` reconocibles en el registro.
+
 ## [0.6.0] - 2026-08-04
 
 ### Changed
