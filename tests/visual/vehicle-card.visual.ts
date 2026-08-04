@@ -47,6 +47,32 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
       .evaluate((element) => getComputedStyle(element).backgroundColor),
   ]);
   expect(controlBackground).not.toBe(metricBackground);
+  const themedSecondaryBackground = await page.locator(card).evaluate((element) => {
+    const probe = document.createElement("div");
+    probe.style.background = "var(--secondary-background-color)";
+    element.shadowRoot?.append(probe);
+    const color = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return color;
+  });
+  expect(metricBackground).toBe(themedSecondaryBackground);
+
+  await page.locator(card).evaluate((element) => {
+    element.addEventListener(
+      "hass-more-info",
+      (event) => {
+        document.body.dataset.moreInfoEntityId = (
+          event as CustomEvent<{ entityId: string }>
+        ).detail.entityId;
+      },
+      { once: true },
+    );
+  });
+  await page.getByRole("button", { name: "Odometer: 17505 km" }).click();
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-more-info-entity-id",
+    "sensor.synthetic_odometer",
+  );
   const [cardTypography, statusTypography, controlTypography] = await Promise.all([
     page.locator(card).evaluate((element) => {
       const style = getComputedStyle(element);

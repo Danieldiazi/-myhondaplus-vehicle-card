@@ -180,18 +180,24 @@ export class MyHondaPlusVehicleCard extends LitElement {
     return this.t("updated_hours", { count: Math.floor(state.ageSeconds / 3600) });
   }
 
+  private showMoreInfo(key: keyof EntityMap): void {
+    const entityId = this.entities[key];
+    if (!entityId) return;
+    this.dispatchEvent(
+      new CustomEvent("hass-more-info", {
+        bubbles: true,
+        composed: true,
+        detail: { entityId },
+      }),
+    );
+  }
+
   private async execute(key: keyof EntityMap): Promise<void> {
     const entityId = this.entities[key];
     if (!entityId || !this.hass || this.busy) return;
 
     if (key === "location") {
-      this.dispatchEvent(
-        new CustomEvent("hass-more-info", {
-          bubbles: true,
-          composed: true,
-          detail: { entityId },
-        }),
-      );
+      this.showMoreInfo(key);
       return;
     }
 
@@ -256,10 +262,15 @@ export class MyHondaPlusVehicleCard extends LitElement {
       },
     }[key];
 
-    return html`<div class="metric">
+    return html`<button
+      class="metric"
+      type="button"
+      aria-label=${`${metadata.label}: ${metadata.value}`}
+      @click=${() => this.showMoreInfo(key)}
+    >
       <ha-icon icon=${metadata.icon} aria-hidden="true"></ha-icon>
       <div><small>${metadata.label}</small><strong>${metadata.value}</strong></div>
-    </div>`;
+    </button>`;
   }
 
   private status(
@@ -593,11 +604,26 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .metric {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 9px;
       padding: 11px;
       border-radius: 14px;
-      background: var(--secondary-background-color);
+      background: var(--secondary-background-color, var(--card-background-color));
       border: 1px solid var(--divider-color);
+      color: var(--primary-text-color);
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background-color 0.18s ease,
+        border-color 0.18s ease;
+    }
+    .metric:hover {
+      border-color: var(--primary-color);
+    }
+    .metric:focus-visible {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
     .metric ha-icon {
       flex: 0 0 auto;
@@ -653,7 +679,8 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
       grid-template-columns: repeat(4, minmax(0, 1fr));
       margin-top: 15px;
     }
-    button {
+    .controls button,
+    .diagnostics button {
       display: grid;
       place-items: center;
       gap: 4px;
@@ -672,20 +699,24 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
         background-color 0.18s ease,
         border-color 0.18s ease;
     }
-    button:hover:not(:disabled) {
+    .controls button:hover:not(:disabled),
+    .diagnostics button:hover:not(:disabled) {
       transform: translateY(-2px);
       background: color-mix(in srgb, var(--primary-color) 20%, var(--card-background-color));
       border-color: var(--primary-color);
     }
-    button:focus-visible {
+    .controls button:focus-visible,
+    .diagnostics button:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
     }
-    button:disabled {
+    .controls button:disabled,
+    .diagnostics button:disabled {
       cursor: progress;
       opacity: 0.65;
     }
-    button ha-icon {
+    .controls button ha-icon,
+    .diagnostics button ha-icon {
       color: var(--primary-color);
       --mdc-icon-size: 21px;
     }
