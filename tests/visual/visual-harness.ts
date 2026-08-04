@@ -22,6 +22,7 @@ const locale = params.get("locale") ?? "en";
 const customImageFailure = params.get("customImageFailure") === "true";
 const target = params.get("target") === "editor" ? "editor" : "card";
 const discoveryScenario = params.get("discovery") ?? "ready";
+const discoveryDelay = params.get("discoveryDelay") === "true";
 document.documentElement.dataset.theme = params.get("theme") === "dark" ? "dark" : "light";
 
 const device: DeviceRegistryEntry = {
@@ -103,6 +104,7 @@ const hass: HomeAssistant = {
   language: locale,
   config: { version: "2026.8.0", components },
   callWS: async <T>(message: Record<string, unknown>): Promise<T> => {
+    if (discoveryDelay) await new Promise((resolve) => window.setTimeout(resolve, 250));
     if (message.type === "config/entity_registry/list") return registry as T;
     if (message.type === "config/device_registry/list") return devices as T;
     throw new Error(`Unexpected websocket request: ${String(message.type)}`);
