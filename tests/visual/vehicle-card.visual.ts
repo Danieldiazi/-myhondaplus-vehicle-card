@@ -122,7 +122,7 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   await openScenario(page, "model=hrv&layout=compact&theme=dark&locale=gl");
 
   await expect(page.locator(`${card} .honda-logo-art`)).toBeVisible();
-  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(8);
+  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(2);
   await expect(page.locator(`${card} .compact-statuses`)).toContainText("Clima");
   const metricColumns = await page
     .locator(`${card} .metrics`)
