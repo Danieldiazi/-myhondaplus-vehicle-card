@@ -16,6 +16,7 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | ------------------- | --------------------------- | -------------: | ------------------------------------------------------------------------------------------------ |
 | `device`            | string                      |              — | ID del dispositivo creado por My Honda+ for Home Assistant. El editor lo selecciona visualmente. |
 | `name`              | string                      |    `My Honda+` | Nombre mostrado.                                                                                 |
+| `vehicle_model`     | string                      |         `auto` | Modelo usado únicamente para elegir la ilustración.                                              |
 | `color_preset`      | string                      |   `rallye_red` | Color predefinido de la sombra de la ilustración.                                                |
 | `vehicle_color`     | string                      |      `#a51d2d` | Color de sombra hexadecimal cuando el preset es `custom`.                                        |
 | `image_mode`        | `rendered` / `custom`       |     `rendered` | Ilustración incluida o imagen propia.                                                            |
@@ -27,6 +28,8 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | `layout`            | `full` / `compact`          |         `full` | Densidad visual.                                                                                 |
 | `stale_after`       | number                      |        `21600` | Segundos antes de marcar los datos como antiguos.                                                |
 | `show_controls`     | boolean                     |         `true` | Muestra los botones de acción.                                                                   |
+| `show_model`        | boolean                     |         `true` | Muestra el modelo visual debajo del nombre.                                                      |
+| `animate`           | boolean                     |         `true` | Permite las animaciones respetando la preferencia de movimiento reducido.                        |
 | `confirm_unlock`      | boolean                     |         `true` | Solicita confirmación antes de abrir.                                                            |
 | `confirm_climate`     | boolean                     |        `false` | Solicita confirmación antes de accionar la climatización.                                       |
 | `confirm_horn_lights` | boolean                     |        `false` | Solicita confirmación antes de accionar la bocina y las luces.                                  |
@@ -34,10 +37,22 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | `warn_stale_actions`  | boolean                     |         `true` | Advierte antes de una acción remota cuando los datos están marcados como antiguos.              |
 | `locale`            | `auto` / `es` / `en` / `gl` |         `auto` | Idioma de la tarjeta. `auto` utiliza el idioma de Home Assistant.                                |
 | `debug`             | boolean                     |        `false` | Muestra el diagnóstico anonimizado.                                                              |
-| `controls`          | array                       |    compatibles | Controles preferidos y su orden. Los que no tengan entidad se ocultan.                           |
-| `metrics`           | array                       |    compatibles | Métricas preferidas y su orden. Las que no tengan entidad se ocultan.                            |
-| `statuses`          | array                       |    compatibles | Estados visibles y su orden. Los que no tengan entidad se ocultan.                              |
+| `controls`          | array                       | predeterminados | Controles visibles. Los que no tengan entidad se ocultan.                                       |
+| `metrics`           | array                       | predeterminadas | Métricas visibles. Las que no tengan entidad se ocultan.                                        |
+| `statuses`          | array                       | predeterminados | Estados visibles y su orden. Los que no tengan entidad se ocultan.                              |
 | `entities`          | object                      |     automático | Sobrescritura avanzada de entidades detectadas.                                                  |
+
+### Claves de métricas, estados y controles
+
+- `metrics`: `range`, `battery`, `odometer`, `trip_distance`, `trip_consumption` y `trip_duration`.
+- `statuses`: `doors`, `windows`, `trunk`, `hood`, `lights`, `charging`, `climate` y `location`.
+- `controls`: `lock`, `climate`, `horn_lights`, `refresh_cached` y `refresh`.
+
+`refresh_cached` vuelve a consultar los datos guardados en la nube de Honda. `refresh` solicita datos nuevos directamente al coche. Cada control se muestra únicamente cuando la integración publica su entidad; no todos los vehículos ofrecen ambas actualizaciones. La ubicación es un estado informativo que abre el diálogo nativo de Home Assistant, no una acción remota.
+
+`vehicle_model: auto` intenta elegir la ilustración a partir del dispositivo. Los valores manuales son `civic`, `hrv`, `crv`, `zrv`, `jazz`, `honda_e`, `eny1` y `generic`. Cambiarlo manualmente solo modifica la representación visual y nunca activa capacidades.
+
+Los presets de sombra disponibles son `rallye_red`, `platinum_white`, `crystal_black`, `sonic_grey`, `urban_grey`, `premium_blue`, `canyon_river_blue`, `silver` y `custom`.
 
 Cuando `image_mode` es `custom` y `vehicle_image` no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado. La URL se mantiene en la configuración para que pueda corregirse desde el editor.
 

@@ -32,7 +32,7 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 - Visual configuration with automatic vehicle discovery.
 - A dedicated Civic illustration and a generic Honda logo for all other models.
 - Content automatically adapted to the entities each vehicle publishes in Home Assistant.
-- Configurable and orderable metrics, vehicle states and controls; selecting an informational block opens its native Home Assistant details and history.
+- Configurable metrics and controls, plus configurable and orderable vehicle states; selecting an informational block opens its native Home Assistant details and history.
 - Spanish, English and Galician, selected automatically from the active language.
 - Anonymized diagnostics for requesting support without sharing the VIN, coordinates or complete identifiers.
 - Visual-editor checks for the required integration, configured vehicles and detected capabilities, with one-click entity rediscovery.
@@ -110,7 +110,7 @@ Restarting Home Assistant itself is usually not necessary.
 1. Open the dashboard where you want to display the vehicle.
 2. Select **Edit dashboard → Add card**.
 3. Search for and select **My Honda+ Vehicle Card**.
-4. In the visual editor, select the vehicle and configure the name, color and visible controls.
+4. In the visual editor, select the vehicle and configure the name, shadow color and intensity, and visible content.
 5. Save the card and the dashboard.
 
 You can also add it manually using YAML:
@@ -155,7 +155,7 @@ The HACS distribution is generated as a single self-contained file at `dist/myho
 
 ## Privacy and security
 
-The card does not connect directly to Honda or store credentials. It only consumes entities and calls services already created by Home Assistant. Sensitive commands require confirmation by default, and diagnostics hide identifiers and location data.
+The card does not connect directly to Honda or store credentials. It only consumes entities and calls services already created by Home Assistant. Unlocking requires confirmation by default; climate, horn and lights, and both refresh actions offer optional confirmations. Diagnostics hide identifiers and location data.
 
 ## License
 

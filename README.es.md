@@ -32,7 +32,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 - Configuración visual con descubrimiento automático del vehículo.
 - Ilustración específica para Civic y logotipo genérico de Honda para el resto de modelos.
 - Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
-- Métricas, estados y controles configurables y ordenables; al pulsar un bloque informativo se abren sus detalles y su historial nativo de Home Assistant.
+- Métricas y controles configurables, además de estados configurables y ordenables; al pulsar un bloque informativo se abren sus detalles y su historial nativo de Home Assistant.
 - Español, inglés y gallego con selección automática de idioma.
 - Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
 - Comprobación de la integración, vehículos configurados y capacidades detectadas desde el editor, con redescubrimiento de entidades.
@@ -110,7 +110,7 @@ No suele ser necesario reiniciar todo Home Assistant.
 1. Abre el panel donde quieras mostrar el coche.
 2. Pulsa **Editar panel → Añadir tarjeta**.
 3. Busca y selecciona **My Honda+ Vehicle Card**.
-4. En el editor visual, selecciona el vehículo y configura el nombre, el color y los controles visibles.
+4. En el editor visual, selecciona el vehículo y configura el nombre, el color y la intensidad de la sombra y el contenido visible.
 5. Guarda la tarjeta y el panel.
 
 También puedes añadirla manualmente mediante YAML:
@@ -155,7 +155,7 @@ La distribución HACS se genera como un único archivo autocontenido en `dist/my
 
 ## Privacidad y seguridad
 
-La tarjeta no se conecta directamente a Honda ni almacena credenciales. Solo consume entidades y llama a servicios ya creados por Home Assistant. Los comandos sensibles requieren confirmación de forma predeterminada y los diagnósticos ocultan identificadores y datos de localización.
+La tarjeta no se conecta directamente a Honda ni almacena credenciales. Solo consume entidades y llama a servicios ya creados por Home Assistant. La apertura requiere confirmación de forma predeterminada; la climatización, la bocina y las luces y las dos actualizaciones ofrecen confirmaciones opcionales. Los diagnósticos ocultan identificadores y datos de localización.
 
 ## Licencia
 

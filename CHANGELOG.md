@@ -10,6 +10,10 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Changed
+
+- Documentación sincronizada con la serie 1.x: confirmaciones, acciones de actualización, opciones de configuración, fallback visual y versiones con soporte.
+
 ## [1.0.1] - 2026-08-08
 
 ### Fixed

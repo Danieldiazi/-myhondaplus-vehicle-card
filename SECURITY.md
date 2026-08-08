@@ -6,8 +6,8 @@ Security fixes are applied to the latest released version of My Honda+ Vehicle C
 
 | Version | Supported |
 |---|---|
-| 0.5.x | Yes |
-| < 0.5 | No |
+| Latest `1.x` release | Yes |
+| `< 1.0` | No |
 
 ## Reporting a vulnerability
 
