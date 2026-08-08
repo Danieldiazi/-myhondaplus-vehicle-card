@@ -133,8 +133,10 @@ Authentication problems, a completely missing vehicle or communication problems 
 
 ## Documentation
 
-- [User guide](docs/USER_GUIDE.md)
-- [Configuration reference](docs/CONFIGURATION.md)
+- [User guide](docs/USER_GUIDE.en.md)
+- [Configuration reference](docs/CONFIGURATION.en.md)
+- [Frequently asked questions](docs/FAQ.en.md)
+- [Release guide](docs/RELEASING.en.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
