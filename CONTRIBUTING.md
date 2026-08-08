@@ -74,7 +74,7 @@ El pull request debe incluir:
 
 No incluyas VIN, coordenadas, matrículas, tokens, correos ni otros datos privados en código, tests, logs, capturas o incidencias.
 
-Consulta también [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Consulta también [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) y la [guía de publicación](docs/RELEASING.md).
 
 ## Nuevas ilustraciones de vehículos
 

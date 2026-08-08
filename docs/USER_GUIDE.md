@@ -1,5 +1,7 @@
 # Guía de usuario
 
+**Español** | [English](USER_GUIDE.en.md)
+
 ## Qué necesitas instalar
 
 Esta tarjeta es la interfaz visual. No inicia sesión en Honda ni obtiene por sí misma los datos del vehículo.
@@ -195,6 +197,8 @@ Selecciona manualmente `vehicle_model` en el editor o en YAML. La detección aut
 - Actualiza la información de HACS o espera a su siguiente comprobación periódica.
 - Reiniciar Home Assistant no obliga a HACS a detectar inmediatamente una release nueva.
 - Cuando HACS ya haya instalado la actualización, recarga el navegador sin caché para cargar el nuevo JavaScript.
+
+Consulta también las [preguntas frecuentes](FAQ.md).
 
 ## Dónde solicitar ayuda
 
