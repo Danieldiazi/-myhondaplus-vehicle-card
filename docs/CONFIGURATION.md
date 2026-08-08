@@ -1,5 +1,7 @@
 # Configuración
 
+**Español** | [English](CONFIGURATION.en.md)
+
 ## Origen de los datos
 
 La tarjeta no consulta directamente los servicios de Honda. Utiliza los dispositivos, entidades y servicios creados en Home Assistant por [My Honda+ for Home Assistant](https://github.com/enricobattocchi/myhondaplus-homeassistant).
