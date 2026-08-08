@@ -39,7 +39,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 - Diagnósticos accionables en la propia tarjeta cuando falta la integración, el vehículo o entidades compatibles.
 - Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
 - Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
-- Confirmaciones opcionales para abrir, climatización, bocina y luces y actualización desde el coche.
+- Confirmaciones opcionales para abrir, climatización, bocina y luces y las actualizaciones de datos guardados o desde el coche.
 - Aviso antes de enviar órdenes remotas cuando los datos mostrados están desactualizados.
 - Bloqueo de acciones duplicadas.
 
