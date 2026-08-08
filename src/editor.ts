@@ -10,6 +10,7 @@ import type {
   EntityRegistryEntry,
   HomeAssistant,
   MyHondaPlusCardConfig,
+  StatusKey,
 } from "./types";
 
 @customElement(EDITOR_TAG)
@@ -93,7 +94,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     );
   }
 
-  private toggleListValue(event: Event, field: "controls" | "metrics"): void {
+  private toggleListValue(event: Event, field: "controls" | "metrics" | "statuses"): void {
     const target = event.currentTarget as HTMLInputElement;
     const current = new Set((this.config[field] ?? DEFAULT_CONFIG[field]) as string[]);
     if (target.checked) current.add(target.value);
@@ -109,28 +110,87 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     );
   }
 
+  private moveListValue(
+    field: "controls" | "metrics" | "statuses",
+    value: string,
+    direction: -1 | 1,
+  ): void {
+    const current = [...((this.config[field] ?? DEFAULT_CONFIG[field]) as string[])];
+    const index = current.indexOf(value);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= current.length) return;
+    [current[index], current[target]] = [current[target], current[index]];
+    const config = { ...this.config, [field]: current } as MyHondaPlusCardConfig;
+    this.config = config;
+    this.dispatchEvent(
+      new CustomEvent("config-changed", {
+        detail: { config },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   private checklist(
     title: string,
-    field: "controls" | "metrics",
+    field: "controls" | "metrics" | "statuses",
     options: Array<[string, string]>,
+    orderable = false,
   ): TemplateResult {
-    const selected = new Set((this.config[field] ?? DEFAULT_CONFIG[field]) as string[]);
+    const selectedValues = [...((this.config[field] ?? DEFAULT_CONFIG[field]) as string[])];
+    const selected = new Set(selectedValues);
+    const optionMap = new Map(options.map((option) => [option[0], option]));
+    const orderedOptions = orderable
+      ? [
+          ...selectedValues
+            .map((value) => optionMap.get(value))
+            .filter((option): option is [string, string] => Boolean(option)),
+          ...options.filter(([value]) => !selected.has(value)),
+        ]
+      : options;
     const detected = this.detectedEntities();
     return html`<fieldset>
       <legend>${title}</legend>
-      <div class="checks">
-        ${options.map(([value, label]) => {
+      <div class="checks ${orderable ? "ordered-checks" : ""}">
+        ${orderedOptions.map(([value, label]) => {
           const available = !this.config.device || Boolean(detected[value as keyof EntityMap]);
-          return html`<label class="check">
-            <input
-              type="checkbox"
-              .value=${value}
-              .checked=${selected.has(value)}
-              ?disabled=${!available && !selected.has(value)}
-              @change=${(event: Event) => this.toggleListValue(event, field)}
-            />
-            ${label}${available ? "" : ` — ${this.t("editor_not_available")}`}
-          </label>`;
+          const selectedIndex = selectedValues.indexOf(value);
+          return html`<div class="check-row">
+            <label class="check">
+              <input
+                type="checkbox"
+                .value=${value}
+                .checked=${selected.has(value)}
+                ?disabled=${!available && !selected.has(value)}
+                @change=${(event: Event) => this.toggleListValue(event, field)}
+              />
+              <span>${label}${available ? "" : ` — ${this.t("editor_not_available")}`}</span>
+            </label>
+            ${
+              orderable && selectedIndex >= 0
+                ? html`<span class="order-buttons">
+                    <button
+                      type="button"
+                      aria-label=${this.t("editor_move_up", { item: label })}
+                      title=${this.t("editor_move_up", { item: label })}
+                      ?disabled=${selectedIndex === 0}
+                      @click=${() => this.moveListValue(field, value, -1)}
+                    >
+                      <ha-icon icon="mdi:chevron-up" aria-hidden="true"></ha-icon>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label=${this.t("editor_move_down", { item: label })}
+                      title=${this.t("editor_move_down", { item: label })}
+                      ?disabled=${selectedIndex === selectedValues.length - 1}
+                      @click=${() => this.moveListValue(field, value, 1)}
+                    >
+                      <ha-icon icon="mdi:chevron-down" aria-hidden="true"></ha-icon>
+                    </button>
+                  </span>`
+                : nothing
+            }
+          </div>`;
         })}
       </div>
     </fieldset>`;
@@ -419,6 +479,21 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
           ["trip_consumption", this.t("trip_consumption")],
           ["trip_duration", this.t("trip_duration")],
         ])}
+        ${this.checklist(
+          this.t("editor_states"),
+          "statuses",
+          [
+            ["doors", this.t("doors")],
+            ["windows", this.t("windows")],
+            ["trunk", this.t("trunk")],
+            ["hood", this.t("hood")],
+            ["lights", this.t("lights")],
+            ["charging", this.t("charging")],
+            ["climate", this.t("climate")],
+            ["location", this.t("location")],
+          ] satisfies Array<[StatusKey, string]>,
+          true,
+        )}
         ${this.checklist(this.t("editor_controls"), "controls", [
           ["lock", this.t("editor_locking")],
           ["climate", this.t("climate")],
@@ -490,6 +565,42 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
         >
         <label class="check"
           ><input
+            name="confirm_climate"
+            type="checkbox"
+            .checked=${this.config.confirm_climate === true}
+            @change=${this.updateField}
+          />
+          ${this.t("editor_confirm_climate")}</label
+        >
+        <label class="check"
+          ><input
+            name="confirm_horn_lights"
+            type="checkbox"
+            .checked=${this.config.confirm_horn_lights === true}
+            @change=${this.updateField}
+          />
+          ${this.t("editor_confirm_horn_lights")}</label
+        >
+        <label class="check"
+          ><input
+            name="confirm_refresh"
+            type="checkbox"
+            .checked=${this.config.confirm_refresh === true}
+            @change=${this.updateField}
+          />
+          ${this.t("editor_confirm_refresh")}</label
+        >
+        <label class="check"
+          ><input
+            name="warn_stale_actions"
+            type="checkbox"
+            .checked=${this.config.warn_stale_actions !== false}
+            @change=${this.updateField}
+          />
+          ${this.t("editor_warn_stale_actions")}</label
+        >
+        <label class="check"
+          ><input
             name="debug"
             type="checkbox"
             .checked=${this.config.debug === true}
@@ -556,10 +667,36 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
     }
+    .check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
     .check {
       display: flex;
       align-items: center;
       gap: 9px;
+      min-width: 0;
+    }
+    .ordered-checks {
+      grid-template-columns: 1fr;
+    }
+    .order-buttons {
+      display: flex;
+      gap: 4px;
+      flex: 0 0 auto;
+    }
+    .order-buttons button {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      min-height: 34px;
+      padding: 4px;
+    }
+    .order-buttons ha-icon {
+      --mdc-icon-size: 18px;
     }
     .check input {
       width: auto;
