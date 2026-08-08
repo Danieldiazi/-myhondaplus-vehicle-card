@@ -87,6 +87,10 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
   await expectMoreInfo(page, ".freshness", "sensor.synthetic_updated");
   await expectMoreInfo(page, ".info-status", "device_tracker.synthetic_location");
   await expect(page.locator(`${card} .controls button[aria-label='Location']`)).toHaveCount(0);
+  await expect(page.locator(`${card} .metric .detail-indicator`)).toHaveCount(5);
+  await expect(page.locator(`${card} .status .detail-indicator`)).toHaveCount(8);
+  await expect(page.locator(`${card} .badge .detail-indicator`)).toHaveCount(1);
+  await expect(page.locator(`${card} .freshness .detail-indicator`)).toHaveCount(1);
   const [cardTypography, statusTypography, controlTypography] = await Promise.all([
     page.locator(card).evaluate((element) => {
       const style = getComputedStyle(element);
@@ -118,7 +122,7 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   await openScenario(page, "model=hrv&layout=compact&theme=dark&locale=gl");
 
   await expect(page.locator(`${card} .honda-logo-art`)).toBeVisible();
-  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(2);
+  await expect(page.locator(`${card} .compact-statuses .status`)).toHaveCount(8);
   await expect(page.locator(`${card} .compact-statuses`)).toContainText("Clima");
   const metricColumns = await page
     .locator(`${card} .metrics`)
@@ -126,6 +130,39 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   expect(metricColumns).toBe(1);
   await expectArtworkAboveFreshness(page);
   await expectNoHorizontalOverflow(page);
+});
+
+test("configured states preserve their order and hide unselected states", async ({ page }) => {
+  await openScenario(page, "model=civic&layout=full&locale=es&statuses=location,doors,lights");
+
+  const labels = await page
+    .locator(`${card} .statuses .status`)
+    .evaluateAll((elements) => elements.map((element) => element.getAttribute("aria-label")));
+  expect(labels).toEqual(["Ubicación: Home", "Puertas: Cerrado", "Luces: Apagadas"]);
+});
+
+test("remote confirmations and stale warnings run before service calls", async ({ page }) => {
+  await openScenario(page, "model=civic&layout=full&locale=es&confirmations=true");
+
+  const hornDialogPromise = page.waitForEvent("dialog");
+  const hornClick = page
+    .locator(`${card} .controls button[aria-label='Bocina y luces']`)
+    .click();
+  const hornDialog = await hornDialogPromise;
+  expect(hornDialog.message()).toContain("¿Activar la bocina y las luces?");
+  await hornDialog.accept();
+  await hornClick;
+  await expect(page.locator("body")).toHaveAttribute("data-called-service", "button.press");
+
+  await openScenario(page, "model=civic&layout=full&locale=es&stale=true");
+  const staleDialogPromise = page.waitForEvent("dialog");
+  const refreshClick = page
+    .locator(`${card} .controls button[aria-label='Actualizar desde el coche']`)
+    .click();
+  const staleDialog = await staleDialogPromise;
+  expect(staleDialog.message()).toContain("Los datos del vehículo están desactualizados");
+  await staleDialog.accept();
+  await refreshClick;
 });
 
 test("a broken custom image shows the localized Honda fallback", async ({ page }) => {
@@ -163,6 +200,10 @@ test("the editor reports the selected vehicle capabilities", async ({ page }) =>
 
   await expect(page.locator(editor)).toContainText("Capacidades detectadas");
   await expect(page.locator(`${editor} .chip`)).not.toHaveCount(0);
+  await expect(page.locator(editor)).toContainText("Estados");
+  await expect(page.locator(`${editor} .ordered-checks .check-row`)).toHaveCount(8);
+  await expect(page.locator(`${editor} input[name='confirm_climate']`)).toBeVisible();
+  await expect(page.locator(`${editor} input[name='warn_stale_actions']`)).toBeChecked();
 });
 
 test("Home Assistant state updates do not restart editor discovery", async ({ page }) => {
