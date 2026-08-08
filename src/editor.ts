@@ -23,8 +23,10 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   @state() private integrationDetected = false;
   @state() private discoveryError = false;
   private automaticDiscoveryStarted = false;
+  private statusesExplicit = false;
 
   public setConfig(config: MyHondaPlusCardConfig): void {
+    this.statusesExplicit = config.statuses !== undefined;
     this.config = { ...DEFAULT_CONFIG, ...config };
   }
 
@@ -81,6 +83,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
       value = Number(target.value);
 
     const config = { ...this.config, [target.name]: value };
+    if (!this.statusesExplicit) delete config.statuses;
     if (target.name === "color_preset" && value !== "custom") {
       config.vehicle_color = PAINT_PRESETS[String(value)]?.value ?? config.vehicle_color;
     }
@@ -95,6 +98,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
   }
 
   private toggleListValue(event: Event, field: "controls" | "metrics" | "statuses"): void {
+    if (field === "statuses") this.statusesExplicit = true;
     const target = event.currentTarget as HTMLInputElement;
     const current = new Set((this.config[field] ?? DEFAULT_CONFIG[field]) as string[]);
     if (target.checked) current.add(target.value);
@@ -115,6 +119,7 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     value: string,
     direction: -1 | 1,
   ): void {
+    if (field === "statuses") this.statusesExplicit = true;
     const current = [...((this.config[field] ?? DEFAULT_CONFIG[field]) as string[])];
     const index = current.indexOf(value);
     const target = index + direction;
