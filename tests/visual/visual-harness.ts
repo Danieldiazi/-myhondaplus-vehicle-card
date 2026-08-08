@@ -62,6 +62,7 @@ const completeRegistry: EntityRegistryEntry[] = [
   registryEntry("sensor.synthetic_trip_distance", "distance_this_month"),
   registryEntry("sensor.synthetic_trip_consumption", "avg_consumption_this_month"),
   registryEntry("button.synthetic_refresh", "refresh_from_car"),
+  registryEntry("button.synthetic_refresh_cached", "refresh"),
   registryEntry("button.synthetic_horn_lights", "horn_lights"),
   registryEntry("device_tracker.synthetic_location", "location"),
 ];
@@ -101,6 +102,7 @@ const states = Object.fromEntries(
     entity("sensor.synthetic_trip_distance", "371", "km"),
     entity("sensor.synthetic_trip_consumption", "5.4", "L/100km"),
     entity("button.synthetic_refresh", "unknown"),
+    entity("button.synthetic_refresh_cached", "unknown"),
     entity("button.synthetic_horn_lights", "unknown"),
     entity("device_tracker.synthetic_location", "home"),
   ].map((item) => [item.entity_id, item]),
@@ -151,6 +153,7 @@ const config: MyHondaPlusCardConfig = {
   confirm_climate: confirmations,
   confirm_horn_lights: confirmations,
   confirm_refresh: confirmations,
+  controls: confirmations ? ["horn_lights", "refresh_cached", "refresh"] : undefined,
 };
 
 const component =
