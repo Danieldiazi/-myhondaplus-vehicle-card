@@ -27,6 +27,17 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - name: Verify package version matches release tag
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          release_version="${RELEASE_TAG#v}"
+          package_version="$(node -p "require('./package.json').version")"
+          if [[ "$package_version" != "$release_version" ]]; then
+            echo "package.json version $package_version does not match release $RELEASE_TAG" >&2
+            exit 1
+          fi
       - run: npm ci
       - run: npm run audit:prod
       - run: npm run check
