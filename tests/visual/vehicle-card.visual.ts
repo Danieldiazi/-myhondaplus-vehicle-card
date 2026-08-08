@@ -169,7 +169,7 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   await expectNoHorizontalOverflow(page);
 });
 
-test("configured states preserve their order and hide unselected states", async ({
+test("configured states preserve their chosen order and hide unselected states", async ({
   page,
 }) => {
   await openScenario(
