@@ -206,6 +206,29 @@ test("the editor reports the selected vehicle capabilities", async ({ page }) =>
   await expect(page.locator(`${editor} input[name='warn_stale_actions']`)).toBeChecked();
 });
 
+test("unrelated editor changes preserve implicit compact status defaults", async ({ page }) => {
+  await openEditorScenario(page, "discovery=ready&layout=compact&locale=en");
+  await page.locator(editor).evaluate((element) => {
+    element.addEventListener(
+      "config-changed",
+      (event) => {
+        document.body.dataset.savedConfig = JSON.stringify(
+          (event as CustomEvent<{ config: Record<string, unknown> }>).detail.config,
+        );
+      },
+      { once: true },
+    );
+  });
+
+  const name = page.locator(`${editor} input[name="name"]`);
+  await name.fill("Updated name");
+  await name.dispatchEvent("change");
+
+  const savedConfig = await page.locator("body").getAttribute("data-saved-config");
+  expect(savedConfig).not.toBeNull();
+  expect(JSON.parse(savedConfig!)).not.toHaveProperty("statuses");
+});
+
 test("Home Assistant state updates do not restart editor discovery", async ({ page }) => {
   await openEditorScenario(page, "discovery=ready&discoveryDelay=true&locale=es");
   const status = page.locator(`${editor} .integration-status`);
