@@ -146,6 +146,18 @@ test("configured states preserve their chosen order and hide unselected states",
 test("remote confirmations and stale warnings run before service calls", async ({ page }) => {
   await openScenario(page, "model=civic&layout=full&locale=es&confirmations=true");
 
+  const cachedDialogPromise = page.waitForEvent("dialog");
+  const cachedClick = page
+    .locator(`${card} .controls button[aria-label='Actualizar datos guardados']`)
+    .click();
+  const cachedDialog = await cachedDialogPromise;
+  expect(cachedDialog.message()).toContain(
+    "¿Actualizar los datos del vehículo guardados en la nube de Honda?",
+  );
+  await cachedDialog.dismiss();
+  await cachedClick;
+  await expect(page.locator("body")).not.toHaveAttribute("data-called-service");
+
   const hornDialogPromise = page.waitForEvent("dialog");
   const hornClick = page.locator(`${card} .controls button[aria-label='Bocina y luces']`).click();
   const hornDialog = await hornDialogPromise;
