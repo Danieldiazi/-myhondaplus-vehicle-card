@@ -119,7 +119,11 @@ export class MyHondaPlusVehicleCardEditor extends LitElement {
     const index = current.indexOf(value);
     const target = index + direction;
     if (index < 0 || target < 0 || target >= current.length) return;
-    [current[index], current[target]] = [current[target], current[index]];
+    const item = current[index];
+    const adjacentItem = current[target];
+    if (item === undefined || adjacentItem === undefined) return;
+    current[index] = adjacentItem;
+    current[target] = item;
     const config = { ...this.config, [field]: current } as MyHondaPlusCardConfig;
     this.config = config;
     this.dispatchEvent(
