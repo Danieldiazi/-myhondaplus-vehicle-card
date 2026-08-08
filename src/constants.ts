@@ -23,10 +23,15 @@ export const DEFAULT_CONFIG: Required<
     | "show_model"
     | "animate"
     | "confirm_unlock"
+    | "confirm_climate"
+    | "confirm_horn_lights"
+    | "confirm_refresh"
+    | "warn_stale_actions"
     | "locale"
     | "debug"
     | "controls"
     | "metrics"
+    | "statuses"
   >
 > = {
   type: `custom:${CARD_TAG}`,
@@ -45,10 +50,15 @@ export const DEFAULT_CONFIG: Required<
   show_model: true,
   animate: true,
   confirm_unlock: true,
+  confirm_climate: false,
+  confirm_horn_lights: false,
+  confirm_refresh: false,
+  warn_stale_actions: true,
   locale: "auto",
   debug: false,
   controls: ["lock", "climate", "horn_lights", "refresh"],
   metrics: ["range", "battery", "odometer", "trip_distance", "trip_consumption"],
+  statuses: ["doors", "windows", "trunk", "hood", "lights", "charging", "climate", "location"],
 };
 
 export const PAINT_PRESETS: Record<string, { label: string; value: string; accent: string }> = {
