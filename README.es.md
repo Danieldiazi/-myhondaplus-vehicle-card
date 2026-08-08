@@ -135,6 +135,8 @@ Los problemas de autenticación, ausencia completa del vehículo o comunicación
 
 - [Guía de usuario](docs/USER_GUIDE.md)
 - [Referencia de configuración](docs/CONFIGURATION.md)
+- [Preguntas frecuentes](docs/FAQ.md)
+- [Guía de publicación](docs/RELEASING.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Cómo contribuir](CONTRIBUTING.md)
 - [Política de seguridad](SECURITY.md)
