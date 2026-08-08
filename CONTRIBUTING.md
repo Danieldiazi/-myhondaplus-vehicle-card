@@ -78,7 +78,7 @@ Consulta también [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Nuevas ilustraciones de vehículos
 
-Hasta que exista una ilustración específica, el modelo debe utilizar el vehículo genérico. Para proponer un SVG específico:
+Hasta que exista una ilustración específica, el modelo debe utilizar el logotipo de Honda configurado como fallback oficial. Para proponer un SVG específico:
 
 - usa una vista lateral y un `viewBox` ajustado al vehículo;
 - conserva ruedas, cristales, luces y líneas separados del efecto de color;
