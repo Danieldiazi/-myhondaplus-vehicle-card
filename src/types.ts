@@ -63,10 +63,15 @@ export interface MyHondaPlusCardConfig {
   show_model?: boolean;
   animate?: boolean;
   confirm_unlock?: boolean;
+  confirm_climate?: boolean;
+  confirm_horn_lights?: boolean;
+  confirm_refresh?: boolean;
+  warn_stale_actions?: boolean;
   locale?: CardLocale;
   debug?: boolean;
   controls?: ControlKey[];
   metrics?: MetricKey[];
+  statuses?: StatusKey[];
   entities?: Partial<EntityMap>;
 }
 
@@ -75,6 +80,9 @@ export type ControlKey =
 
 export type MetricKey =
   "range" | "battery" | "odometer" | "trip_distance" | "trip_consumption" | "trip_duration";
+
+export type StatusKey =
+  "doors" | "windows" | "trunk" | "hood" | "lights" | "charging" | "climate" | "location";
 
 export interface EntityMap {
   lock: string;
