@@ -245,3 +245,4 @@ test("the card explains when a vehicle has no compatible entities", async ({ pag
   );
   await expect(page.locator(`${card} .vehicle-art`)).toHaveCount(0);
 });
+
