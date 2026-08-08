@@ -8,7 +8,7 @@ Este documento explica cómo está organizado el proyecto y dónde debe incorpor
 - Separar la resolución de datos, la presentación y las acciones.
 - Generar un único bundle compatible con HACS.
 - Evitar dependencias de componentes internos no documentados de Home Assistant.
-- Mantener las acciones sensibles protegidas por confirmación.
+- Mantener la apertura protegida por defecto y ofrecer confirmaciones configurables para las demás acciones remotas.
 
 ## Estructura principal
 
@@ -19,7 +19,7 @@ src/
 ├── integration-discovery.ts Descubrimiento compartido de integración y vehículos
 ├── entity-resolver.ts   Descubrimiento de entidades del vehículo
 ├── model-resolver.ts    Detección de la familia visual Honda
-├── vehicle-art.ts       Ilustraciones vectoriales y estados animados
+├── vehicle-art.ts       Ilustración del Civic y fallback visual de Honda
 ├── constants.ts         Valores predeterminados, versión y colores
 ├── types.ts             Contratos TypeScript compartidos
 └── index.ts             Registro del custom element y metadatos Lovelace
@@ -56,7 +56,7 @@ Las coincidencias específicas deben aparecer antes que las genéricas. Por ejem
 
 ### `vehicle-art.ts`
 
-El renderer recibe un modelo visual ya resuelto. No debe llamar servicios ni consultar registros de Home Assistant.
+El renderer recibe un modelo visual ya resuelto y muestra la ilustración específica disponible o el fallback de Honda. No debe activar capacidades, llamar servicios ni consultar registros de Home Assistant.
 
 ### `editor.ts`
 
