@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-08
+
 ### Fixed
 
 - La confirmación de actualización se aplica tanto a «Actualizar datos guardados» como a «Actualizar desde el coche».
