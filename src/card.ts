@@ -227,10 +227,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
     if (key === "horn_lights" && this.config.confirm_horn_lights === true) {
       confirmations.push(this.t("confirm_horn_lights_action"));
     }
-    if (
-      (key === "refresh" || key === "refresh_cached") &&
-      this.config.confirm_refresh === true
-    ) {
+    if ((key === "refresh" || key === "refresh_cached") && this.config.confirm_refresh === true) {
       confirmations.push(
         this.t(key === "refresh" ? "confirm_refresh_action" : "confirm_refresh_cached_action"),
       );
