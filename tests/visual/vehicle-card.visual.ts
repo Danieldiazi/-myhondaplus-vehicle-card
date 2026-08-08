@@ -183,7 +183,7 @@ test("the editor explains when the integration is missing", async ({ page }) => 
 
   await expect(page.locator(editor)).toContainText("Integración My Honda+ no detectada");
   await expect(page.locator(`${editor} a`)).toHaveAttribute("href", /myhondaplus-homeassistant/);
-  await expect(page.locator(`${editor} button`)).toContainText("Volver a detectar");
+  await expect(page.locator(`${editor} button`).first()).toContainText("Volver a detectar");
 });
 
 test("the editor distinguishes an installed integration with no vehicles", async ({ page }) => {
