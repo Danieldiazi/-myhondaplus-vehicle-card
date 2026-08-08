@@ -164,7 +164,8 @@ const TRANSLATIONS = {
     confirm_climate_action: "¿Ejecutar la acción de climatización?",
     confirm_horn_lights_action: "¿Activar la bocina y las luces?",
     confirm_refresh_action: "¿Solicitar datos nuevos directamente al vehículo?",
-    confirm_refresh_cached_action: "¿Actualizar los datos del vehículo guardados en la nube de Honda?",
+    confirm_refresh_cached_action:
+      "¿Actualizar los datos del vehículo guardados en la nube de Honda?",
     confirm_stale_action:
       "Los datos del vehículo están desactualizados y su estado actual puede ser diferente. ¿Continuar con la acción remota?",
     action_failed: "No se pudo completar la acción del vehículo.",
