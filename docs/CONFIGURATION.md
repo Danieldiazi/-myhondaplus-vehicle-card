@@ -30,7 +30,7 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | `confirm_unlock`      | boolean                     |         `true` | Solicita confirmación antes de abrir.                                                            |
 | `confirm_climate`     | boolean                     |        `false` | Solicita confirmación antes de accionar la climatización.                                       |
 | `confirm_horn_lights` | boolean                     |        `false` | Solicita confirmación antes de accionar la bocina y las luces.                                  |
-| `confirm_refresh`     | boolean                     |        `false` | Solicita confirmación antes de actualizar directamente desde el coche.                          |
+| `confirm_refresh`     | boolean                     |        `false` | Solicita confirmación antes de actualizar datos guardados o directamente desde el coche.        |
 | `warn_stale_actions`  | boolean                     |         `true` | Advierte antes de una acción remota cuando los datos están marcados como antiguos.              |
 | `locale`            | `auto` / `es` / `en` / `gl` |         `auto` | Idioma de la tarjeta. `auto` utiliza el idioma de Home Assistant.                                |
 | `debug`             | boolean                     |        `false` | Muestra el diagnóstico anonimizado.                                                              |
@@ -78,7 +78,7 @@ Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia 
 
 ## Confirmaciones y datos antiguos
 
-`confirm_unlock` está activado de forma predeterminada. `confirm_climate`, `confirm_horn_lights` y `confirm_refresh` permiten solicitar confirmación para cada acción adicional.
+`confirm_unlock` está activado de forma predeterminada. `confirm_climate`, `confirm_horn_lights` y `confirm_refresh` permiten solicitar confirmación para cada acción adicional. `confirm_refresh` protege tanto la actualización de los datos guardados en la nube como la solicitud directa al coche.
 
 Cuando `warn_stale_actions` está activado y los datos superan `stale_after`, la tarjeta advierte antes de cierre, climatización, bocina y luces o actualización directa desde el coche. Si una acción tiene también su confirmación específica, ambos avisos se presentan en un único diálogo.
 

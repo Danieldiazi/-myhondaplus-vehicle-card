@@ -47,6 +47,7 @@ const TRANSLATIONS = {
     confirm_climate_action: "Run the climate control action?",
     confirm_horn_lights_action: "Sound the horn and flash the lights?",
     confirm_refresh_action: "Request fresh data directly from the vehicle?",
+    confirm_refresh_cached_action: "Refresh the vehicle data saved in Honda's cloud?",
     confirm_stale_action:
       "The vehicle data is outdated. Its current state may differ. Continue with the remote action?",
     action_failed: "The vehicle action could not be completed.",
@@ -96,7 +97,7 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirm before unlocking",
     editor_confirm_climate: "Confirm climate actions",
     editor_confirm_horn_lights: "Confirm horn and lights",
-    editor_confirm_refresh: "Confirm refresh from vehicle",
+    editor_confirm_refresh: "Confirm data refresh actions",
     editor_warn_stale_actions: "Warn before remote actions when data is outdated",
     editor_move_up: "Move {item} up",
     editor_move_down: "Move {item} down",
@@ -163,6 +164,8 @@ const TRANSLATIONS = {
     confirm_climate_action: "¿Ejecutar la acción de climatización?",
     confirm_horn_lights_action: "¿Activar la bocina y las luces?",
     confirm_refresh_action: "¿Solicitar datos nuevos directamente al vehículo?",
+    confirm_refresh_cached_action:
+      "¿Actualizar los datos del vehículo guardados en la nube de Honda?",
     confirm_stale_action:
       "Los datos del vehículo están desactualizados y su estado actual puede ser diferente. ¿Continuar con la acción remota?",
     action_failed: "No se pudo completar la acción del vehículo.",
@@ -212,7 +215,7 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_confirm_climate: "Confirmar acciones de climatización",
     editor_confirm_horn_lights: "Confirmar bocina y luces",
-    editor_confirm_refresh: "Confirmar actualización desde el coche",
+    editor_confirm_refresh: "Confirmar actualizaciones de datos",
     editor_warn_stale_actions: "Avisar antes de acciones remotas si los datos son antiguos",
     editor_move_up: "Subir {item}",
     editor_move_down: "Bajar {item}",
@@ -280,6 +283,7 @@ const TRANSLATIONS = {
     confirm_climate_action: "Executar a acción de climatización?",
     confirm_horn_lights_action: "Activar a bucina e as luces?",
     confirm_refresh_action: "Solicitar datos novos directamente ao vehículo?",
+    confirm_refresh_cached_action: "Actualizar os datos do vehículo gardados na nube de Honda?",
     confirm_stale_action:
       "Os datos do vehículo están desactualizados e o seu estado actual pode ser diferente. Continuar coa acción remota?",
     action_failed: "Non se puido completar a acción do vehículo.",
@@ -329,7 +333,7 @@ const TRANSLATIONS = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_confirm_climate: "Confirmar accións de climatización",
     editor_confirm_horn_lights: "Confirmar bucina e luces",
-    editor_confirm_refresh: "Confirmar actualización desde o coche",
+    editor_confirm_refresh: "Confirmar actualizacións de datos",
     editor_warn_stale_actions: "Avisar antes de accións remotas se os datos son antigos",
     editor_move_up: "Subir {item}",
     editor_move_down: "Baixar {item}",

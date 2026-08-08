@@ -39,7 +39,7 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 - Actionable in-card diagnostics for a missing integration, vehicle or compatible entities.
 - Door, window, trunk, hood, light, charging and climate status.
 - Responsive design, dark mode, keyboard focus and automatic reduced-motion support.
-- Optional confirmations for unlocking, climate, horn and lights, and refresh-from-vehicle actions.
+- Optional confirmations for unlocking, climate, horn and lights, and both saved-data and refresh-from-vehicle actions.
 - Warning before remote commands when the displayed vehicle data is outdated.
 - Prevention of duplicate actions.
 
