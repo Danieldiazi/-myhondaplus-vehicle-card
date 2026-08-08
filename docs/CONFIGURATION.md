@@ -50,7 +50,9 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 
 `refresh_cached` vuelve a consultar los datos guardados en la nube de Honda. `refresh` solicita datos nuevos directamente al coche. Cada control se muestra únicamente cuando la integración publica su entidad; no todos los vehículos ofrecen ambas actualizaciones. La ubicación es un estado informativo que abre el diálogo nativo de Home Assistant, no una acción remota.
 
-`vehicle_model: auto` intenta elegir la ilustración a partir del dispositivo. Cambiarlo manualmente solo modifica la representación visual y nunca activa capacidades.
+`vehicle_model: auto` intenta elegir la ilustración a partir del dispositivo. Los valores manuales son `civic`, `hrv`, `crv`, `zrv`, `jazz`, `honda_e`, `eny1` y `generic`. Cambiarlo manualmente solo modifica la representación visual y nunca activa capacidades.
+
+Los presets de sombra disponibles son `rallye_red`, `platinum_white`, `crystal_black`, `sonic_grey`, `urban_grey`, `premium_blue`, `canyon_river_blue`, `silver` y `custom`.
 
 Cuando `image_mode` es `custom` y `vehicle_image` no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado. La URL se mantiene en la configuración para que pueda corregirse desde el editor.
 
