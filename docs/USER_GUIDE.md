@@ -108,8 +108,18 @@ entities:
   lock: lock.mi_honda
   range: sensor.mi_honda_autonomia
   battery: sensor.mi_honda_bateria
-  refresh: button.mi_honda_actualizar
+  refresh_cached: button.mi_honda_actualizar_guardados
+  refresh: button.mi_honda_actualizar_desde_coche
 ```
+
+## Actualizaciones de datos
+
+La tarjeta puede mostrar dos acciones diferentes, siempre que la integración publique sus entidades:
+
+- **Actualizar datos guardados** (`refresh_cached`): vuelve a consultar la información disponible en la nube de Honda.
+- **Actualizar desde el coche** (`refresh`): solicita información nueva directamente al vehículo.
+
+Algunos vehículos solo ofrecen una de ellas. La tarjeta oculta automáticamente la que no exista; no es necesario crearla ni configurarla manualmente.
 
 ## Seguridad
 
@@ -126,6 +136,8 @@ confirm_climate: true
 confirm_horn_lights: true
 confirm_refresh: true
 ```
+
+`confirm_refresh` se aplica tanto a **Actualizar datos guardados** como a **Actualizar desde el coche**. Cada acción utiliza un texto de confirmación específico.
 
 No se recomienda desactivar la confirmación de apertura en paneles compartidos o accesibles desde una pared.
 
