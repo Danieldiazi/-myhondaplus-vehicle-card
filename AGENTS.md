@@ -90,7 +90,7 @@ The HACS artifact is `dist/myhondaplus-vehicle-card.js`. Never edit it by hand. 
 
 - Follow Semantic Versioning and update `package.json`, `package-lock.json` and `CHANGELOG.md` together.
 - Audit narrative documentation before publishing a version.
-- Do not promote the project to `1.0.0` without explicit maintainer approval while dedicated artwork coverage remains incomplete.
+- The `1.x` series is stable. Preserve backward compatibility unless a future major release explicitly documents a migration.
 - Releases use tags named `vX.Y.Z`. The repository also supports the connector-driven `publish/vX.Y.Z` branch flow.
 - The release workflow runs installation, dependency audit, all project checks and build before attaching the HACS JavaScript file.
 - Never publish when required Actions are failing.
