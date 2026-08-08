@@ -27,11 +27,16 @@ My Honda+ for Home Assistant → dispositivo y entidades → My Honda+ Vehicle C
 | `layout`            | `full` / `compact`          |         `full` | Densidad visual.                                                                                 |
 | `stale_after`       | number                      |        `21600` | Segundos antes de marcar los datos como antiguos.                                                |
 | `show_controls`     | boolean                     |         `true` | Muestra los botones de acción.                                                                   |
-| `confirm_unlock`    | boolean                     |         `true` | Solicita confirmación antes de abrir.                                                            |
+| `confirm_unlock`      | boolean                     |         `true` | Solicita confirmación antes de abrir.                                                            |
+| `confirm_climate`     | boolean                     |        `false` | Solicita confirmación antes de accionar la climatización.                                       |
+| `confirm_horn_lights` | boolean                     |        `false` | Solicita confirmación antes de accionar la bocina y las luces.                                  |
+| `confirm_refresh`     | boolean                     |        `false` | Solicita confirmación antes de actualizar directamente desde el coche.                          |
+| `warn_stale_actions`  | boolean                     |         `true` | Advierte antes de una acción remota cuando los datos están marcados como antiguos.              |
 | `locale`            | `auto` / `es` / `en` / `gl` |         `auto` | Idioma de la tarjeta. `auto` utiliza el idioma de Home Assistant.                                |
 | `debug`             | boolean                     |        `false` | Muestra el diagnóstico anonimizado.                                                              |
 | `controls`          | array                       |    compatibles | Controles preferidos y su orden. Los que no tengan entidad se ocultan.                           |
 | `metrics`           | array                       |    compatibles | Métricas preferidas y su orden. Las que no tengan entidad se ocultan.                            |
+| `statuses`          | array                       |    compatibles | Estados visibles y su orden. Los que no tengan entidad se ocultan.                              |
 | `entities`          | object                      |     automático | Sobrescritura avanzada de entidades detectadas.                                                  |
 
 Cuando `image_mode` es `custom` y `vehicle_image` no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado. La URL se mantiene en la configuración para que pueda corregirse desde el editor.
@@ -69,7 +74,13 @@ La tarjeta no asigna funciones por modelo. El modelo visual solo selecciona la i
 - Si existe y tiene un estado válido, se muestra y puede utilizarse.
 - La batería solo se reconoce mediante claves específicas de batería de tracción; un nombre genérico no basta.
 
-Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia mensual, consumo medio y tiempo de conducción. Los estados informativos incluyen puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación. Los controles incluyen cierre, climatización, bocina y luces, actualización almacenada y actualización desde el coche, siempre que la integración publique la entidad correspondiente.
+Las métricas disponibles incluyen autonomía, batería, kilometraje, distancia mensual, consumo medio y tiempo de conducción. Los estados informativos incluyen puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación. El editor permite activar, desactivar y ordenar estos estados. La selección predeterminada incluye todos ellos y la detección automática oculta los que no existan para el vehículo. Los controles incluyen cierre, climatización, bocina y luces, actualización almacenada y actualización desde el coche, siempre que la integración publique la entidad correspondiente.
+
+## Confirmaciones y datos antiguos
+
+`confirm_unlock` está activado de forma predeterminada. `confirm_climate`, `confirm_horn_lights` y `confirm_refresh` permiten solicitar confirmación para cada acción adicional.
+
+Cuando `warn_stale_actions` está activado y los datos superan `stale_after`, la tarjeta advierte antes de cierre, climatización, bocina y luces o actualización directa desde el coche. Si una acción tiene también su confirmación específica, ambos avisos se presentan en un único diálogo.
 
 ## Límites de responsabilidad
 
