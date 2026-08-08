@@ -43,7 +43,7 @@ Sigue las instrucciones del repositorio [My Honda+ for Home Assistant](https://g
 
 ## Configuración desde el editor
 
-El editor visual permite elegir el vehículo, el modelo, el color, el diseño y los controles visibles. En la mayoría de los casos no es necesario editar YAML.
+El editor visual permite elegir el vehículo, el modelo, el color, el diseño y las métricas, estados y controles visibles. Los estados pueden reordenarse con los botones de subir y bajar. Si se mantiene la selección predeterminada, la tarjeta detecta automáticamente cuáles existen y oculta los no compatibles. En la mayoría de los casos no es necesario editar YAML.
 
 Configuración mínima equivalente:
 
@@ -79,6 +79,24 @@ image_mode: custom
 vehicle_image: /local/coches/mi-civic.png
 ```
 
+### Estados visibles y orden
+
+```yaml
+type: custom:myhondaplus-vehicle-card
+device: ID_DEL_DISPOSITIVO
+statuses:
+  - location
+  - doors
+  - windows
+  - trunk
+  - hood
+  - lights
+  - charging
+  - climate
+```
+
+El editor permite cambiar esta lista sin editar YAML. Un estado seleccionado solo se muestra cuando la integración publica su entidad.
+
 ### Entidades manuales
 
 La detección automática puede sobrescribirse para instalaciones con nombres o entidades especiales:
@@ -101,7 +119,15 @@ La opción `confirm_unlock` está activada de forma predeterminada. Al pulsar el
 confirm_unlock: true
 ```
 
-No se recomienda desactivarla en paneles compartidos o accesibles desde una pared.
+También pueden activarse confirmaciones independientes:
+
+```yaml
+confirm_climate: true
+confirm_horn_lights: true
+confirm_refresh: true
+```
+
+No se recomienda desactivar la confirmación de apertura en paneles compartidos o accesibles desde una pared.
 
 La tarjeta no recibe ni almacena las credenciales de Honda. La autenticación pertenece exclusivamente a la integración My Honda+ y a Home Assistant.
 
@@ -113,7 +139,7 @@ La tarjeta no recibe ni almacena las credenciales de Honda. La autenticación pe
 stale_after: 21600
 ```
 
-Este aviso no fuerza una actualización del vehículo; solo informa sobre la antigüedad del último dato disponible.
+Este aviso no fuerza una actualización del vehículo; solo informa sobre la antigüedad del último dato disponible. Con `warn_stale_actions: true` —valor predeterminado— la tarjeta solicita confirmación antes de enviar una acción remota cuando los datos están marcados como antiguos.
 
 ## Resolución de problemas
 

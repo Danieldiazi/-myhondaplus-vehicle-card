@@ -87,6 +87,10 @@ test("Civic full layout remains readable on a light desktop", async ({ page }) =
   await expectMoreInfo(page, ".freshness", "sensor.synthetic_updated");
   await expectMoreInfo(page, ".info-status", "device_tracker.synthetic_location");
   await expect(page.locator(`${card} .controls button[aria-label='Location']`)).toHaveCount(0);
+  await expect(page.locator(`${card} .metric .detail-indicator`)).toHaveCount(5);
+  await expect(page.locator(`${card} .status .detail-indicator`)).toHaveCount(8);
+  await expect(page.locator(`${card} .badge .detail-indicator`)).toHaveCount(1);
+  await expect(page.locator(`${card} .freshness .detail-indicator`)).toHaveCount(1);
   const [cardTypography, statusTypography, controlTypography] = await Promise.all([
     page.locator(card).evaluate((element) => {
       const style = getComputedStyle(element);
@@ -128,6 +132,39 @@ test("generic compact layout exposes climate on a dark mobile viewport", async (
   await expectNoHorizontalOverflow(page);
 });
 
+test("configured states preserve their chosen order and hide unselected states", async ({
+  page,
+}) => {
+  await openScenario(page, "model=civic&layout=full&locale=es&statuses=location,doors,lights");
+
+  const labels = await page
+    .locator(`${card} .statuses .status`)
+    .evaluateAll((elements) => elements.map((element) => element.getAttribute("aria-label")));
+  expect(labels).toEqual(["Ubicación: Home", "Puertas: Cerrado", "Luces: Apagadas"]);
+});
+
+test("remote confirmations and stale warnings run before service calls", async ({ page }) => {
+  await openScenario(page, "model=civic&layout=full&locale=es&confirmations=true");
+
+  const hornDialogPromise = page.waitForEvent("dialog");
+  const hornClick = page.locator(`${card} .controls button[aria-label='Bocina y luces']`).click();
+  const hornDialog = await hornDialogPromise;
+  expect(hornDialog.message()).toContain("¿Activar la bocina y las luces?");
+  await hornDialog.accept();
+  await hornClick;
+  await expect(page.locator("body")).toHaveAttribute("data-called-service", "button.press");
+
+  await openScenario(page, "model=civic&layout=full&locale=es&stale=true");
+  const staleDialogPromise = page.waitForEvent("dialog");
+  const refreshClick = page
+    .locator(`${card} .controls button[aria-label='Actualizar desde el coche']`)
+    .click();
+  const staleDialog = await staleDialogPromise;
+  expect(staleDialog.message()).toContain("Los datos del vehículo están desactualizados");
+  await staleDialog.accept();
+  await refreshClick;
+});
+
 test("a broken custom image shows the localized Honda fallback", async ({ page }) => {
   await page.setViewportSize({ width: 620, height: 1000 });
   await openScenario(page, "model=civic&layout=full&theme=light&locale=es&customImageFailure=true");
@@ -146,7 +183,7 @@ test("the editor explains when the integration is missing", async ({ page }) => 
 
   await expect(page.locator(editor)).toContainText("Integración My Honda+ no detectada");
   await expect(page.locator(`${editor} a`)).toHaveAttribute("href", /myhondaplus-homeassistant/);
-  await expect(page.locator(`${editor} button`)).toContainText("Volver a detectar");
+  await expect(page.locator(`${editor} button`).first()).toContainText("Volver a detectar");
 });
 
 test("the editor distinguishes an installed integration with no vehicles", async ({ page }) => {
@@ -163,6 +200,33 @@ test("the editor reports the selected vehicle capabilities", async ({ page }) =>
 
   await expect(page.locator(editor)).toContainText("Capacidades detectadas");
   await expect(page.locator(`${editor} .chip`)).not.toHaveCount(0);
+  await expect(page.locator(editor)).toContainText("Estados");
+  await expect(page.locator(`${editor} .ordered-checks .check-row`)).toHaveCount(8);
+  await expect(page.locator(`${editor} input[name='confirm_climate']`)).toBeVisible();
+  await expect(page.locator(`${editor} input[name='warn_stale_actions']`)).toBeChecked();
+});
+
+test("unrelated editor changes preserve implicit compact status defaults", async ({ page }) => {
+  await openEditorScenario(page, "discovery=ready&layout=compact&locale=en");
+  await page.locator(editor).evaluate((element) => {
+    element.addEventListener(
+      "config-changed",
+      (event) => {
+        document.body.dataset.savedConfig = JSON.stringify(
+          (event as CustomEvent<{ config: Record<string, unknown> }>).detail.config,
+        );
+      },
+      { once: true },
+    );
+  });
+
+  const name = page.locator(`${editor} input[name="name"]`);
+  await name.fill("Updated name");
+  await name.dispatchEvent("change");
+
+  const savedConfig = await page.locator("body").getAttribute("data-saved-config");
+  expect(savedConfig).not.toBeNull();
+  expect(JSON.parse(savedConfig!)).not.toHaveProperty("statuses");
 });
 
 test("Home Assistant state updates do not restart editor discovery", async ({ page }) => {
@@ -171,7 +235,9 @@ test("Home Assistant state updates do not restart editor discovery", async ({ pa
 
   await expect(status).toContainText("Integración My Honda+ detectada");
   await page.locator(editor).evaluate((element) => {
-    const component = element as HTMLElement & { hass: Record<string, unknown> };
+    const component = element as HTMLElement & {
+      hass: Record<string, unknown>;
+    };
     component.hass = { ...component.hass };
   });
   await page.waitForTimeout(75);

@@ -32,14 +32,16 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 - Configuración visual con descubrimiento automático del vehículo.
 - Ilustración específica para Civic y logotipo genérico de Honda para el resto de modelos.
 - Contenido adaptado automáticamente a las entidades que cada vehículo publica en Home Assistant.
-- Métricas y controles configurables; al pulsar una métrica, estado del vehículo, cierre o fecha de actualización se abre su historial nativo de Home Assistant.
+- Métricas, estados y controles configurables y ordenables; al pulsar un bloque informativo se abren sus detalles y su historial nativo de Home Assistant.
 - Español, inglés y gallego con selección automática de idioma.
 - Diagnóstico anonimizado para solicitar soporte sin compartir VIN, coordenadas ni identificadores completos.
 - Comprobación de la integración, vehículos configurados y capacidades detectadas desde el editor, con redescubrimiento de entidades.
 - Diagnósticos accionables en la propia tarjeta cuando falta la integración, el vehículo o entidades compatibles.
 - Estados de puertas, ventanas, maletero, capó, luces, carga y climatización.
 - Diseño responsive, modo oscuro, foco de teclado y reducción automática de movimiento.
-- Confirmación antes de desbloquear y bloqueo de acciones duplicadas.
+- Confirmaciones opcionales para abrir, climatización, bocina y luces y actualización desde el coche.
+- Aviso antes de enviar órdenes remotas cuando los datos mostrados están desactualizados.
+- Bloqueo de acciones duplicadas.
 
 ## Compatibilidad visual y funcional
 
@@ -49,7 +51,7 @@ La integración obtiene y publica los datos como dispositivos y entidades de Hom
 | HR-V, CR-V, ZR-V, Jazz, Honda e y e:Ny1 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
 | Otros Honda compatibles                 | Logotipo Honda         | Detectados desde sus entidades My Honda+ |
 
-El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
+El modelo solo determina la ilustración. La batería, carga, climatización, cierre y demás bloques se muestran únicamente cuando la integración crea la entidad correspondiente para el dispositivo. Los estados pueden mostrarse, ocultarse y ordenarse desde el editor visual; las capacidades no disponibles siguen ocultándose automáticamente. Una entidad temporalmente no disponible se indica como **Sin datos**; una capacidad inexistente se oculta.
 
 Si una imagen personalizada configurada no puede cargarse, la tarjeta muestra el logo genérico de Honda y un aviso localizado en lugar de dejar vacío el espacio del vehículo.
 

@@ -1,50 +1,47 @@
 # Roadmap
 
-Este documento separa las capacidades ya entregadas de las líneas de trabajo pendientes. Las versiones concretas pueden ajustarse según las entidades que publique la integración My Honda+ y las pruebas aportadas por propietarios de distintos modelos.
+Este documento refleja el estado del proyecto a partir de `v0.9.1`. Las versiones concretas pueden ajustarse según las entidades que publique My Honda+ for Home Assistant y las pruebas aportadas por propietarios de distintos modelos.
 
-## Completado en v0.4–v0.5
+## Estado actual — v0.9.1
 
-- Tarjeta TypeScript, Lit y Vite distribuible mediante HACS.
-- Descubrimiento de vehículos y entidades de la integración `myhondaplus`.
-- Capacidades visibles determinadas por las entidades reales, no por una tabla fija de modelos.
-- Diseño completo y compacto, responsive, compatible con temas claro y oscuro.
-- Ilustración lateral específica para Civic y logo Honda como fallback para otros modelos.
-- Sombras configurables con colores Honda sin modificar el logo ni las líneas del vehículo.
-- Métricas mensuales, estados del vehículo y controles remotos cuando están disponibles.
-- Climatización visible también en el diseño compacto.
-- Editor visual y tarjeta traducidos al español, inglés y gallego.
-- Navegación por teclado, lectores de pantalla y reducción de movimiento.
-- Diagnóstico anonimizado y confirmación de acciones sensibles.
-- Releases versionadas, validación oficial de HACS y documentación bilingüe.
-- Pruebas unitarias y visuales para los principales estados, modelos y tamaños de pantalla.
+- Tarjeta TypeScript, Lit y Vite distribuida mediante HACS.
+- Descubrimiento de la integración, vehículos, entidades y capacidades reales.
+- Métricas, estados y controles adaptados a las entidades publicadas por cada vehículo.
+- Diseños completo y compacto, responsive y compatibles con temas claro y oscuro.
+- Ilustración específica para Civic y logo Honda como alternativa para otros modelos.
+- Editor visual, diagnóstico anonimizado y traducciones en español, inglés y gallego.
+- Apertura del diálogo nativo de Home Assistant desde métricas, estados, cierre y fecha de actualización.
+- Pruebas unitarias, visuales, de compilación y validación oficial de HACS.
+- Releases automáticas y solicitud de inclusión en el índice predeterminado de HACS.
 
-## v0.6 — Robustez y cobertura de modelos
+## Próxima versión menor — en desarrollo
 
-- Resumen de capacidades detectadas dentro del editor visual.
-- Confirmaciones configurables para otras acciones remotas sensibles.
+- Configuración de visibilidad y orden de puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación.
+- Indicadores visuales coherentes para todos los bloques que abren más información.
+- Confirmaciones opcionales para climatización, bocina y luces y actualización desde el coche.
+- Advertencia antes de acciones remotas cuando la información mostrada está desactualizada.
 - Guía y plantilla SVG para aportar ilustraciones de nuevos modelos.
-- Galería de capturas reales con datos sintéticos o anonimizados.
-- Validación con más modelos y versiones recientes de Home Assistant.
-- Recuperación y redescubrimiento sencillo cuando cambien las entidades del vehículo.
+- Galería de capturas con datos sintéticos o anonimizados.
 
 ## Datos avanzados — sujetos a disponibilidad
 
 Estas funciones solo se incorporarán cuando la integración publique entidades estables que permitan implementarlas sin consultar directamente los servicios de Honda:
 
 - Hora estimada de finalización de carga.
-- Historial opcional de autonomía y batería usando datos de Home Assistant.
+- Historial resumido de autonomía y batería utilizando datos de Home Assistant.
 - Resúmenes de trayectos adicionales.
 - Acceso mejorado a la ubicación sin registrar ni exponer coordenadas.
 
-## v1.0 — Primera versión estable
+## Qué falta para v1.0.0
 
-- Compatibilidad validada con varios modelos y versiones de Home Assistant.
-- Cobertura visual suficiente o proceso comunitario consolidado para aportar ilustraciones.
-- Migración estable de configuraciones antiguas.
-- Documentación y proceso de releases consolidados.
-- Evaluación de inclusión en el índice predeterminado de HACS.
+No se publicará `v1.0.0` sin aprobación expresa del mantenedor y hasta completar una parte suficiente de estas condiciones:
 
-No se publicará `v1.0.0` mientras la cobertura de ilustraciones específicas siga siendo insuficiente sin aprobación expresa del mantenedor.
+- Compatibilidad funcional validada con varios modelos Honda y versiones recientes de Home Assistant.
+- Cobertura visual suficiente o un proceso comunitario consolidado para aportar ilustraciones.
+- Pruebas documentadas de migración de configuraciones antiguas.
+- Proceso de contribución, documentación y releases consolidado.
+- Resolución de la solicitud de inclusión en el índice predeterminado de HACS.
+- Ausencia de regresiones relevantes durante un periodo razonable de uso.
 
 ## Fuera de alcance
 

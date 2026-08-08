@@ -32,14 +32,16 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 - Visual configuration with automatic vehicle discovery.
 - A dedicated Civic illustration and a generic Honda logo for all other models.
 - Content automatically adapted to the entities each vehicle publishes in Home Assistant.
-- Configurable metrics and controls; selecting a metric, vehicle status, lock state, or update time opens its native Home Assistant history.
+- Configurable and orderable metrics, vehicle states and controls; selecting an informational block opens its native Home Assistant details and history.
 - Spanish, English and Galician, selected automatically from the active language.
 - Anonymized diagnostics for requesting support without sharing the VIN, coordinates or complete identifiers.
 - Visual-editor checks for the required integration, configured vehicles and detected capabilities, with one-click entity rediscovery.
 - Actionable in-card diagnostics for a missing integration, vehicle or compatible entities.
 - Door, window, trunk, hood, light, charging and climate status.
 - Responsive design, dark mode, keyboard focus and automatic reduced-motion support.
-- Confirmation before unlocking and prevention of duplicate actions.
+- Optional confirmations for unlocking, climate, horn and lights, and refresh-from-vehicle actions.
+- Warning before remote commands when the displayed vehicle data is outdated.
+- Prevention of duplicate actions.
 
 ## Visual and functional compatibility
 
@@ -49,7 +51,7 @@ The integration retrieves and publishes the data as Home Assistant devices and e
 | HR-V, CR-V, ZR-V, Jazz, Honda e and e:Ny1 | Honda logo              | Discovered from their My Honda+ entities |
 | Other compatible Honda vehicles           | Honda logo              | Discovered from their My Honda+ entities |
 
-The model determines only the illustration. Battery, charging, climate, locking and other sections are displayed only when the integration creates the corresponding entity for the device. A temporarily unavailable entity is shown as **No data**; an unsupported capability is hidden.
+The model determines only the illustration. Battery, charging, climate, locking and other sections are displayed only when the integration creates the corresponding entity for the device. Statuses can be shown, hidden and ordered in the visual editor; unavailable capabilities remain hidden automatically. A temporarily unavailable entity is shown as **No data**; an unsupported capability is hidden.
 
 If a configured custom image cannot be loaded, the card displays the generic Honda logo and a localized warning instead of leaving an empty vehicle area.
 

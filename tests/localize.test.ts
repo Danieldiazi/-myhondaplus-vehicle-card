@@ -20,6 +20,8 @@ describe("localize", () => {
     expect(localize("editor_integration_not_detected", "es")).toContain("no detectada");
     expect(localize("editor_redetect_entities", "gl")).toContain("Volver detectar");
     expect(localize("editor_capabilities", "en")).toBe("Detected capabilities");
+    expect(localize("editor_move_up", "es", { item: "Luces" })).toBe("Subir Luces");
+    expect(localize("confirm_stale_action", "gl")).toContain("desactualizados");
     expect(localize("card_integration_not_detected", "es").toLowerCase()).toContain(
       "no se detectó",
     );
