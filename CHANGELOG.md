@@ -10,6 +10,14 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+### Added
+
+- Los estados de puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación pueden mostrarse, ocultarse y ordenarse desde el editor visual.
+- Confirmaciones opcionales para climatización, bocina y luces y actualización directa desde el coche.
+- Advertencia configurable antes de enviar acciones remotas cuando los datos del vehículo están marcados como antiguos.
+- Indicadores visuales discretos en métricas, estados, cierre y fecha de actualización para señalar que abren el diálogo nativo de Home Assistant.
+
+
 ## [0.9.1] - 2026-08-08
 
 ### Added
