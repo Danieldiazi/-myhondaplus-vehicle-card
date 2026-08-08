@@ -192,8 +192,9 @@ Selecciona manualmente `vehicle_model` en el editor o en YAML. La detección aut
 ### HACS no muestra una actualización
 
 - Comprueba que exista una release publicada con un tag de versión.
-- Actualiza la información de HACS.
-- Reinicia Home Assistant únicamente si la recarga del navegador no es suficiente.
+- Actualiza la información de HACS o espera a su siguiente comprobación periódica.
+- Reiniciar Home Assistant no obliga a HACS a detectar inmediatamente una release nueva.
+- Cuando HACS ya haya instalado la actualización, recarga el navegador sin caché para cargar el nuevo JavaScript.
 
 ## Dónde solicitar ayuda
 
