@@ -6,6 +6,7 @@ import type {
   HassEntity,
   HomeAssistant,
   MyHondaPlusCardConfig,
+  StatusKey,
   VehicleModelKey,
 } from "../../src/types";
 
@@ -23,6 +24,11 @@ const customImageFailure = params.get("customImageFailure") === "true";
 const target = params.get("target") === "editor" ? "editor" : "card";
 const discoveryScenario = params.get("discovery") ?? "ready";
 const discoveryDelay = params.get("discoveryDelay") === "true";
+const stale = params.get("stale") === "true";
+const confirmations = params.get("confirmations") === "true";
+const configuredStatuses = params.has("statuses")
+  ? (params.get("statuses")?.split(",").filter(Boolean) as StatusKey[])
+  : undefined;
 document.documentElement.dataset.theme = params.get("theme") === "dark" ? "dark" : "light";
 
 const device: DeviceRegistryEntry = {
@@ -70,11 +76,12 @@ const devices =
 const components = discoveryScenario === "missingIntegration" ? [] : ["myhondaplus"];
 
 const now = new Date().toISOString();
+const entityUpdated = stale ? new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString() : now;
 const entity = (entity_id: string, state: string, unit?: string): HassEntity => ({
   entity_id,
   state,
   attributes: unit ? { unit_of_measurement: unit } : {},
-  last_updated: now,
+  last_updated: entityUpdated,
 });
 
 const states = Object.fromEntries(
@@ -109,7 +116,9 @@ const hass: HomeAssistant = {
     if (message.type === "config/device_registry/list") return devices as T;
     throw new Error(`Unexpected websocket request: ${String(message.type)}`);
   },
-  callService: async () => undefined,
+  callService: async (domain, service) => {
+    document.body.dataset.calledService = `${domain}.${service}`;
+  },
 };
 
 type TestCard = HTMLElement & {
@@ -137,6 +146,11 @@ const config: MyHondaPlusCardConfig = {
   image_mode: customImageFailure ? "custom" : "rendered",
   vehicle_image: customImageFailure ? "/missing-vehicle-image.png" : undefined,
   debug: true,
+  statuses: configuredStatuses,
+  stale_after: stale ? 300 : undefined,
+  confirm_climate: confirmations,
+  confirm_horn_lights: confirmations,
+  confirm_refresh: confirmations,
 };
 
 const component =
