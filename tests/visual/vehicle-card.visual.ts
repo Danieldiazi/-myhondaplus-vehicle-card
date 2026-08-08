@@ -318,3 +318,25 @@ test("Home Assistant state updates do not restart editor discovery", async ({
 test("the card shows an actionable diagnostic when the integration is missing", async ({
   page,
 }) => {
+  await openScenario(page, "discovery=missingIntegration&locale=es");
+
+  await expect(page.locator(`${card} .setup`)).toContainText(
+    "No se detectó la integración My Honda+",
+  );
+  await expect(page.locator(`${card} .setup a`)).toHaveAttribute(
+    "href",
+    /myhondaplus-homeassistant/,
+  );
+  await expect(page.locator(`${card} .vehicle-art`)).toHaveCount(0);
+});
+
+test("the card explains when a vehicle has no compatible entities", async ({
+  page,
+}) => {
+  await openScenario(page, "discovery=noCompatible&locale=en");
+
+  await expect(page.locator(`${card} .setup`)).toContainText(
+    "No compatible entities were found for this vehicle",
+  );
+  await expect(page.locator(`${card} .vehicle-art`)).toHaveCount(0);
+});
