@@ -43,8 +43,9 @@ export class MyHondaPlusVehicleCard extends LitElement {
   }
 
   public static getStubConfig(): MyHondaPlusCardConfig {
-    const { statuses: _statuses, ...config } = DEFAULT_CONFIG;
-    return { ...config };
+    const config: MyHondaPlusCardConfig = { ...DEFAULT_CONFIG };
+    delete config.statuses;
+    return config;
   }
 
   public setConfig(config: MyHondaPlusCardConfig): void {
