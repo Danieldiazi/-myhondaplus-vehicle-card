@@ -284,7 +284,7 @@ z.elementStyles = [], z.shadowRootOptions = { mode: "open" }, z[O("elementProper
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const L = globalThis, le = (t) => t, F = L.trustedTypes, de = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, ye = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, we = "?" + $, Ze = `<${we}>`, S = document, N = () => S.createComment(""), I = (t) => t === null || typeof t != "object" && typeof t != "function", ie = Array.isArray, Re = (t) => ie(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
+const L = globalThis, le = (t) => t, F = L.trustedTypes, de = F ? F.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, ye = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, we = "?" + $, Re = `<${we}>`, S = document, N = () => S.createComment(""), I = (t) => t === null || typeof t != "object" && typeof t != "function", ie = Array.isArray, Ze = (t) => ie(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", Y = `[ 	
 \f\r]`, T = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, he = /-->/g, ue = />/g, x = RegExp(`>|${Y}(?:([^\\s"'>=/]+)(${Y}*=${Y}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), pe = /'/g, _e = /"/g, xe = /^(?:script|style|textarea|title)$/i, Ve = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), d = Ve(1), H = Symbol.for("lit-noChange"), u = Symbol.for("lit-nothing"), me = /* @__PURE__ */ new WeakMap(), k = S.createTreeWalker(S, 129);
 function Ae(t, e) {
@@ -299,7 +299,7 @@ const je = (t, e) => {
     let l, h, p = -1, C = 0;
     for (; C < r.length && (a.lastIndex = C, h = a.exec(r), h !== null); ) C = a.lastIndex, a === T ? h[1] === "!--" ? a = he : h[1] !== void 0 ? a = ue : h[2] !== void 0 ? (xe.test(h[2]) && (s = RegExp("</" + h[2], "g")), a = x) : h[3] !== void 0 && (a = x) : a === x ? h[0] === ">" ? (a = s ?? T, p = -1) : h[1] === void 0 ? p = -2 : (p = a.lastIndex - h[2].length, l = h[1], a = h[3] === void 0 ? x : h[3] === '"' ? _e : pe) : a === _e || a === pe ? a = x : a === he || a === ue ? a = T : (a = x, s = void 0);
     const b = a === x && t[c + 1].startsWith("/>") ? " " : "";
-    n += a === T ? r + Ze : p >= 0 ? (o.push(l), r.slice(0, p) + ye + r.slice(p) + $ + b) : r + $ + (p === -2 ? c : b);
+    n += a === T ? r + Re : p >= 0 ? (o.push(l), r.slice(0, p) + ye + r.slice(p) + $ + b) : r + $ + (p === -2 ? c : b);
   }
   return [Ae(t, n + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), o];
 };
@@ -316,8 +316,8 @@ class U {
     for (; (s = k.nextNode()) !== null && r.length < c; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const p of s.getAttributeNames()) if (p.endsWith(ye)) {
-          const C = h[a++], b = s.getAttribute(p).split($), R = /([.?@])?(.*)/.exec(C);
-          r.push({ type: 1, index: n, name: R[2], strings: b, ctor: R[1] === "." ? Be : R[1] === "?" ? qe : R[1] === "@" ? We : W }), s.removeAttribute(p);
+          const C = h[a++], b = s.getAttribute(p).split($), Z = /([.?@])?(.*)/.exec(C);
+          r.push({ type: 1, index: n, name: Z[2], strings: b, ctor: Z[1] === "." ? Be : Z[1] === "?" ? qe : Z[1] === "@" ? We : W }), s.removeAttribute(p);
         } else p.startsWith($) && (r.push({ type: 6, index: n }), s.removeAttribute(p));
         if (xe.test(s.tagName)) {
           const p = s.textContent.split($), C = p.length - 1;
@@ -364,7 +364,7 @@ class Fe {
     for (; r !== void 0; ) {
       if (a === r.index) {
         let l;
-        r.type === 2 ? l = new Z(n, n.nextSibling, this, e) : r.type === 1 ? l = new r.ctor(n, r.name, r.strings, this, e) : r.type === 6 && (l = new Ge(n, this, e)), this._$AV.push(l), r = o[++c];
+        r.type === 2 ? l = new R(n, n.nextSibling, this, e) : r.type === 1 ? l = new r.ctor(n, r.name, r.strings, this, e) : r.type === 6 && (l = new Ge(n, this, e)), this._$AV.push(l), r = o[++c];
       }
       a !== (r == null ? void 0 : r.index) && (n = k.nextNode(), a++);
     }
@@ -375,7 +375,7 @@ class Fe {
     for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(e, o, i), i += o.strings.length - 2) : o._$AI(e[i])), i++;
   }
 }
-class Z {
+class R {
   get _$AU() {
     var e;
     return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
@@ -395,7 +395,7 @@ class Z {
     return this._$AB;
   }
   _$AI(e, i = this) {
-    e = P(this, e, i), I(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== H && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Re(e) ? this.k(e) : this._(e);
+    e = P(this, e, i), I(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== H && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Ze(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -423,7 +423,7 @@ class Z {
     ie(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
     let o, s = 0;
-    for (const n of e) s === i.length ? i.push(o = new Z(this.O(N()), this.O(N()), this, this.options)) : o = i[s], o._$AI(n), s++;
+    for (const n of e) s === i.length ? i.push(o = new R(this.O(N()), this.O(N()), this, this.options)) : o = i[s], o._$AI(n), s++;
     s < i.length && (this._$AR(o && o._$AB.nextSibling, s), i.length = s);
   }
   _$AR(e = this._$AA.nextSibling, i) {
@@ -505,13 +505,13 @@ class Ge {
   }
 }
 const J = L.litHtmlPolyfillSupport;
-J == null || J(U, Z), (L.litHtmlVersions ?? (L.litHtmlVersions = [])).push("3.3.3");
+J == null || J(U, R), (L.litHtmlVersions ?? (L.litHtmlVersions = [])).push("3.3.3");
 const Ye = (t, e, i) => {
   const o = (i == null ? void 0 : i.renderBefore) ?? e;
   let s = o._$litPart$;
   if (s === void 0) {
     const n = (i == null ? void 0 : i.renderBefore) ?? null;
-    o._$litPart$ = s = new Z(e.insertBefore(N(), n), n, void 0, i ?? {});
+    o._$litPart$ = s = new R(e.insertBefore(N(), n), n, void 0, i ?? {});
   }
   return s._$AI(t), s;
 };
@@ -793,6 +793,7 @@ const tt = {
     confirm_climate_action: "Run the climate control action?",
     confirm_horn_lights_action: "Sound the horn and flash the lights?",
     confirm_refresh_action: "Request fresh data directly from the vehicle?",
+    confirm_refresh_cached_action: "Refresh the vehicle data saved in Honda's cloud?",
     confirm_stale_action: "The vehicle data is outdated. Its current state may differ. Continue with the remote action?",
     action_failed: "The vehicle action could not be completed.",
     discovery_failed: "Vehicle entities could not be discovered.",
@@ -841,7 +842,7 @@ const tt = {
     editor_confirm_unlock: "Confirm before unlocking",
     editor_confirm_climate: "Confirm climate actions",
     editor_confirm_horn_lights: "Confirm horn and lights",
-    editor_confirm_refresh: "Confirm refresh from vehicle",
+    editor_confirm_refresh: "Confirm data refresh actions",
     editor_warn_stale_actions: "Warn before remote actions when data is outdated",
     editor_move_up: "Move {item} up",
     editor_move_down: "Move {item} down",
@@ -907,6 +908,7 @@ const tt = {
     confirm_climate_action: "¿Ejecutar la acción de climatización?",
     confirm_horn_lights_action: "¿Activar la bocina y las luces?",
     confirm_refresh_action: "¿Solicitar datos nuevos directamente al vehículo?",
+    confirm_refresh_cached_action: "¿Actualizar los datos del vehículo guardados en la nube de Honda?",
     confirm_stale_action: "Los datos del vehículo están desactualizados y su estado actual puede ser diferente. ¿Continuar con la acción remota?",
     action_failed: "No se pudo completar la acción del vehículo.",
     discovery_failed: "No se pudieron detectar las entidades del vehículo.",
@@ -955,7 +957,7 @@ const tt = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_confirm_climate: "Confirmar acciones de climatización",
     editor_confirm_horn_lights: "Confirmar bocina y luces",
-    editor_confirm_refresh: "Confirmar actualización desde el coche",
+    editor_confirm_refresh: "Confirmar actualizaciones de datos",
     editor_warn_stale_actions: "Avisar antes de acciones remotas si los datos son antiguos",
     editor_move_up: "Subir {item}",
     editor_move_down: "Bajar {item}",
@@ -1021,6 +1023,7 @@ const tt = {
     confirm_climate_action: "Executar a acción de climatización?",
     confirm_horn_lights_action: "Activar a bucina e as luces?",
     confirm_refresh_action: "Solicitar datos novos directamente ao vehículo?",
+    confirm_refresh_cached_action: "Actualizar os datos do vehículo gardados na nube de Honda?",
     confirm_stale_action: "Os datos do vehículo están desactualizados e o seu estado actual pode ser diferente. Continuar coa acción remota?",
     action_failed: "Non se puido completar a acción do vehículo.",
     discovery_failed: "Non se puideron detectar as entidades do vehículo.",
@@ -1069,7 +1072,7 @@ const tt = {
     editor_confirm_unlock: "Confirmar antes de abrir",
     editor_confirm_climate: "Confirmar accións de climatización",
     editor_confirm_horn_lights: "Confirmar bucina e luces",
-    editor_confirm_refresh: "Confirmar actualización desde o coche",
+    editor_confirm_refresh: "Confirmar actualizacións de datos",
     editor_warn_stale_actions: "Avisar antes de accións remotas se os datos son antigos",
     editor_move_up: "Subir {item}",
     editor_move_down: "Baixar {item}",
@@ -1328,7 +1331,9 @@ let g = class extends D {
     let s = o === "button" ? "press" : ((c = this.entity(t)) == null ? void 0 : c.state) === "on" ? "turn_off" : "turn_on";
     o === "lock" && (s = i.locked ? "unlock" : "lock");
     const n = [];
-    if ((t === "lock" || t === "climate" || t === "horn_lights" || t === "refresh") && i.stale && this.config.warn_stale_actions !== !1 && n.push(this.t("confirm_stale_action")), o === "lock" && s === "unlock" && this.config.confirm_unlock !== !1 && n.push(this.t("confirm_unlock")), t === "climate" && this.config.confirm_climate === !0 && n.push(this.t("confirm_climate_action")), t === "horn_lights" && this.config.confirm_horn_lights === !0 && n.push(this.t("confirm_horn_lights_action")), t === "refresh" && this.config.confirm_refresh === !0 && n.push(this.t("confirm_refresh_action")), !(n.length > 0 && !window.confirm(n.join(`
+    if ((t === "lock" || t === "climate" || t === "horn_lights" || t === "refresh") && i.stale && this.config.warn_stale_actions !== !1 && n.push(this.t("confirm_stale_action")), o === "lock" && s === "unlock" && this.config.confirm_unlock !== !1 && n.push(this.t("confirm_unlock")), t === "climate" && this.config.confirm_climate === !0 && n.push(this.t("confirm_climate_action")), t === "horn_lights" && this.config.confirm_horn_lights === !0 && n.push(this.t("confirm_horn_lights_action")), (t === "refresh" || t === "refresh_cached") && this.config.confirm_refresh === !0 && n.push(
+      this.t(t === "refresh" ? "confirm_refresh_action" : "confirm_refresh_cached_action")
+    ), !(n.length > 0 && !window.confirm(n.join(`
 
 `)))) {
       this.busy = t, this.message = void 0;
