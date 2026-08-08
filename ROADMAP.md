@@ -1,8 +1,8 @@
 # Roadmap
 
-Este documento refleja la base estable publicada como `v1.0.0`. Las próximas prioridades pueden ajustarse según las entidades que publique My Honda+ for Home Assistant y las pruebas aportadas por propietarios de distintos modelos.
+Este documento refleja la base estable iniciada en `v1.0.0` y corregida en la versión actual `v1.0.1`. Las próximas prioridades pueden ajustarse según las entidades que publique My Honda+ for Home Assistant y las pruebas aportadas por propietarios de distintos modelos.
 
-## Versión estable — v1.0.0
+## Base estable — serie v1.0.x
 
 - Tarjeta TypeScript, Lit y Vite distribuida mediante HACS.
 - Descubrimiento de la integración, vehículos, entidades y capacidades reales.
