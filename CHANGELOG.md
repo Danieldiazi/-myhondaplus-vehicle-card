@@ -10,6 +10,8 @@ El proyecto sigue [Semantic Versioning](https://semver.org/):
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-08
+
 ### Added
 
 - Los estados de puertas, ventanas, maletero, capó, luces, carga, climatización y ubicación pueden mostrarse, ocultarse y ordenarse desde el editor visual.
