@@ -35,6 +35,7 @@ export class MyHondaPlusVehicleCard extends LitElement {
   @state() private vehicleCount = 0;
   @state() private compatibleEntityCount = 0;
   private loadedDevice?: string;
+  private configuredStatuses?: StatusKey[];
 
   public static async getConfigElement(): Promise<HTMLElement> {
     await import("./editor");
@@ -42,12 +43,14 @@ export class MyHondaPlusVehicleCard extends LitElement {
   }
 
   public static getStubConfig(): MyHondaPlusCardConfig {
-    return { ...DEFAULT_CONFIG };
+    const { statuses: _statuses, ...config } = DEFAULT_CONFIG;
+    return { ...config };
   }
 
   public setConfig(config: MyHondaPlusCardConfig): void {
     if (!config) throw new Error(localize("required_config", "es"));
     const nextConfig = { ...DEFAULT_CONFIG, ...config };
+    this.configuredStatuses = config.statuses ? [...config.statuses] : undefined;
     if (
       this.config.vehicle_image !== nextConfig.vehicle_image ||
       this.config.image_mode !== nextConfig.image_mode
@@ -474,7 +477,11 @@ export class MyHondaPlusVehicleCard extends LitElement {
           : this.t("unknown_state");
     const controls = this.config.controls ?? [...DEFAULT_CONFIG.controls];
     const metrics = this.config.metrics ?? [...DEFAULT_CONFIG.metrics];
-    const statuses = this.config.statuses ?? [...DEFAULT_CONFIG.statuses];
+    const statuses =
+      this.configuredStatuses ??
+      (this.config.layout === "compact"
+        ? (["climate", "location"] satisfies StatusKey[])
+        : [...DEFAULT_CONFIG.statuses]);
     const visibleStatuses = statuses.filter((key) => Boolean(this.entities[key]));
     const alignment = this.config.vehicle_alignment ?? DEFAULT_CONFIG.vehicle_alignment;
 
@@ -809,6 +816,9 @@ ${diagnosticsText(createDiagnostics(this.hass, this.entities, this.model(), this
     .freshness:focus-visible {
       outline: 3px solid var(--primary-color);
       outline-offset: 2px;
+    }
+    .info-status {
+      grid-template-columns: auto 1fr auto;
     }
     .status i {
       width: 9px;
